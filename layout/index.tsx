@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import "./layout.scss";
+import style from "./layout.module.scss";
 import Navbar from "./Header/Navbar";
 import Footer from "./Footer/Footer";
 interface MainLayoutProps {
@@ -8,7 +8,7 @@ interface MainLayoutProps {
 
 const MainLayout: FC<MainLayoutProps> = (props) => {
   return (
-    <div className="layout-wrapper">
+    <div className={style.layout_wrapper}>
       <div>
         <Navbar />
         {props.children}

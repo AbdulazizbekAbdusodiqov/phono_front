@@ -2,7 +2,7 @@ import React from 'react'
 
 const createAdPage = () => {
   return (
-    <div></div>
+    <div>fgyufgygj</div>
   )
 }
 

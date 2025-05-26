@@ -2,6 +2,7 @@ import React from 'react'
 import style from "./Navbar.module.scss"
 import Button from '../../components/Button/Button'
 import { FaRegEnvelopeOpen, FaRegHeart,FaRegUser,FaChevronDown } from "react-icons/fa6";
+import Link from 'next/link';
 
 const Navbar = () => {
     return (
@@ -21,9 +22,9 @@ const Navbar = () => {
                             <FaChevronDown color='#fff'/>
                         </div>
                     </div>
-                    <div>
+                    <Link href="/CreateProduct">
                         <Button variant="secondary">Добавить объявление</Button>
-                    </div>
+                    </Link>
                 </div>
             </div>
         </nav>

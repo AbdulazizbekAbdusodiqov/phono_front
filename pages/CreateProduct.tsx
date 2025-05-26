@@ -1,9 +1,12 @@
 import React from 'react'
+import { CreatePtoduct } from '../app'
 
-const createAdPage = () => {
+const createProductPage = () => {
   return (
-    <div>fgyufgygj</div>
+    <>
+      <CreatePtoduct/>
+    </>
   )
 }
 
-export default createAdPage
+export default createProductPage

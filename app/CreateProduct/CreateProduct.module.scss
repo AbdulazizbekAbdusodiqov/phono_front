@@ -1,0 +1,8 @@
+@use '@/styles/container';
+
+.container {
+    @extend .container;
+    padding: 0px 10px;
+    background-color: #fff;
+    margin-top: 50px;
+}

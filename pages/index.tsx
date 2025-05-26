@@ -1,9 +1,11 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { HomePage } from "../app";
 
 export default function Home() {
   return (
     <>
-      Main Page
+      <main>
+        <HomePage />
+      </main>
     </>
   );
 }

@@ -1,14 +1,18 @@
 import "@/styles/globals.css";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { AppProps } from "next/app";
-import Navbar from "../layout/Header/Navbar";
-import Footer from "../layout/Footer/Footer";
+import { ToastContainer } from "react-toastify";
+import MainLayout from "../layout";
 
 export default function App({ Component, pageProps }: AppProps) {
+  const queryClient = new QueryClient();
+
   return (
-    <>
-      <Navbar />
-      <Component {...pageProps} />
-      <Footer />
-    </>
+    <QueryClientProvider client={queryClient}>
+      <MainLayout>
+        <Component {...pageProps} />
+        <ToastContainer />
+      </MainLayout>
+    </QueryClientProvider>
   );
 }

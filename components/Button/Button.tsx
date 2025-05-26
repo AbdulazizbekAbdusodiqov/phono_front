@@ -1,23 +1,25 @@
-import React from 'react';
+import React from "react";
 import style from "./Button.module.scss";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'danger';
+  variant?: "primary" | "secondary" | "danger";
   customColor?: string;
 }
 
 const Button: React.FC<ButtonProps> = ({
   children,
-  variant = 'primary',
+  variant = "primary",
   customColor,
-  className = '',
+  className = "",
   ...props
 }) => {
-  const buttonStyle = customColor ? { backgroundColor: customColor } : undefined;
-  
+  const buttonStyle = customColor
+    ? { backgroundColor: customColor }
+    : undefined;
+
   return (
-    <button 
-      {...props} 
+    <button
+      {...props}
       className={`${style.button} ${style[variant]} ${className}`}
       style={buttonStyle}
     >

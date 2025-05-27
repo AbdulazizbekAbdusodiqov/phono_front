@@ -2,6 +2,7 @@ import React from 'react'
 import style from "./Navbar.module.scss"
 import Button from '../../components/Button/Button'
 import { FaRegEnvelopeOpen, FaRegHeart,FaRegUser,FaChevronDown } from "react-icons/fa6";
+import Link from 'next/link';
 
 const Navbar = () => {
     return (
@@ -11,19 +12,19 @@ const Navbar = () => {
                 <div className={style.right}>
                     <div className={style.navigations}>
                         <div>
-                            <FaRegEnvelopeOpen  color='#fff'/>
+                            <FaRegEnvelopeOpen size={18} color='#fff'/>
                             Сообщения
                         </div>
-                        <FaRegHeart  color='#fff'/>
+                        <FaRegHeart size={18} color='#fff'/>
                         <div>
-                            <FaRegUser color='#fff'/>
+                            <FaRegUser size={18} color='#fff'/>
                             Ваш профиль
                             <FaChevronDown color='#fff'/>
                         </div>
                     </div>
-                    <div>
+                    <Link href="/CreateProduct">
                         <Button variant="secondary">Добавить объявление</Button>
-                    </div>
+                    </Link>
                 </div>
             </div>
         </nav>

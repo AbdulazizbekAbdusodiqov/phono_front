@@ -1,7 +1,9 @@
 @use '@/styles/container';
+@use '@/styles/fonts';
 
 
 .footer {
+    font-family: 'SF-Pro-Display-Regular', sans-serif;
     .line{
         width: 1200px;
         border-radius: 1px;

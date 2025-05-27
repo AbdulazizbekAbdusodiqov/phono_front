@@ -12,12 +12,12 @@ const Navbar = () => {
                 <div className={style.right}>
                     <div className={style.navigations}>
                         <div>
-                            <FaRegEnvelopeOpen  color='#fff'/>
+                            <FaRegEnvelopeOpen size={18} color='#fff'/>
                             Сообщения
                         </div>
-                        <FaRegHeart  color='#fff'/>
+                        <FaRegHeart size={18} color='#fff'/>
                         <div>
-                            <FaRegUser color='#fff'/>
+                            <FaRegUser size={18} color='#fff'/>
                             Ваш профиль
                             <FaChevronDown color='#fff'/>
                         </div>

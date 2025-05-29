@@ -1,5 +1,5 @@
 import React from "react";
-import "./home.scss";
+import style from "./home.module.scss";
 const HomePage = () => {
   return <div>HomePage</div>;
 };

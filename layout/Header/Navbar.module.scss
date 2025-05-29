@@ -1,28 +1,40 @@
-@use '../../styles/container';
+@use '@/styles/container';
+@use '@/styles/fonts';
 
-.header{
+.header {
     background-color: #4e46b4;
     height: 80px;
-    line-height: 80px
+    line-height: 80px;
+    font-family: 'SF-Pro-Display-Regular', sans-serif;
 }
+
 .container {
     @extend .container;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0px 10px  ;
-    .h1{
-        color: #fff;
+    padding: 0px 10px;
+
+    a {
+        text-decoration: none;
+
+        &>.h1 {
+            color: #fff;
+            font-size: 32px;
+        }
     }
-    .right{
+
+    .right {
         display: flex;
         align-items: center;
         gap: 25px;
-        .navigations{
+
+        .navigations {
             display: flex;
             align-items: center;
             gap: 40px;
-            &>div{
+
+            &>div {
                 display: flex;
                 align-items: center;
                 gap: 10px;

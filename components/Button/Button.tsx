@@ -1,29 +1,31 @@
-"use client"
+import React from "react";
+import style from "./Button.module.scss";
 
-import type { ReactNode } from "react"
-import styles from "./Button.module.scss"
-
-interface ButtonProps {
-  children: ReactNode
-  variant?: "primary" | "outline"
-  icon?: ReactNode
-  onClick?: () => void
-  disabled?: boolean
-  className?: string
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: "primary" | "secondary" | "danger";
+  customColor?: string;
 }
 
-export default function Button({
+const Button: React.FC<ButtonProps> = ({
   children,
   variant = "primary",
-  icon,
-  onClick,
-  disabled = false,
+  customColor,
   className = "",
-}: ButtonProps) {
+  ...props
+}) => {
+  const buttonStyle = customColor
+    ? { backgroundColor: customColor }
+    : undefined;
+
   return (
-    <button className={`${styles.button} ${styles[variant]} ${className}`} onClick={onClick} disabled={disabled}>
-      {icon && <span className={styles.icon}>{icon}</span>}
+    <button
+      {...props}
+      className={`${style.button} ${style[variant]} ${className}`}
+      style={buttonStyle}
+    >
       {children}
     </button>
-  )
-}
+  );
+};
+
+export default Button;

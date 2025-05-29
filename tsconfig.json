@@ -33,7 +33,7 @@
     "**/*.tsx",
     "next-env.d.ts",
     ".next/types/**/*.ts"
-  ],
+, "public/icons/profile/src/PenIcon.jsx"  ],
   "exclude": [
     "node_modules"
   ]

@@ -2,6 +2,7 @@ import { useState } from "react"
 import styles from "./Edit.module.scss"
 import Image from "next/image"
 import Breadcrumb from "@/components/Breadcrumb"
+import { EditIcon, FavoriteIcon, LeftNavIcon, LocationIcon, RightNavIcon, TopIcon } from "@/public/icons/profile"
 
 const ProductDetails = () => {
   const [activeTab, setActiveTab] = useState("description")
@@ -17,12 +18,13 @@ const ProductDetails = () => {
           <div className={styles.mainImage}>
             <Image src="/img/edit/Rectangle-5.png" alt="iPhone" width={500} height={500} className={styles.mainImg} />
             <div className={styles.imageControls}>
-              <button className={styles.navButton}>‹</button>
-              <button className={styles.navButton}>›</button>
+              <button className={styles.navButton}><LeftNavIcon /></button>
+              <button className={styles.navButton}><RightNavIcon /></button>
             </div>
             <div className={styles.indicators}>
-              <span className={styles.active}></span>
               <span></span>
+              <span></span>
+              <span className={styles.active}></span>
               <span></span>
               <span></span>
             </div>
@@ -37,7 +39,7 @@ const ProductDetails = () => {
         <div className={styles.info}>
           <div className={styles.header}>
             <h1>iPhone 12 Pro 64 GB</h1>
-            <button className={styles.favoriteBtn}>♡</button>
+            <button className={styles.favoriteBtn}><FavoriteIcon /></button>
           </div>
 
           <div className={styles.price}>
@@ -45,17 +47,17 @@ const ProductDetails = () => {
             <span className={styles.negotiable}>Торг есть</span>
           </div>
 
-          <div className={styles.location}>📍 Юнусабадский район, Ташкент</div>
+          <div className={styles.location}><LocationIcon /> Юнусабадский район, Ташкент</div>
 
           <div className={styles.actions}>
-            <button className={styles.edit}>✏️ Изменить</button>
-            <button className={styles.promote}>⬆️ Поднять</button>
+            <button className={styles.edit}><EditIcon /> Изменить</button>
+            <button className={styles.promote}><TopIcon /> Поднять</button>
           </div>
 
           <ul className={styles.specs}>
             <li>
               <span className={styles.label}>Состояние</span>
-              <span className={styles.value}>Новый</span>
+              <span className={`${styles.value} ${styles.valueOne}`}>Новый</span>
             </li>
             <li>
               <span className={styles.label}>Память</span>
@@ -83,6 +85,7 @@ const ProductDetails = () => {
               <span className={styles.label}>Просмотров</span>
               <span className={styles.value}>250</span>
             </li>
+            <li></li>
           </ul>
         </div>
       </div>
@@ -104,7 +107,7 @@ const ProductDetails = () => {
           <p>
             Apple iPhone 12 Pro работает на базе самого быстрого процессора на сегодняшний день с применением
             5-нанометровой технологии, который обеспечивает ему невероятную плавность работы. Такой процессор также
-            легко справляется с многозадачностью и позволяет запускать ресурсоёмкие игры и смотреть видео в высоком
+            легко справляется с многозадачностью и позволяет запускать ресурсоёмкие игры и смотреть видео в <br /> высоком
             разрешении.
           </p>
         )}

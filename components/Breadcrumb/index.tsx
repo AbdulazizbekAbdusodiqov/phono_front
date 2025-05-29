@@ -4,18 +4,15 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import styles from './Breadcrumb.module.scss';
 
-// Ruscha nomlar
 const rusNamesMap: Record<string, string> = {
   profile: 'Профиль',
   edit: 'Мои объявления',
-  // boshqa keraklilarni shu yerga qo‘shing
 };
 
 const Breadcrumb = () => {
   const pathname = usePathname() || '/';
   const segments = pathname.split('/').filter(Boolean);
 
-  // Boshlanishda Главная
   const breadcrumbs = [
     { name: 'Главная', href: '/' },
     ...segments.map((segment, index) => {

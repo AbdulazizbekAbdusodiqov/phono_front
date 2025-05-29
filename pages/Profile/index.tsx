@@ -13,7 +13,7 @@ const products = [
     memory: '64 GB',
     price: '1 680 000 UZS',
     image: '/img/profile/Rectangle.png',
-    isFavorite: true,
+    isFavorite: false,
     isBargain: false,
   },
   {

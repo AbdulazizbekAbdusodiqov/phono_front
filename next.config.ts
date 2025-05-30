@@ -1,10 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   reactStrictMode: true,
   images: {
-    domains: ["localhost", "your-api.com"],
+    domains: ["localhost", "api.phone-tech.uz"],
   },
 };
 

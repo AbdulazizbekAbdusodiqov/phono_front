@@ -30,7 +30,6 @@
         color: #000;
         font-weight: 500;
       }
-
       .select_label {
         display: block;
         margin-bottom: 8px;
@@ -38,7 +37,7 @@
         color: #000;
         font-weight: 500;
       }
-
+      
       /* Style for select dropdowns */
       .select {
         width: 343px;
@@ -63,13 +62,13 @@
           border-color: #4e46b4;
           box-shadow: 0 0 0 2px rgba(78, 70, 180, 0.1);
         }
-
+        
         &:disabled {
           background-color: #f9f9f9;
           color: #999;
           cursor: not-allowed;
         }
-
+        
         option {
           padding: 10px;
           background: #fff;
@@ -131,6 +130,18 @@
         color: #999CA0;
         margin-top: -16px;
         padding-left: 12px;
+      }
+    }
+    &__location {
+      .select_buttons_wrapper {
+        width: 30%;
+        display: inline-flex;
+        gap: 6px;
+        padding: 6px;
+        border-radius: 10px;
+        background-color: #f0f0f0;
+        margin: 10px 0;
+        margin-bottom: 16px;
       }
     }
     .photo_upload_container {

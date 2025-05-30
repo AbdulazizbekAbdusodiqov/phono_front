@@ -13,10 +13,11 @@ export const createProduct = async ({ data, images }: { data: CreateProductProps
     images.forEach((img) => {
       formData.append("images", img); 
     });
-    
+
     await instance.post("/product", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
+        "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
       },
     });
 

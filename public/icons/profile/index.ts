@@ -2,6 +2,7 @@ export { default as TopIcon } from "./src/TopIcon";
 export { default as PenIcon } from "./src/PenIcon";
 export { default as DateIcon } from "./src/DateIcon";
 export { default as EditIcon } from "./src/EditIcon";
+export { default as HeartIcon } from "./src/HeartIcon";
 export { default as ArrowIcon } from "./src/ArrowIcon";
 export { default as CloseIcon } from "./src/CloseIcon";
 export { default as SearchIcon } from "./src/searchIcon";

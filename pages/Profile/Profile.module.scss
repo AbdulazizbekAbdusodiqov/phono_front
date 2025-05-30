@@ -115,6 +115,11 @@
       font-weight: 400;
       font-size: 14px;
       cursor: pointer;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: #4e46b4;
+      }
     }
 
     .active {
@@ -158,5 +163,32 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 30px;
+  }
+
+  .emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    text-align: center;
+
+    .emptyIcon {
+      margin-bottom: 24px;
+      opacity: 0.5;
+    }
+
+    h3 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #333;
+      margin: 0 0 12px 0;
+    }
+
+    p {
+      font-size: 16px;
+      color: #999ca0;
+      margin: 0;
+    }
   }
 }

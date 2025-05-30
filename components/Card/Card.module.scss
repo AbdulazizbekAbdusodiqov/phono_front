@@ -39,6 +39,25 @@
     }
   }
 
+  .like {
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      font-size: 18px;
+      transition: transform 0.2s ease;
+    }
+
+    &:active svg {
+      transform: scale(1.2);
+    }
+  }
+
   .wrapper {
     display: flex;
     margin: 6px 0;
@@ -56,6 +75,7 @@
     .memory {
       margin-left: 19px;
       margin-bottom: 12px;
+      color: #000;
     }
 
     b {

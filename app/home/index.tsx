@@ -1,24 +1,49 @@
-import React from "react";
+"use client";
+
+import { useState } from "react";
 import style from "./home.module.scss";
-import { FilterIcon, SearchIconInput } from "../../public/icons/profile";
 import CategorySide from "../../components/home/category";
 import ProductSide from "../../components/home/products";
+import SearchInput from "../../components/home/search-input";
+import FilterSide from "../../components/home/filter";
+
+interface FilterState {
+  regionId: number | null;
+  topAdsOnly: boolean;
+  condition: string;
+  brandId: number | null;
+  manualBrand: string;
+  memoryId: number | null;
+  colorId: number | null;
+}
 
 const HomePage = () => {
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [activeFilters, setActiveFilters] = useState<FilterState | null>(null);
+
+  const toggleFilter = () => setIsFilterOpen(!isFilterOpen);
+  const closeFilter = () => setIsFilterOpen(false);
+
+  const handleApplyFilters = (filters: FilterState) => {
+    setActiveFilters(filters);
+    closeFilter();
+    console.log("Applied filters:", filters);
+    // Here you would typically fetch filtered data or update the UI
+  };
+
   return (
     <div className={style.container}>
-      <div className={style.home_input_wrapper}>
-        <div className={style.input_search}>
-          <input type="text" placeholder="Search..." />
-          <SearchIconInput />
-        </div>
-        <div className={style.action_icon}>
-          <div className={style.filter}>
-            <FilterIcon />
+      <SearchInput onFilterClick={toggleFilter} />
+
+      {isFilterOpen && (
+        <>
+          <div className={style.overlay} onClick={closeFilter}></div>
+          <div className={style.filter_side_wrapper}>
+            <FilterSide onClose={closeFilter} onApply={handleApplyFilters} />
           </div>
-          <div className={style.search}>Search</div>
-        </div>
-      </div>
+        </>
+      )}
+
       <div className={style.category_wrapper}>
         <h1 className={style.category_title}>Категории</h1>
         <CategorySide />

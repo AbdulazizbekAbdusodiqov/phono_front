@@ -1,7 +1,14 @@
 import React, { useState } from 'react'
 import style from "./CreateProduct.module.scss"
+import { CiCirclePlus } from 'react-icons/ci'
+import { MdOutlineCameraAlt } from 'react-icons/md'
+enum SelectType {
+  default = "default",
+  manual = "manual"
+}
 const CreateProduct = () => {
-  const [selectType, setSelectType] = useState("default")
+  const [selectType, setSelectType] = useState<SelectType>(SelectType.default)
+  const [selectTypeLocation, setSelectTypeLocation] = useState<SelectType>(SelectType.default)
   return (
     <div className={style.create_product_wrapper}>
       <div className={style.container}>
@@ -11,8 +18,8 @@ const CreateProduct = () => {
             <p>Выберите бренд телефона</p>
             <div >
               <div className={style.select_buttons_wrapper}>
-                <button type='button' className={style.select_button + " " + (selectType === "default" ? style.active : "")} onClick={() => setSelectType("default")}>Выбрать</button>
-                <button type='button' className={style.select_button + " " + (selectType === "manual" ? style.active : "")} onClick={() => setSelectType("manual")}>Ввести вручную</button>
+                <button type='button' className={style.select_button + " " + (selectType === SelectType.default ? style.active : "")} onClick={() => setSelectType(SelectType.default)}>Выбрать</button>
+                <button type='button' className={style.select_button + " " + (selectType === SelectType.manual ? style.active : "")} onClick={() => setSelectType(SelectType.manual)}>Ввести вручную</button>
               </div>
               <div>
                 <div>
@@ -31,7 +38,7 @@ const CreateProduct = () => {
                   </select>
                 </div>
                 {
-                  selectType === "default"
+                  selectType === SelectType.default
                     ?
                     <div>
                       <p className={style.select_label}>Выберите модель</p>
@@ -51,6 +58,59 @@ const CreateProduct = () => {
               </div>
             </div>
 
+          </div>
+          {/* Year of Release */}
+          <div className={style.form_section}>
+            <p className={style.section_title}>Год выпуска</p>
+            <div className={style.form_content}>
+              <input
+                className={style.input}
+                type="number"
+                min="2000"
+                max={new Date().getFullYear()}
+                placeholder='Например: 2023'
+              />
+            </div>
+          </div>
+          <div>
+            <p>Добавьте фото</p>
+            <div className={style.photo_upload_container}>
+              <div className={style.photo_upload_box}>
+                <CiCirclePlus />
+                Добавить фото
+              </div>
+              {[1, 2, 3, 4, 5, 6, 7].map((item) => (
+                <div className={style.photo_box} key={item}>
+                  <MdOutlineCameraAlt />
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className={style.form__description}>
+            <p>Описание</p>
+            <textarea
+              className={`${style.input} ${style.textarea}`}
+              placeholder='Напишите что-нибудь...'
+            />
+            <p className={style.text_area_max_characters}>Максимум 1000 символов</p>
+          </div>
+          <div className={style.form__location}>
+            <p>Адрес продажи</p>
+            <div className={style.select_buttons_wrapper}>
+              <button type='button' className={style.select_button + " " + (selectTypeLocation === SelectType.default ? style.active : "")} onClick={() => setSelectTypeLocation(SelectType.default)}>Выбрать</button>
+              <button type='button' className={style.select_button + " " + (selectTypeLocation === SelectType.manual ? style.active : "")} onClick={() => setSelectTypeLocation(SelectType.manual)}>Ввести вручную</button>
+            </div>
+            {
+              selectTypeLocation === SelectType.default
+                ?
+                <div>
+                  <select name="" id=""></select>
+                </div>
+                :
+                <div>
+                  
+                </div>
+            }
           </div>
         </form>
       </div>

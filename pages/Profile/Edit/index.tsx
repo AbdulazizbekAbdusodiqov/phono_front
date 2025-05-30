@@ -1,11 +1,18 @@
-import { useState } from "react"
-import styles from "./Edit.module.scss"
-import Image from "next/image"
-import Breadcrumb from "@/components/Breadcrumb"
-import { EditIcon, FavoriteIcon, LeftNavIcon, LocationIcon, RightNavIcon, TopIcon } from "@/public/icons/profile"
+import { useState } from "react";
+import styles from "./Edit.module.scss";
+import Image from "next/image";
+import Breadcrumb from "@/components/Breadcrumb";
+import {
+  EditIcon,
+  FavoriteIcon,
+  LeftNavIcon,
+  LocationIcon,
+  RightNavIcon,
+  TopIcon,
+} from "@/public/icons/profile";
 
 const ProductDetails = () => {
-  const [activeTab, setActiveTab] = useState("description")
+  const [activeTab, setActiveTab] = useState("description");
 
   return (
     <div className={styles.detailsPage}>
@@ -16,10 +23,20 @@ const ProductDetails = () => {
       <div className={styles.container}>
         <div className={styles.gallery}>
           <div className={styles.mainImage}>
-            <Image src="/img/edit/Rectangle-5.png" alt="iPhone" width={500} height={500} className={styles.mainImg} />
+            <Image
+              src="/img/edit/Rectangle-5.png"
+              alt="iPhone"
+              width={500}
+              height={500}
+              className={styles.mainImg}
+            />
             <div className={styles.imageControls}>
-              <button className={styles.navButton}><LeftNavIcon /></button>
-              <button className={styles.navButton}><RightNavIcon /></button>
+              <button className={styles.navButton}>
+                <LeftNavIcon />
+              </button>
+              <button className={styles.navButton}>
+                <RightNavIcon />
+              </button>
             </div>
             <div className={styles.indicators}>
               <span></span>
@@ -30,16 +47,36 @@ const ProductDetails = () => {
             </div>
           </div>
           <div className={styles.thumbnails}>
-            <Image src="/img/edit/Rectangle-6.png" alt="iPhone" width={100} height={100} className={styles.thumbnail} />
-            <Image src="/img/edit/Rectangle-7.png" alt="iPhone" width={100} height={100} className={styles.thumbnail} />
-            <Image src="/img/edit/Rectangle-8.png" alt="iPhone" width={100} height={100} className={styles.thumbnail} />
+            <Image
+              src="/img/edit/Rectangle-6.png"
+              alt="iPhone"
+              width={100}
+              height={100}
+              className={styles.thumbnail}
+            />
+            <Image
+              src="/img/edit/Rectangle-7.png"
+              alt="iPhone"
+              width={100}
+              height={100}
+              className={styles.thumbnail}
+            />
+            <Image
+              src="/img/edit/Rectangle-8.png"
+              alt="iPhone"
+              width={100}
+              height={100}
+              className={styles.thumbnail}
+            />
           </div>
         </div>
 
         <div className={styles.info}>
           <div className={styles.header}>
             <h1>iPhone 12 Pro 64 GB</h1>
-            <button className={styles.favoriteBtn}><FavoriteIcon /></button>
+            <button className={styles.favoriteBtn}>
+              <FavoriteIcon />
+            </button>
           </div>
 
           <div className={styles.price}>
@@ -47,17 +84,25 @@ const ProductDetails = () => {
             <span className={styles.negotiable}>Торг есть</span>
           </div>
 
-          <div className={styles.location}><LocationIcon /> Юнусабадский район, Ташкент</div>
+          <div className={styles.location}>
+            <LocationIcon /> Юнусабадский район, Ташкент
+          </div>
 
           <div className={styles.actions}>
-            <button className={styles.edit}><EditIcon /> Изменить</button>
-            <button className={styles.promote}><TopIcon /> Поднять</button>
+            <button className={styles.edit}>
+              <EditIcon /> Изменить
+            </button>
+            <button className={styles.promote}>
+              <TopIcon /> Поднять
+            </button>
           </div>
 
           <ul className={styles.specs}>
             <li>
               <span className={styles.label}>Состояние</span>
-              <span className={`${styles.value} ${styles.valueOne}`}>Новый</span>
+              <span className={`${styles.value} ${styles.valueOne}`}>
+                Новый
+              </span>
             </li>
             <li>
               <span className={styles.label}>Память</span>
@@ -97,7 +142,10 @@ const ProductDetails = () => {
         >
           Описание
         </span>
-        <span className={activeTab === "reviews" ? styles.activeTab : ""} onClick={() => setActiveTab("reviews")}>
+        <span
+          className={activeTab === "reviews" ? styles.activeTab : ""}
+          onClick={() => setActiveTab("reviews")}
+        >
           Отзывы (4)
         </span>
       </div>
@@ -105,16 +153,19 @@ const ProductDetails = () => {
       <div className={styles.description}>
         {activeTab === "description" && (
           <p>
-            Apple iPhone 12 Pro работает на базе самого быстрого процессора на сегодняшний день с применением
-            5-нанометровой технологии, который обеспечивает ему невероятную плавность работы. Такой процессор также
-            легко справляется с многозадачностью и позволяет запускать ресурсоёмкие игры и смотреть видео в <br /> высоком
-            разрешении.
+            Apple iPhone 12 Pro работает на базе самого быстрого процессора на
+            сегодняшний день с применением 5-нанометровой технологии, который
+            обеспечивает ему невероятную плавность работы. Такой процессор также
+            легко справляется с многозадачностью и позволяет запускать
+            ресурсоёмкие игры и смотреть видео в <br /> высоком разрешении.
           </p>
         )}
-        {activeTab === "reviews" && <p>Отзывы пользователей будут отображаться здесь.</p>}
+        {activeTab === "reviews" && (
+          <p>Отзывы пользователей будут отображаться здесь.</p>
+        )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ProductDetails
+export default ProductDetails;

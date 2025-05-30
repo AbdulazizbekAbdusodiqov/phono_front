@@ -1,5 +1,5 @@
-@use '../../../styles/container';
-@use '@/styles/fonts';
+@use "../../../styles/container";
+@use "@/styles/fonts";
 
 .detailsPage {
   max-width: 1200px;
@@ -52,7 +52,7 @@
           width: 35px;
           height: 35px;
           border-radius: 50%;
-          &:active{
+          &:active {
             background-color: #625b5b3a;
           }
         }
@@ -70,11 +70,11 @@
           width: 8px;
           height: 8px;
           border-radius: 50%;
-          background: #FFFFFF;
+          background: #ffffff;
           cursor: pointer;
 
           &.active {
-            background: #4E46B4;
+            background: #4e46b4;
           }
         }
       }
@@ -121,7 +121,7 @@
         border: none;
         font-size: 1.5rem;
         cursor: pointer;
-        color: #999CA0;
+        color: #999ca0;
         transition: color 0.2s;
       }
     }
@@ -131,14 +131,14 @@
       font-weight: 600;
       font-size: 24px;
       line-height: 32px;
-      color: #4E46B4;
+      color: #4e46b4;
       display: flex;
       align-items: center;
       gap: 33px;
 
       .negotiable {
-        background-color: #4AD15F33;
-        color: #4AD15F;
+        background-color: #4ad15f33;
+        color: #4ad15f;
         font-size: 14px;
         font-weight: 400;
         padding: 0 8px;
@@ -147,7 +147,7 @@
     }
 
     .location {
-      color: #999CA0;
+      color: #999ca0;
       font-weight: 400;
       line-height: 24px;
       font-size: 16px;
@@ -177,8 +177,8 @@
 
         &.edit {
           background: white;
-          border: 1px solid #4E46B4;
-          color: #4E46B4;
+          border: 1px solid #4e46b4;
+          color: #4e46b4;
 
           &:hover {
             background: #f7fafc;
@@ -186,8 +186,8 @@
         }
 
         &.promote {
-          background: #4E46B4;
-          border: 1px solid #4E46B4;
+          background: #4e46b4;
+          border: 1px solid #4e46b4;
           color: white;
 
           &:hover {
@@ -208,14 +208,14 @@
         align-items: center;
         padding-top: 20px;
         padding-bottom: 8px;
-        border-bottom: 1px solid #E7E7E7;
+        border-bottom: 1px solid #e7e7e7;
 
         &:last-child {
           border-bottom: none;
         }
 
         .label {
-          color: #999CA0;
+          color: #999ca0;
           font-weight: 400;
           font-size: 16px;
           line-height: 24px;
@@ -229,18 +229,17 @@
           display: flex;
           align-items: center;
           gap: 0.5rem;
-          
-          
+
           .blueDot {
             display: inline-block;
             width: 20px;
             height: 20px;
-            background-color: #3448F0;
+            background-color: #3448f0;
             border-radius: 50%;
           }
         }
-        .valueOne{
-          color: #4E46B4;
+        .valueOne {
+          color: #4e46b4;
         }
       }
     }
@@ -254,7 +253,7 @@
     span {
       cursor: pointer;
       font-weight: 400;
-      color: #999CA0;
+      color: #999ca0;
       line-height: 24px;
       font-size: 14px;
       padding-bottom: 0.75rem;
@@ -266,18 +265,18 @@
       }
 
       &.activeTab {
-        color: #4E46B4;
+        color: #4e46b4;
         font-weight: 400;
         font-size: 14px;
 
         &::after {
-          content: '';
+          content: "";
           position: absolute;
           bottom: -1px;
           left: 0;
           right: 0;
           height: 2px;
-          background: #4E46B4;
+          background: #4e46b4;
         }
       }
     }

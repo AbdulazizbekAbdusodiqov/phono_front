@@ -1,31 +1,55 @@
-import React, { useState } from 'react'
-import style from "./CreateProduct.module.scss"
-import { CiCirclePlus } from 'react-icons/ci'
-import { MdOutlineCameraAlt } from 'react-icons/md'
+import React, { useState } from "react";
+import style from "./CreateProduct.module.scss";
+import { CiCirclePlus } from "react-icons/ci";
+import { MdOutlineCameraAlt } from "react-icons/md";
 enum SelectType {
   default = "default",
-  manual = "manual"
+  manual = "manual",
 }
 const CreateProduct = () => {
-  const [selectType, setSelectType] = useState<SelectType>(SelectType.default)
-  const [selectTypeLocation, setSelectTypeLocation] = useState<SelectType>(SelectType.default)
+  const [selectType, setSelectType] = useState<SelectType>(SelectType.default);
+  const [selectTypeLocation, setSelectTypeLocation] = useState<SelectType>(
+    SelectType.default,
+  );
   return (
     <div className={style.create_product_wrapper}>
       <div className={style.container}>
-        <p >Создать объявление</p>
+        <p>Создать объявление</p>
         <form action="" className={style.form}>
           <div>
             <p>Выберите бренд телефона</p>
-            <div >
+            <div>
               <div className={style.select_buttons_wrapper}>
-                <button type='button' className={style.select_button + " " + (selectType === SelectType.default ? style.active : "")} onClick={() => setSelectType(SelectType.default)}>Выбрать</button>
-                <button type='button' className={style.select_button + " " + (selectType === SelectType.manual ? style.active : "")} onClick={() => setSelectType(SelectType.manual)}>Ввести вручную</button>
+                <button
+                  type="button"
+                  className={
+                    style.select_button +
+                    " " +
+                    (selectType === SelectType.default ? style.active : "")
+                  }
+                  onClick={() => setSelectType(SelectType.default)}
+                >
+                  Выбрать
+                </button>
+                <button
+                  type="button"
+                  className={
+                    style.select_button +
+                    " " +
+                    (selectType === SelectType.manual ? style.active : "")
+                  }
+                  onClick={() => setSelectType(SelectType.manual)}
+                >
+                  Ввести вручную
+                </button>
               </div>
               <div>
                 <div>
                   <p className={style.select_label}>Выберите бренд</p>
                   <select className={style.select} name="" id="">
-                    <option selected disabled value="">Выберите бренд телефона </option>
+                    <option selected disabled value="">
+                      Выберите бренд телефона{" "}
+                    </option>
                     <option value="">Apple</option>
                     <option value="">Samsung</option>
                     <option value="">Xiaomi</option>
@@ -37,27 +61,29 @@ const CreateProduct = () => {
                     <option value="">iPhone</option>
                   </select>
                 </div>
-                {
-                  selectType === SelectType.default
-                    ?
-                    <div>
-                      <p className={style.select_label}>Выберите модель</p>
-                      <select name="" id="" className={style.select}>
-                        <option disabled value="">Выберите модель телефона </option>
-                        <option value="">iPhone 14 Pro Max</option>
-                        <option value="">iPhone 14 Pro</option>
-
-                      </select>
-                    </div>
-                    :
-                    <div>
-                      <p className={style.select_label}>Выберите модель</p>
-                      <input className={style.input} type="text" placeholder='Выберите модель телефона' />
-                    </div>
-                }
+                {selectType === SelectType.default ? (
+                  <div>
+                    <p className={style.select_label}>Выберите модель</p>
+                    <select name="" id="" className={style.select}>
+                      <option disabled value="">
+                        Выберите модель телефона{" "}
+                      </option>
+                      <option value="">iPhone 14 Pro Max</option>
+                      <option value="">iPhone 14 Pro</option>
+                    </select>
+                  </div>
+                ) : (
+                  <div>
+                    <p className={style.select_label}>Выберите модель</p>
+                    <input
+                      className={style.input}
+                      type="text"
+                      placeholder="Выберите модель телефона"
+                    />
+                  </div>
+                )}
               </div>
             </div>
-
           </div>
           {/* Year of Release */}
           <div className={style.form_section}>
@@ -68,7 +94,7 @@ const CreateProduct = () => {
                 type="number"
                 min="2000"
                 max={new Date().getFullYear()}
-                placeholder='Например: 2023'
+                placeholder="Например: 2023"
               />
             </div>
           </div>
@@ -90,32 +116,52 @@ const CreateProduct = () => {
             <p>Описание</p>
             <textarea
               className={`${style.input} ${style.textarea}`}
-              placeholder='Напишите что-нибудь...'
+              placeholder="Напишите что-нибудь..."
             />
-            <p className={style.text_area_max_characters}>Максимум 1000 символов</p>
+            <p className={style.text_area_max_characters}>
+              Максимум 1000 символов
+            </p>
           </div>
           <div className={style.form__location}>
             <p>Адрес продажи</p>
             <div className={style.select_buttons_wrapper}>
-              <button type='button' className={style.select_button + " " + (selectTypeLocation === SelectType.default ? style.active : "")} onClick={() => setSelectTypeLocation(SelectType.default)}>Выбрать</button>
-              <button type='button' className={style.select_button + " " + (selectTypeLocation === SelectType.manual ? style.active : "")} onClick={() => setSelectTypeLocation(SelectType.manual)}>Ввести вручную</button>
+              <button
+                type="button"
+                className={
+                  style.select_button +
+                  " " +
+                  (selectTypeLocation === SelectType.default
+                    ? style.active
+                    : "")
+                }
+                onClick={() => setSelectTypeLocation(SelectType.default)}
+              >
+                Выбрать
+              </button>
+              <button
+                type="button"
+                className={
+                  style.select_button +
+                  " " +
+                  (selectTypeLocation === SelectType.manual ? style.active : "")
+                }
+                onClick={() => setSelectTypeLocation(SelectType.manual)}
+              >
+                Ввести вручную
+              </button>
             </div>
-            {
-              selectTypeLocation === SelectType.default
-                ?
-                <div>
-                  <select name="" id=""></select>
-                </div>
-                :
-                <div>
-                  
-                </div>
-            }
+            {selectTypeLocation === SelectType.default ? (
+              <div>
+                <select name="" id=""></select>
+              </div>
+            ) : (
+              <div></div>
+            )}
           </div>
         </form>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default CreateProduct
+export default CreateProduct;

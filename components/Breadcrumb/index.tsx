@@ -1,26 +1,26 @@
-'use client';
+"use client";
 
-import { usePathname } from 'next/navigation';
-import Link from 'next/link';
-import styles from './Breadcrumb.module.scss';
+import { usePathname } from "next/navigation";
+import Link from "next/link";
+import styles from "./Breadcrumb.module.scss";
 
 const rusNamesMap: Record<string, string> = {
-  profile: 'Профиль',
-  edit: 'Мои объявления',
+  profile: "Профиль",
+  edit: "Мои объявления",
 };
 
 const Breadcrumb = () => {
-  const pathname = usePathname() || '/';
-  const segments = pathname.split('/').filter(Boolean);
+  const pathname = usePathname() || "/";
+  const segments = pathname.split("/").filter(Boolean);
 
   const breadcrumbs = [
-    { name: 'Главная', href: '/' },
+    { name: "Главная", href: "/" },
     ...segments.map((segment, index) => {
-      const href = '/' + segments.slice(0, index + 1).join('/');
+      const href = "/" + segments.slice(0, index + 1).join("/");
       const name =
         rusNamesMap[segment.toLowerCase()] ||
         decodeURIComponent(segment)
-          .replace(/-/g, ' ')
+          .replace(/-/g, " ")
           .replace(/\b\w/g, (char) => char.toUpperCase());
 
       return { name, href };

@@ -1,8 +1,8 @@
 const SvgComponent = (props) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width={props.width ?? 16}
-    height={props.height ?? 16}
+    width={props.width ?? 24}
+    height={props.height ?? 24}
     fill="none"
     {...props}
   >
@@ -10,7 +10,7 @@ const SvgComponent = (props) => (
       stroke={props.color || "#999CA0"}
       strokeLinecap="round"
       strokeLinejoin="round"
-      d="M5.808 12.75H3.25v-2.563L8.548 4.88m-2.74 7.871h6.942m-6.942 0 5.298-5.308M8.548 4.879l1.096-1.098a1.806 1.806 0 0 1 2.558 0 1.815 1.815 0 0 1 0 2.562l-1.096 1.099M8.548 4.879l2.558 2.563"
+      d="M19.125 14.192v2.74c0 1.212-.982 2.193-2.192 2.193H7.067a2.192 2.192 0 0 1-2.192-2.192v-2.74M12 15.835V4.875m0 0L8.712 8.163M12 4.875l3.289 3.288"
     />
   </svg>
 );

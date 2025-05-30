@@ -1,12 +1,12 @@
-import React from 'react'
-import { CreatePtoduct } from '../app'
+import React from "react";
+import { CreatePtoduct } from "../app";
 
 const createProductPage = () => {
   return (
     <>
-      <CreatePtoduct/>
+      <CreatePtoduct />
     </>
-  )
-}
+  );
+};
 
-export default createProductPage
+export default createProductPage;

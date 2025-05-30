@@ -38,7 +38,7 @@ const UserLoginPage = () => {
             id: data.id,
             phone_number: data.phone_number,
             full_name: data.full_name,
-          })
+          }),
         );
         setLocalStorage("accessToken", data.accessToken);
         router.push("/");

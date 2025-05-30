@@ -17,5 +17,5 @@ const SvgComponent = (props) => (
       d="M17.625 10.187c0 4.62-5.625 8.938-5.625 8.938s-5.625-4.318-5.625-8.938c0-2.934 2.518-5.312 5.625-5.312s5.625 2.378 5.625 5.312Z"
     />
   </svg>
-)
-export default SvgComponent
+);
+export default SvgComponent;

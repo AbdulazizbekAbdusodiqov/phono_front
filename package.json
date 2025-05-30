@@ -38,6 +38,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/react-redux": "^7.1.34",
+    "prettier": "^3.0.0-alpha.6",
     "sass": "^1.89.0",
     "typescript": "^5"
   }

@@ -105,7 +105,7 @@ const VerifyOtpForm = ({ onNext }: { onNext: () => void }) => {
   }
 
   const handleVerify = async () => {
-    // get user info from local storge 
+    // get user info from local storge
     const user = getLocalStorage("signup-user");
 
     if (!user) {
@@ -114,10 +114,10 @@ const VerifyOtpForm = ({ onNext }: { onNext: () => void }) => {
     }
     const code = otp.join("");
 
-    // verify phone number by otp code 
+    // verify phone number by otp code
     const res = await verifyOtp({ verification_key: user?.key, code });
     if (res?.status) {
-      // after verify phone number create user 
+      // after verify phone number create user
       const resSignup = await signUp({
         first_name: user?.firstName,
         last_name: user?.lastName,
@@ -126,16 +126,13 @@ const VerifyOtpForm = ({ onNext }: { onNext: () => void }) => {
         phone_number: user?.phoneNumber,
       });
       if (resSignup?.status_code == 200) {
-
-        
         const {
           data: { id, phone_number, full_name, accessToken },
         } = resSignup;
-        
+
         dispatch(loginSuccess({ id, phone_number, full_name }));
 
         router.push("/");
-        
 
         setLocalStorage("accessToken", accessToken);
         removeLocalStorage("signup-user");

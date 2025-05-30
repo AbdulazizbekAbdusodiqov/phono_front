@@ -1,5 +1,5 @@
 .card {
-  background: #F5F5F5;
+  background: #f5f5f5;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   padding: 16px;
@@ -25,7 +25,7 @@
 .info {
   margin-top: 10px;
 
-  .title{
+  .title {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -39,27 +39,48 @@
     }
   }
 
+  .like {
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999CA0;
+    
+    svg {
+      font-size: 18px;
+      transition: transform 0.2s ease;
+    }
+
+    &:active svg {
+      transform: scale(1.2);
+    }
+  }
+
   .wrapper {
     display: flex;
     margin: 6px 0;
     gap: 16px;
 
-  span{
-    font-size: 14px;
-    font-weight: 400;
-  }
+    span {
+      font-size: 14px;
+      font-weight: 400;
+    }
 
-  .condition{
-    color: #4E46B4;
-  }
+    .condition {
+      color: #4e46b4;
+    }
 
-  .memory{
-    margin-left: 19px;
-    margin-bottom: 12px;
-  }
+    .memory {
+      margin-left: 19px;
+      margin-bottom: 12px;
+      color: #000;
+    }
 
     b {
-      color: #999CA0;
+      color: #999ca0;
       font-weight: 400;
       font-size: 14px;
     }
@@ -75,15 +96,15 @@
 }
 
 .price {
-  font-weight:500;
+  font-weight: 500;
   font-size: 16px;
-  color: #4E46B4;
+  color: #4e46b4;
   line-height: 24px;
 }
 
 .badge {
-  background: #4AD15F33;
-  color: #4AD15F;
+  background: #4ad15f33;
+  color: #4ad15f;
   font-size: 12px;
   padding: 0 8px;
   border-radius: 8px;

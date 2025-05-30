@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation'
 import { CreateProductProps } from '@/types'
 enum SelectType {
   default = "default",
-  manual = "manual"
+  manual = "manual",
 }
 const CreateProduct = () => {
   const router = useRouter()
@@ -50,14 +50,34 @@ const CreateProduct = () => {
     return (
     <div className={style.create_product_wrapper}>
       <div className={style.container}>
-        <p >Создать объявление</p>
+        <p>Создать объявление</p>
         <form action="" className={style.form}>
           <div>
             <p>Выберите бренд телефона</p>
-            <div >
+            <div>
               <div className={style.select_buttons_wrapper}>
-                <button type='button' className={style.select_button + " " + (selectType === SelectType.default ? style.active : "")} onClick={() => setSelectType(SelectType.default)}>Выбрать</button>
-                <button type='button' className={style.select_button + " " + (selectType === SelectType.manual ? style.active : "")} onClick={() => setSelectType(SelectType.manual)}>Ввести вручную</button>
+                <button
+                  type="button"
+                  className={
+                    style.select_button +
+                    " " +
+                    (selectType === SelectType.default ? style.active : "")
+                  }
+                  onClick={() => setSelectType(SelectType.default)}
+                >
+                  Выбрать
+                </button>
+                <button
+                  type="button"
+                  className={
+                    style.select_button +
+                    " " +
+                    (selectType === SelectType.manual ? style.active : "")
+                  }
+                  onClick={() => setSelectType(SelectType.manual)}
+                >
+                  Ввести вручную
+                </button>
               </div>
               <div>
                 <div>
@@ -95,7 +115,6 @@ const CreateProduct = () => {
                 }
               </div>
             </div>
-
           </div>
           {/* Year of Release */}
           <div className={style.form_section}>
@@ -129,15 +148,39 @@ const CreateProduct = () => {
             <p>Описание</p>
             <textarea
               className={`${style.input} ${style.textarea}`}
-              placeholder='Напишите что-нибудь...'
+              placeholder="Напишите что-нибудь..."
             />
-            <p className={style.text_area_max_characters}>Максимум 1000 символов</p>
+            <p className={style.text_area_max_characters}>
+              Максимум 1000 символов
+            </p>
           </div>
           <div className={style.form__location}>
             <p>Адрес продажи</p>
             <div className={style.select_buttons_wrapper}>
-              <button type='button' className={style.select_button + " " + (selectTypeLocation === SelectType.default ? style.active : "")} onClick={() => setSelectTypeLocation(SelectType.default)}>Выбрать</button>
-              <button type='button' className={style.select_button + " " + (selectTypeLocation === SelectType.manual ? style.active : "")} onClick={() => setSelectTypeLocation(SelectType.manual)}>Ввести вручную</button>
+              <button
+                type="button"
+                className={
+                  style.select_button +
+                  " " +
+                  (selectTypeLocation === SelectType.default
+                    ? style.active
+                    : "")
+                }
+                onClick={() => setSelectTypeLocation(SelectType.default)}
+              >
+                Выбрать
+              </button>
+              <button
+                type="button"
+                className={
+                  style.select_button +
+                  " " +
+                  (selectTypeLocation === SelectType.manual ? style.active : "")
+                }
+                onClick={() => setSelectTypeLocation(SelectType.manual)}
+              >
+                Ввести вручную
+              </button>
             </div>
             {
               selectTypeLocation === SelectType.default
@@ -276,7 +319,7 @@ const CreateProduct = () => {
           <SuccessCreateModel isOpen={createModal} setIsOpen={setCreateModal} />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default CreateProduct
+export default CreateProduct;

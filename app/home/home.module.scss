@@ -15,6 +15,12 @@
     margin-bottom: 20px;
 }
 
+@media (max-width: 768px) {
+    .home_input_wrapper {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 0 16px;
+        gap: 10px;
 .prodcuts_wrapper {
     margin-top: 40px;
 }

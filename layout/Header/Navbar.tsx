@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import style from "./Navbar.module.scss";
 import Link from "next/link";
@@ -21,7 +19,6 @@ const Navbar = () => {
   const token = getLocalStorage("accessToken");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Close menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
@@ -30,7 +27,6 @@ const Navbar = () => {
       }
     };
 
-    // Close menu when resizing to desktop
     const handleResize = () => {
       if (window.innerWidth > 770 && isMenuOpen) {
         setIsMenuOpen(false);
@@ -46,7 +42,6 @@ const Navbar = () => {
     };
   }, [isMenuOpen]);
 
-  // Prevent scrolling when menu is open
   useEffect(() => {
     if (isMenuOpen) {
       document.body.style.overflow = "hidden";

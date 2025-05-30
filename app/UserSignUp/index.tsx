@@ -5,8 +5,6 @@ import style from "./user-sign-up.module.scss";
 const SignUpPage = () => {
   const [step, setStep] = useState<"form" | "verify">("form");
 
-  
-
   return step === "form" ? (
     <UserSignUpForm onNext={() => setStep("verify")} />
   ) : (

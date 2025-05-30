@@ -1,11 +1,11 @@
-@use '../../styles/container';
-@use '@/styles/fonts';
+@use "../../styles/container";
+@use "@/styles/fonts";
 
 .profile {
   padding: 2rem;
   margin-bottom: 76px;
 
-  h1{
+  h1 {
     font-size: 24px;
     font-weight: 400;
     line-height: 32px;
@@ -32,9 +32,9 @@
     margin-bottom: 2rem;
   }
 
-  .disabledButton {
-    background: #F5F5F5;
-    color : #999CA0;
+  .editButton {
+    background: #f5f5f5;
+    color: #999ca0;
     font-size: 12px;
     line-height: 16px;
     border: none;
@@ -42,29 +42,28 @@
     border-radius: 8px;
     cursor: pointer;
 
-    .edit{
+    .edit {
       display: flex;
       gap: 4px;
       padding: 12px;
-
     }
-}
-
-.searchButton {
-  background: #4E46B4;
-  color: white;
-  padding: 12px 16px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.3s ease;
-
-  &:hover {
-    background-color: white;
-    color: #4E46B4;
-    border: 1px solid #4E46B4;
   }
-}
+
+  .searchButton {
+    background: #4e46b4;
+    color: white;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+
+    &:hover {
+      background-color: white;
+      color: #4e46b4;
+      border: 1px solid #4e46b4;
+    }
+  }
 
   .userInfo {
     display: flex;
@@ -87,15 +86,15 @@
       margin-bottom: 8px;
     }
 
-    p{
+    p {
       font-weight: 400;
       font-size: 16px;
-      color: #999CA0;
+      color: #999ca0;
       line-height: 24px;
     }
 
     .balance {
-      color: #4E46B4;
+      color: #4e46b4;
       font-weight: 400;
       font-size: 16px;
       line-height: 24px;
@@ -112,16 +111,21 @@
     margin-bottom: 1.5rem;
 
     span {
-      color: #999CA0;
+      color: #999ca0;
       font-weight: 400;
       font-size: 14px;
       cursor: pointer;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: #4e46b4;
+      }
     }
 
     .active {
       font-weight: bold;
-      color: #4E46B4;
-      border-bottom: 2px solid #4E46B4;
+      color: #4e46b4;
+      border-bottom: 2px solid #4e46b4;
       padding-bottom: 23px;
     }
   }
@@ -131,16 +135,16 @@
     gap: 1rem;
     margin-bottom: 2rem;
 
-    .searchInput{
+    .searchInput {
       display: flex;
       justify-content: center;
       align-items: center;
       width: 1194px;
       padding: 12px 16px;
       gap: 8px;
-      background: #F5F5F5;
+      background: #f5f5f5;
       border-radius: 8px;
-      
+
       input {
         flex: 1;
         width: 1035px;
@@ -149,16 +153,42 @@
         font-size: 16px;
         line-height: 24px;
         font-weight: 400;
-        color: #999CA0;
-        background: #F5F5F5;
+        color: #999ca0;
+        background: #f5f5f5;
       }
     }
-
   }
 
   .cardGrid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 30px;
+  }
+
+  .emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    text-align: center;
+
+    .emptyIcon {
+      margin-bottom: 24px;
+      opacity: 0.5;
+    }
+
+    h3 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #333;
+      margin: 0 0 12px 0;
+    }
+
+    p {
+      font-size: 16px;
+      color: #999ca0;
+      margin: 0;
+    }
   }
 }

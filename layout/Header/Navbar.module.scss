@@ -78,7 +78,7 @@
     border: none;
     color: white;
     cursor: pointer;
-    z-index: 1001; // Above the overlay
+    z-index: 1001; 
     padding: 8px;
 
     &:focus {
@@ -88,7 +88,7 @@
 
 .overlay {
     position: fixed;
-    top: 70px; // Height of header
+    top: 70px; 
     left: 0;
     right: 0;
     bottom: 0;
@@ -96,7 +96,6 @@
     z-index: 999;
 }
 
-/* Responsive: Tablets */
 @media (max-width: 1024px) {
     .h1 {
         font-size: 28px;
@@ -116,7 +115,6 @@
     }
 }
 
-/* Responsive: Mobile */
 @media (max-width: 770px) {
     .header {
         height: 60px;
@@ -138,7 +136,7 @@
 
     .right {
         position: fixed;
-        top: 60px; // Height of header
+        top: 60px;
         left: 0;
         right: 0;
         bottom: 0;
@@ -189,7 +187,6 @@
     }
 }
 
-/* Small phones */
 @media (max-width: 480px) {
     .header {
         height: 55px;

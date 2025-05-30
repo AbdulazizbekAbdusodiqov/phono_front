@@ -4,19 +4,22 @@
 
 .footer {
     font-family: 'SF-Pro-Display-Regular', sans-serif;
-    .line{
-        width: 1200px;
+
+    .line {
+        max-width: 1200px;
         border-radius: 1px;
         margin: 0 auto;
         height: 1px;
         background-color: #999ca0;
     }
+
     .container {
         @extend .container;
         padding: 0px 10px;
         background-color: #fff;
         margin-top: 50px;
     }
+
     &__top {
         display: flex;
         flex-wrap: wrap;
@@ -61,14 +64,15 @@
         flex-direction: column;
         align-self: flex-end;
         gap: 10px;
+
         .footer__store_badge {
-            align-self: flex-end;   
+            align-self: flex-end;
         }
 
         .footer__social_icons {
             display: flex;
             gap: 10px;
-            
+
         }
     }
 

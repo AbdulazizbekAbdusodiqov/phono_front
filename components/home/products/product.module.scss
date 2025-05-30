@@ -1,9 +1,9 @@
 // Product Card Styles
 .products_grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
     gap: 10px;
-    width: 100%;
+    justify-content: center;
 }
 
 .product_card_wrapper {

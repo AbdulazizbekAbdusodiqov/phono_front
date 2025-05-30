@@ -8,7 +8,7 @@ export const sendOtp = async (phone_number: string) => {
     return res.data;
   } catch (error: any) {
     console.log(error);
-    toast.error(`Faild to register user ${error.response.data.message}`);
+    toast.error(`Faild to register user ${error?.response?.data?.message}`);
   }
 };
 

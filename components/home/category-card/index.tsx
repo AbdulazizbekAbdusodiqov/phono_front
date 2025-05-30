@@ -1,8 +1,6 @@
 import React from "react";
 import style from "./category-card.module.scss";
-import cardImg from "../../../public/img/profile/Rectangle-3.png";
 import Image from "next/image";
-import { log } from "console";
 
 const CategoryCard = (props: any) => {
   const { id, name, logo } = props.category;

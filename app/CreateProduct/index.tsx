@@ -7,6 +7,7 @@ import SuccessCreateModel from './components/SuccessCreateModel'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../store/store'
 import { useRouter } from 'next/navigation'
+import { CreateProductProps } from '@/types'
 enum SelectType {
   default = "default",
   manual = "manual"
@@ -17,6 +18,25 @@ const CreateProduct = () => {
   const [selectTypeLocation, setSelectTypeLocation] = useState<SelectType>(SelectType.default)
   const [createModal, setCreateModal] = useState<boolean>(false)
   const {user, isAuthenticated} = useSelector((state:RootState)=>state.auth)
+  const [productData, setProductData] = useState<CreateProductProps>({
+    title:"",
+    brand_id: "",
+    model_id: null,
+    year: "",
+    price: 0,
+    currency_id: "",
+    description: "",
+    negotiable: false,
+    phone_number: "",
+    user_id: user?.id || "",
+    address_id: "",
+    color_id:"",
+    has_document:false,
+    ram:0, 
+    storage:0,
+    other_model:null,
+    condition:false
+  })
   useEffect(()=>{
     if(!isAuthenticated || !localStorage.getItem("accessToken")){
       router.push("/login")
@@ -24,10 +44,10 @@ const CreateProduct = () => {
   },[])
   
   const handleClickPublishing = () => {
-    console.log(user);
+    console.log(productData);
     setCreateModal(true)
   }
-  return (
+    return (
     <div className={style.create_product_wrapper}>
       <div className={style.container}>
         <p >Создать объявление</p>
@@ -42,7 +62,7 @@ const CreateProduct = () => {
               <div>
                 <div>
                   <p className={style.select_label}>Выберите бренд</p>
-                  <select className={style.select} name="" id="">
+                  <select className={style.select} name="" id="" onChange={(e)=>setProductData({...productData, brand_id:e.target.value})}>
                     <option selected disabled value="">Выберите бренд телефона </option>
                     <option value="">Apple</option>
                     <option value="">Samsung</option>
@@ -60,7 +80,7 @@ const CreateProduct = () => {
                     ?
                     <div>
                       <p className={style.select_label}>Выберите модель</p>
-                      <select name="" id="" className={style.select}>
+                      <select name="" id="" className={style.select} onChange={(e)=>setProductData({...productData, model_id:e.target.value})}>
                         <option disabled value="">Выберите модель телефона </option>
                         <option value="">iPhone 14 Pro Max</option>
                         <option value="">iPhone 14 Pro</option>
@@ -87,6 +107,7 @@ const CreateProduct = () => {
                 min="2000"
                 max={new Date().getFullYear()}
                 placeholder='Например: 2023'
+                onChange={(e)=>setProductData({...productData, year:e.target.value})}
               />
             </div>
           </div>
@@ -124,14 +145,14 @@ const CreateProduct = () => {
                 <div>
                   <div>
                     <p className={style.select_label}>Выбрать регион</p>
-                    <select className={style.select} name="" id="">
+                    <select className={style.select} name="" id="" onChange={(e)=>setProductData({...productData, address_id:e.target.value})}>
                       <option selected disabled value="">Выберите регион</option>
                       <option value="">Toshkent</option>
                     </select>
                   </div>
                   <div>
                     <p className={style.select_label}>Выбрать город или район</p>
-                    <select className={style.select} name="" id="">
+                    <select className={style.select} name="" id="" onChange={(e)=>setProductData({...productData, address_id:e.target.value})}>
                       <option selected disabled value="">Выберите город или район</option>
                       <option value="">Chilonzor</option>
                     </select>
@@ -146,8 +167,8 @@ const CreateProduct = () => {
           <div>
             <p>Цена</p>
             <div className={style.form__price}>
-              <input type="number" className={style.input} placeholder='Сумма' />
-              <select style={{ width: "100px" }} className={style.select} name="" id="">
+              <input type="number" className={style.input} placeholder='Сумма' onChange={(e)=>setProductData({...productData, price:Number(e.target.value)})}/> 
+              <select style={{ width: "100px" }} className={style.select} name="" id="" onChange={(e)=>setProductData({...productData, currency_id:e.target.value})}>
                 <option value="">UZS</option>
                 <option value="">USD</option>
                 <option value="">RUB</option>
@@ -157,11 +178,11 @@ const CreateProduct = () => {
               <p>Цена окончательная?</p>
               <div className={style.negotiable_wrapper}>
                 <div className={style.radio_wrapper}>
-                  <input name='negotiable' type="radio" />
+                  <input name='negotiable' type="radio" onChange={(e)=>setProductData({...productData, negotiable:true})}/>
                   <p>Торг есть</p>
                 </div>
                 <div className={style.radio_wrapper}>
-                  <input name='negotiable' type="radio" />
+                  <input name='negotiable' type="radio" onChange={(e)=>setProductData({...productData, negotiable:false})}/>
                   <p>Да, окончательная</p>
                 </div>
               </div>
@@ -170,11 +191,11 @@ const CreateProduct = () => {
               <p>Состояние</p>
               <div className={style.negotiable_wrapper}>
                 <div className={style.radio_wrapper}>
-                  <input name='condition' type="radio" />
+                  <input name='condition' type="radio" onChange={(e)=>setProductData({...productData, condition:true})}/>
                   <p>Новый</p>
                 </div>
                 <div className={style.radio_wrapper}>
-                  <input name='condition' type="radio" />
+                  <input name='condition' type="radio" onChange={(e)=>setProductData({...productData, condition:false})}/>
                   <p>Б/У</p>
                 </div>
               </div>
@@ -183,11 +204,11 @@ const CreateProduct = () => {
               <p>Коробка с документами</p>
               <div className={style.negotiable_wrapper}>
                 <div className={style.radio_wrapper}>
-                  <input name='has_document' type="radio" />
+                  <input name='has_document' type="radio" onChange={(e)=>setProductData({...productData, has_document:true})}/>
                   <p>Есть</p>
                 </div>
                 <div className={style.radio_wrapper}>
-                  <input name='has_document' type="radio" />
+                  <input name='has_document' type="radio" onChange={(e)=>setProductData({...productData, has_document:false})}/>
                   <p>Нет</p>
                 </div>
               </div>
@@ -234,15 +255,15 @@ const CreateProduct = () => {
             <p>Номер телефона</p>
             <div className={style.phone_wrapper}>
               <div className={style.radio_wrapper}>
-                <input name='phone' type="radio" />
+                <input name='phone' type="radio" onChange={(e)=>setProductData({...productData, phone_number:e.target.value})}/>
                 <p>+998931234567</p>
               </div>
               <div className={style.radio_wrapper}>
-                <input name='phone' type="radio" />
+                <input name='phone' type="radio" onChange={(e)=>setProductData({...productData, phone_number:e.target.value})}/>
                 <p>+998931234567</p>
               </div>
               <div className={style.radio_wrapper}>
-                <input name='phone' type="radio" />
+                <input name='phone' type="radio" onChange={(e)=>setProductData({...productData, phone_number:e.target.value})}/>
                 <p>+998931234567</p>
               </div>
             </div>

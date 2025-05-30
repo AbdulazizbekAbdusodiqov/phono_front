@@ -15,4 +15,5 @@ export interface CreateProductProps {
     has_document:boolean;
     phone_number:string;
     address_id:string;
+    condition: boolean;
 }

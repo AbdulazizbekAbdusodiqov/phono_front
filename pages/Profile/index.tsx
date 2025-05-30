@@ -3,7 +3,7 @@ import styles from "./Profile.module.scss"
 import Card from "../../components/Card"
 import { HeartIcon, PenIcon, SearchIcon } from "@/public/icons/profile"
 import Breadcrumb from "@/components/Breadcrumb"
-import EditProfileModal from "@/components/EditProfileModal/EditProfileModal"
+import EditProfileModal from "@/components/EditProfileModal/index"
 
 const products = [
   {

@@ -26,7 +26,7 @@ const ProductSide = () => {
         query: { ...router.query, page: newPage },
       },
       undefined,
-      { shallow: true } // Prevent full reload
+      { shallow: true }
     );
   };
 
@@ -40,7 +40,7 @@ const ProductSide = () => {
     );
   }
 
-  if (!products || products.data.length === 0) {
+  if (!products || products?.data?.length === 0) {
     return (
       <div className={style.no_data}>
         <p>Нет данных</p>

@@ -1,18 +1,30 @@
-import React, { useRef, useState } from 'react'
+import React, { useDebugValue, useEffect, useRef, useState } from 'react'
 import style from "./CreateProduct.module.scss"
 import { CiCirclePlus } from 'react-icons/ci'
 import { MdOutlineCameraAlt } from 'react-icons/md'
 import MapComponent from './components/MapComponent'
 import SuccessCreateModel from './components/SuccessCreateModel'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../store/store'
+import { useRouter } from 'next/navigation'
 enum SelectType {
   default = "default",
   manual = "manual"
 }
 const CreateProduct = () => {
+  const router = useRouter()
   const [selectType, setSelectType] = useState<SelectType>(SelectType.default)
   const [selectTypeLocation, setSelectTypeLocation] = useState<SelectType>(SelectType.default)
   const [createModal, setCreateModal] = useState<boolean>(false)
+  const {user, isAuthenticated} = useSelector((state:RootState)=>state.auth)
+  useEffect(()=>{
+    if(!isAuthenticated || !localStorage.getItem("accessToken")){
+      router.push("/login")
+    }
+  },[])
+  
   const handleClickPublishing = () => {
+    console.log(user);
     setCreateModal(true)
   }
   return (

@@ -6,7 +6,7 @@
   padding: 0px 10px;
   margin-top: 50px;
   font-family: 'SF-Pro-Display-Regular', sans-serif;
-
+  position: relative;
   &>p {
     font-size: 40px;
     font-weight: 400;
@@ -30,7 +30,6 @@
         color: #000;
         font-weight: 500;
       }
-
       .select_label {
         display: block;
         margin-bottom: 8px;
@@ -38,7 +37,7 @@
         color: #000;
         font-weight: 500;
       }
-
+      
       /* Style for select dropdowns */
       .select {
         width: 343px;
@@ -63,13 +62,13 @@
           border-color: #4e46b4;
           box-shadow: 0 0 0 2px rgba(78, 70, 180, 0.1);
         }
-
+        
         &:disabled {
           background-color: #f9f9f9;
           color: #999;
           cursor: not-allowed;
         }
-
+        
         option {
           padding: 10px;
           background: #fff;
@@ -131,6 +130,84 @@
         color: #999CA0;
         margin-top: -16px;
         padding-left: 12px;
+      }
+    }
+    &__location {
+      .select_buttons_wrapper {
+        width: 30%;
+        display: inline-flex;
+        gap: 6px;
+        padding: 6px;
+        border-radius: 10px;
+        background-color: #f0f0f0;
+        margin: 10px 0;
+        margin-bottom: 16px;
+      }
+    }
+    &__price {
+      display: flex;
+      gap: 16px;
+      &>input {
+        width: 100%;
+        height: 50px !important;
+      }
+    }
+    &__color {
+      .color_wrapper {
+        display: flex;
+        gap: 18px;
+        flex-wrap: wrap;
+        width: 35% !important;
+        .color_box {
+          width: 72px;
+          height: 48px;
+          border-radius: 8px;
+          border: 1px solid #e0e0e0;
+        }
+      }
+    }
+    &__submit_buttons {
+      display: flex;
+      flex-direction: row !important;
+      justify-content: end;
+      align-items: center;
+      gap: 16px;
+      margin-top: 24px;
+      margin-bottom: 90px;
+      a {
+        font-size: 16px;
+        color: #000;
+        font-weight: 500;
+      }
+      button {
+        font-size: 16px;
+        color: #fff;
+        font-weight: 500;
+        background-color: #4E46B4;
+        padding: 12px 24px;
+        border-radius: 8px;
+        border: none;
+      }
+    }
+    .phone_wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }  
+    
+    .negotiable_wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .radio_wrapper {
+      display: flex;
+      gap: 16px;
+      p {
+        font-size: 16px;
+        color: #000;
+        font-weight: 500;
       }
     }
     .photo_upload_container {

@@ -157,7 +157,6 @@ const FilterSide = ({ onClose, onApply }: FilterSideProps) => {
   const [showBrandDropdown, setShowBrandDropdown] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
-  // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (

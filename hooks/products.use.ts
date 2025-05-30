@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { getProducts } from "../api";
 
-export const useProducts = (page: number) => {
+export const useProducts = (page: number, search: string) => {
   return useQuery({
-    queryKey: ["products", page], // include page in queryKey!
-    queryFn: () => getProducts(page),
+    queryKey: ["products", page, search],
+    queryFn: () => getProducts(page, search),
   });
 };

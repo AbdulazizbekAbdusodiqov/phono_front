@@ -32,12 +32,17 @@ export const createProduct = async ({
   }
 };
 
-export const getProducts = async (page = 1) => {
+export const getProducts = async (page = 1, search = "") => {
   try {
-    const res = await instance.get(`/product?page=${page}`);
+    const res = await instance.get(`/product`, {
+      params: {
+        page,
+        search,
+      },
+    });
     return res.data;
   } catch (error: any) {
-    console.log(error);
-    toast.error(`${error.response.data.message}`);
+    console.error(error);
+    toast.error(`${error.response?.data?.message || "Something went wrong"}`);
   }
 };

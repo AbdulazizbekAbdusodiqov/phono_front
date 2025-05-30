@@ -9,14 +9,15 @@ import ProductCard from "../product-card";
 const ProductSide = () => {
   const router = useRouter();
   const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
 
-  // Read `page` from query string
   useEffect(() => {
     const pageFromUrl = Number(router.query.page) || 1;
+    const searchFromUrl = router.query.search as string;
     setPage(pageFromUrl);
-  }, [router.query.page]);
-
-  const { data: products, isLoading } = useProducts(page);
+    setSearch(searchFromUrl);
+  }, [router.query.page, router.query.search]);
+  const { data: products, isLoading } = useProducts(page, search);
 
   const handlePageChange = (newPage: number) => {
     router.push(

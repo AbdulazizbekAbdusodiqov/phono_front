@@ -1,0 +1,63 @@
+import React, { forwardRef, useEffect, useRef } from 'react'
+import styles from "./Modal.module.scss"
+import { FaRegCircleCheck } from "react-icons/fa6";
+import Button from '../../../components/Button/Button';
+
+interface SuccessCreateModelProps {
+  isOpen: boolean;
+  setIsOpen: (value: boolean) => void;
+}
+
+const SuccessCreateModel = forwardRef<HTMLDivElement, SuccessCreateModelProps>(({ isOpen, setIsOpen }) => {
+    const modalRef = useRef<HTMLDivElement>(null);
+    const overlayRef = useRef<HTMLDivElement>(null);
+
+    const handleClickOk = () => {
+        setIsOpen(false);
+    };
+
+    useEffect(() => {
+        // Close modal when clicking outside
+        const handleClickOutside = (event: MouseEvent) => {
+            if (overlayRef.current && event.target === overlayRef.current) {
+                setIsOpen(false);
+            }
+        };
+
+        // Close modal on Escape key press
+        const handleEscape = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                setIsOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        document.addEventListener('keydown', handleEscape);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener('keydown', handleEscape);
+        };
+    }, [setIsOpen]);
+
+    return (
+        <div 
+            ref={overlayRef} 
+            className={`${styles.overlay} ${isOpen ? styles.active : ''}`}
+            style={{ display: isOpen ? 'flex' : 'none' }}
+        >
+            <div 
+                ref={modalRef} 
+                className={`${styles.modal} ${isOpen ? styles.active : ''}`}
+            >
+                <FaRegCircleCheck color="#4AD15F" />
+                <p>Ваше объявление успешно создано.</p>
+                <Button variant='primary' onClick={handleClickOk}>Ok</Button>
+            </div>
+        </div>
+  )
+});
+
+SuccessCreateModel.displayName = 'SuccessCreateModel';
+
+export default SuccessCreateModel;

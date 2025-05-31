@@ -51,13 +51,13 @@ const ProductSide = () => {
   return (
     <>
       <div className={style.products_grid}>
-        {products.data.map((product: any) => (
+        {products?.data?.map((product: any) => (
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
 
       {/* Pagination */}
-      {products.meta.lastPage > 1 && (
+      {products?.meta?.lastPage > 1 && (
         <div className={style.pagination}>
           <button
             onClick={() => handlePageChange(page - 1)}

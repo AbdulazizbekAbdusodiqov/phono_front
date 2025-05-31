@@ -1,7 +1,7 @@
 import style from "./product.module.scss";
 import Image from "next/image";
 import Link from "next/link";
-import { Heart } from "lucide-react";
+import { FaRegHeart } from "react-icons/fa6";
 
 const ProductCard = ({ product }: { product?: any }) => {
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "";
@@ -45,7 +45,7 @@ const ProductCard = ({ product }: { product?: any }) => {
               }`}
               onClick={(e) => e.preventDefault()} // prevent link navigation
             >
-              <Heart size={20} />
+              <FaRegHeart size={20} />
             </button>
           </div>
 

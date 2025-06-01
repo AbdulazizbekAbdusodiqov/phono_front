@@ -6,7 +6,7 @@ export { default as EditIcon } from "./src/EditIcon";
 export { default as HeartIcon } from "./src/HeartIcon";
 export { default as ArrowIcon } from "./src/ArrowIcon";
 export { default as CloseIcon } from "./src/CloseIcon";
-export { default as SearchIcon } from "./src/searchIcon";
+export { default as SearchIcon } from "./src/SearchIcon";
 export { default as AvatarIcon } from "./src/AvatarIcon";
 export { default as UploadIcon } from "./src/UploadIcon";
 export { default as LeftNavIcon } from "./src/LeftNavIcon";

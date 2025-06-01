@@ -51,51 +51,26 @@
         .prodcuts_wrapper {
             margin-top: 40px;
         }
+    }
+}
 
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 100;
-            backdrop-filter: blur(4px);
-            animation: fadeIn 0.2s ease-in-out;
-        }
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
 
-        .filter_side_wrapper {
-            width: 600px;
-            max-width: 80vw;
-            height: 100vh;
-            position: fixed;
-            top: 0;
-            right: 30%;
-            background-color: #fff;
-            z-index: 100000000;
-            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
-            animation: slideIn 0.3s ease-in-out;
-            overflow: hidden;
-        }
+    to {
+        opacity: 1;
+    }
+}
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+    }
 
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-            }
-
-            to {
-                transform: translateX(0);
-            }
-        }
+    to {
+        transform: translateX(0);
     }
 }

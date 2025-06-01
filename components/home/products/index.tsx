@@ -1,4 +1,5 @@
 // components/home/products/index.tsx
+
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import style from "./product.module.scss";
@@ -9,15 +10,28 @@ import ProductCard from "../product-card";
 const ProductSide = () => {
   const router = useRouter();
   const [page, setPage] = useState(1);
-  const [search, setSearch] = useState("");
+  const [filters, setFilters] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    const pageFromUrl = Number(router.query.page) || 1;
-    const searchFromUrl = router.query.search as string;
+    const query = router.query;
+    const pageFromUrl = Number(query.page) || 1;
+
+    const filterParams: Record<string, string> = {};
+
+    if (query.search) filterParams.search = query.search as string;
+    if (query.brand) filterParams.brand = query.brand as string;
+    if (query.color) filterParams.color = query.color as string;
+    if (query.memory) filterParams.memory = query.memory as string;
+    if (query.region) filterParams.region = query.region as string;
+    if (query.othermodel) filterParams.othermodel = query.othermodel as string;
+    if (query.condition) filterParams.condition = query.condition as string;
+    if (query["is-top"]) filterParams["is-top"] = query["is-top"] as string;
+
     setPage(pageFromUrl);
-    setSearch(searchFromUrl);
-  }, [router.query.page, router.query.search]);
-  const { data: products, isLoading } = useProducts(page, search);
+    setFilters(filterParams);
+  }, [router.query]);
+
+  const { data: products, isLoading } = useProducts(page, filters);
 
   const handlePageChange = (newPage: number) => {
     router.push(

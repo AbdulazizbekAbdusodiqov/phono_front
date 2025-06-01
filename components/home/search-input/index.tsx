@@ -19,14 +19,6 @@ const SearchInput: React.FC<SearchInputProps> = ({ onFilterClick }) => {
     doSearch(newValue);
   };
 
-  const doSearch = (searchTerm: string) => {
-    const trimmed = searchTerm.trim();
-    router.push({
-      pathname: router.pathname,
-      query: { ...router.query, search: trimmed || undefined, page: 1 }, // reset page to 1 on new search
-    });
-  };
-
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       doSearch(query);
@@ -35,6 +27,24 @@ const SearchInput: React.FC<SearchInputProps> = ({ onFilterClick }) => {
 
   const handleSearchClick = () => {
     doSearch(query);
+  };
+
+  const doSearch = (searchTerm: string) => {
+    const trimmed = searchTerm.trim();
+    const newQuery = { ...router.query };
+
+    if (trimmed) {
+      newQuery.search = trimmed;
+    } else {
+      delete newQuery.search;
+    }
+
+    delete newQuery.page;
+
+    router.push({
+      pathname: router.pathname,
+      query: newQuery,
+    });
   };
 
   return (

@@ -66,3 +66,19 @@
     color: #2f2a88;
   }
 }
+
+.link_text {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 14px;
+}
+
+.link {
+  color: #0070f3;
+  text-decoration: underline;
+  cursor: pointer;
+
+  &:hover {
+    color: #0051a2;
+  }
+}

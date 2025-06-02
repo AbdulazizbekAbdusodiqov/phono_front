@@ -19,7 +19,7 @@ const ProductSide = () => {
   }, [router.query.page, router.query.search]);
   const { data: products, isLoading } = useProducts(page, search);
 
-  const handlePageChange = (newPage: number) => {
+  const handlePageChange = (newPage: number):any => {
     router.push(
       {
         pathname: router.pathname,

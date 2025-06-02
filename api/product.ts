@@ -2,13 +2,16 @@ import instance from "./instance";
 
 import { CreateProductProps } from "../types";
 import { toast } from "react-toastify";
+import { AddressData } from "../types/userData";
 
 export const createProduct = async ({
   data,
   images,
+  addressData
 }: {
   data: CreateProductProps;
   images: File[];
+  addressData: AddressData;
 }) => {
   try {
     const formData = new FormData();

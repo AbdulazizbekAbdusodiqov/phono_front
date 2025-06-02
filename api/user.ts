@@ -4,7 +4,7 @@ import { AddressData } from "../types/userData";
 
 export const getUserPhoneNumbers = async (id: number|string) => {
     try {
-        const token = localStorage.getItem("accessToken")?.split(`"`)[1];
+        const token = localStorage.getItem("accessToken");
         const res = await instance.get(`/phone-number/getmynumbers/${id}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -22,7 +22,7 @@ export const getUserPhoneNumbers = async (id: number|string) => {
 
 export const getRegions = async () => {
     try {
-        const token = localStorage.getItem("accessToken")?.split(`"`)[1];
+        const token = localStorage.getItem("accessToken");
         const res = await instance.get(`/region`, {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -40,7 +40,7 @@ export const getRegions = async () => {
 
 export const getRegionById = async (id: number) => {
     try {
-        const token = localStorage.getItem("accessToken")?.split(`"`)[1];
+        const token = localStorage.getItem("accessToken");
         const res = await instance.get(`/region/${id}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -58,7 +58,7 @@ export const getRegionById = async (id: number) => {
 
 export const getDistricts = async () => {
     try {
-        const token = localStorage.getItem("accessToken")?.split(`"`)[1];
+        const token = localStorage.getItem("accessToken");
         const res = await instance.get(`/district`, {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -76,7 +76,7 @@ export const getDistricts = async () => {
 
 export const createAddress = async (data: AddressData) => {
     try {
-        const token = localStorage.getItem("accessToken")?.split(`"`)[1];
+        const token = localStorage.getItem("accessToken");
         const res = await instance.post(`/address`, data, {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -93,7 +93,7 @@ export const createAddress = async (data: AddressData) => {
 }
 export const getAddresses = async () => {
     try {
-        const token = localStorage.getItem("accessToken")?.split(`"`)[1];
+        const token = localStorage.getItem("accessToken");
         const res = await instance.get(`/address`, {
             headers: {
                 Authorization: `Bearer ${token}`,

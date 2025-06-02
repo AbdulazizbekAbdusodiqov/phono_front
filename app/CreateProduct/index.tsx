@@ -1,22 +1,31 @@
-import React, { useEffect, useRef, useState } from 'react'
-import style from "./CreateProduct.module.scss"
-import { MdOutlineCameraAlt } from 'react-icons/md'
-import MapComponent from './components/MapComponent'
-import SuccessCreateModel from './components/SuccessCreateModel'
-import { useSelector } from 'react-redux'
-import { RootState } from '../../store/store'
-import { useRouter } from 'next/navigation'
-import { CreateProductProps } from '@/types'
+import React, { useEffect, useRef, useState } from 'react';
+import style from './CreateProduct.module.scss';
+import { MdOutlineCameraAlt } from 'react-icons/md';
+import MapComponent from './components/MapComponent';
+import SuccessCreateModel from './components/SuccessCreateModel';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
+import { useRouter } from 'next/navigation';
+import { CreateProductProps } from '@/types';
 import { jwtDecode } from 'jwt-decode';
-import { toast } from 'react-toastify'
-import { useCategory, useCategoryById, useColors, useCurrency } from '../../hooks/category'
-import { useGetRegionById, useGetRegions, useUserPhoneNumbers } from '../../hooks/user'
-import { AddressData } from '../../types/userData'
-import { createProduct } from '../../api/product'
+import { toast } from 'react-toastify';
+import {
+  useCategory,
+  useCategoryById,
+  useColors,
+  useCurrency,
+} from '../../hooks/category';
+import {
+  useGetRegionById,
+  useGetRegions,
+  useUserPhoneNumbers,
+} from '../../hooks/user';
+import { AddressData } from '../../types/userData';
+import { createProduct } from '../../api/product';
 
 enum SelectType {
-  default = "default",
-  manual = "manual",
+  default = 'default',
+  manual = 'manual',
 }
 
 interface Color {
@@ -53,53 +62,57 @@ interface District {
 }
 
 const CreateProduct = () => {
-  const router = useRouter()
-  const [selectType, setSelectType] = useState<SelectType>(SelectType.default)
-  const [selectTypeLocation, setSelectTypeLocation] = useState<SelectType>(SelectType.default)
-  const [createModal, setCreateModal] = useState<boolean>(false)
-  const { user, isAuthenticated } = useSelector((state: RootState) => state.auth)
-  
+  const router = useRouter();
+  const [selectType, setSelectType] = useState<SelectType>(SelectType.default);
+  const [selectTypeLocation, setSelectTypeLocation] = useState<SelectType>(
+    SelectType.default,
+  );
+  const [createModal, setCreateModal] = useState<boolean>(false);
+  const { user, isAuthenticated } = useSelector(
+    (state: RootState) => state.auth,
+  );
+
   const [productData, setProductData] = useState<CreateProductProps>({
-    title: "",
+    title: '',
     brand_id: 0,
     model_id: 0,
-    year: "",
+    year: '',
     price: 0,
     currency_id: 0,
-    description: "",
+    description: '',
     negotiable: false,
-    phone_number: "",
+    phone_number: '',
     user_id: Number(user?.id) || 0,
     address_id: 0,
     color_id: 0,
     has_document: false,
     ram: 0,
     storage: 0,
-    other_model: "",
-    condition: false
-  })
-  
+    other_model: '',
+    condition: false,
+  });
+
   const [addressData, setAddressData] = useState<AddressData>({
     user_id: Number(user?.id) || 0,
     region_id: null,
     district_id: null,
-    name: "",
+    name: '',
     lat: null,
     long: null,
-    address: "",
+    address: '',
   });
 
   const [images, setImages] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  
+
   // API hooks
   const { data: brands } = useCategory();
-  const { data: oneBrand } = useCategoryById(productData.brand_id) 
-  const { data: colors } = useColors()
-  const { data: currency } = useCurrency()
-  const { data: phoneNumbers } = useUserPhoneNumbers(Number(user?.id))
-  const { data: regions } = useGetRegions()
-  const { data: oneRegion } = useGetRegionById(addressData.region_id || 0)
+  const { data: oneBrand } = useCategoryById(productData.brand_id);
+  const { data: colors } = useColors();
+  const { data: currency } = useCurrency();
+  const { data: phoneNumbers } = useUserPhoneNumbers(Number(user?.id));
+  const { data: regions } = useGetRegions();
+  const { data: oneRegion } = useGetRegionById(addressData.region_id || 0);
 
   const handleClickPublishing = async () => {
     console.log('Product Data:', productData);
@@ -107,15 +120,17 @@ const CreateProduct = () => {
     console.log('Uploaded Images:', images);
 
     // Validation
-    if (!productData.title || 
-        !productData.brand_id || 
-        !productData.model_id || 
-        !productData.year || 
-        !productData.price || 
-        !productData.currency_id || 
-        !productData.description || 
-        !productData.phone_number || 
-        !productData.color_id) {
+    if (
+      !productData.title ||
+      !productData.brand_id ||
+      !productData.model_id ||
+      !productData.year ||
+      !productData.price ||
+      !productData.currency_id ||
+      !productData.description ||
+      !productData.phone_number ||
+      !productData.color_id
+    ) {
       toast.error('Please fill all required fields');
       return;
     }
@@ -132,7 +147,7 @@ const CreateProduct = () => {
       const response = await createProduct({
         data: productData,
         images: images,
-        addressData: addressData
+        addressData: addressData,
       });
       toast.success('Product created successfully');
       setCreateModal(true);
@@ -144,12 +159,12 @@ const CreateProduct = () => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const filesArray = Array.from(e.target.files);
-      setImages(prevImages => [...prevImages, ...filesArray].slice(0, 10)); // Limit to 10 images
+      setImages((prevImages) => [...prevImages, ...filesArray].slice(0, 10)); // Limit to 10 images
     }
   };
 
   const removeImage = (index: number) => {
-    setImages(prevImages => prevImages.filter((_, i) => i !== index));
+    setImages((prevImages) => prevImages.filter((_, i) => i !== index));
   };
 
   const triggerFileInput = () => {
@@ -165,45 +180,77 @@ const CreateProduct = () => {
           const decoded = jwtDecode(token);
           const currentTime = Date.now() / 1000; // seconds
 
-          if (typeof decoded === 'object' && 
-              decoded && 
-              'exp' in decoded && 
-              typeof (decoded as any).exp === 'number' && 
-              (decoded as any).exp < currentTime) {
-            toast.info("Tizim sizni xavfsizlik uchun chiqarib qo'ydi. Iltimos, qayta kiring.")
-            router.push("/login")
+          if (
+            typeof decoded === 'object' &&
+            decoded &&
+            'exp' in decoded &&
+            typeof (decoded as any).exp === 'number' &&
+            (decoded as any).exp < currentTime
+          ) {
+            toast.info(
+              "Tizim sizni xavfsizlik uchun chiqarib qo'ydi. Iltimos, qayta kiring.",
+            );
+            router.push('/login');
           }
         } catch (error) {
-          toast.info("Tizim sizni xavfsizlik uchun chiqarib qo'ydi. Iltimos, qayta kiring.")
-          router.push("/login")
+          toast.info(
+            "Tizim sizni xavfsizlik uchun chiqarib qo'ydi. Iltimos, qayta kiring.",
+          );
+          router.push('/login');
         }
       } else {
-        toast.info("Tizim sizni xavfsizlik uchun chiqarib qo'ydi. Iltimos, qayta kiring.")
-        router.push("/login")
+        toast.info(
+          "Tizim sizni xavfsizlik uchun chiqarib qo'ydi. Iltimos, qayta kiring.",
+        );
+        router.push('/login');
       }
     } else {
-      toast.info("Tizim sizni xavfsizlik uchun chiqarib qo'ydi. Iltimos, qayta kiring.")
-      router.push("/login")
+      toast.info(
+        "Tizim sizni xavfsizlik uchun chiqarib qo'ydi. Iltimos, qayta kiring.",
+      );
+      router.push('/login');
     }
-  }, [isAuthenticated, router])
+  }, [isAuthenticated, router]);
 
   // Update title when brand or model changes
   useEffect(() => {
-    if (productData.brand_id && selectType === SelectType.default && productData.model_id) {
-      const brandName = brands?.find((brand: Brand) => brand.id == productData.brand_id)?.name || '';
-      const modelName = oneBrand?.model?.find((model: Model) => model.id == productData.model_id)?.name || '';
-      setProductData(prev => ({
+    if (
+      productData.brand_id &&
+      selectType === SelectType.default &&
+      productData.model_id
+    ) {
+      const brandName =
+        brands?.find((brand: Brand) => brand.id == productData.brand_id)
+          ?.name || '';
+      const modelName =
+        oneBrand?.model?.find(
+          (model: Model) => model.id == productData.model_id,
+        )?.name || '';
+      setProductData((prev) => ({
         ...prev,
-        title: `${brandName} ${modelName}`.trim()
+        title: `${brandName} ${modelName}`.trim(),
       }));
-    } else if (productData.brand_id && selectType === SelectType.manual && productData.other_model) {
-      const brandName = brands?.find((brand: Brand) => brand.id == productData.brand_id)?.name || '';
-      setProductData(prev => ({
+    } else if (
+      productData.brand_id &&
+      selectType === SelectType.manual &&
+      productData.other_model
+    ) {
+      const brandName =
+        brands?.find((brand: Brand) => brand.id == productData.brand_id)
+          ?.name || '';
+      setProductData((prev) => ({
         ...prev,
-        title: `${brandName} ${productData.other_model}`.trim()
+        title: `${brandName} ${productData.other_model}`.trim(),
       }));
     }
-  }, [productData.brand_id, productData.model_id, productData.other_model, selectType, brands, oneBrand]);
+  }, [
+    productData.brand_id,
+    productData.model_id,
+    productData.other_model,
+    selectType,
+    brands,
+    oneBrand,
+  ]);
 
   return (
     <div className={style.create_product_wrapper}>
@@ -220,8 +267,8 @@ const CreateProduct = () => {
                   type="button"
                   className={
                     style.select_button +
-                    " " +
-                    (selectType === SelectType.default ? style.active : "")
+                    ' ' +
+                    (selectType === SelectType.default ? style.active : '')
                   }
                   onClick={() => setSelectType(SelectType.default)}
                 >
@@ -231,62 +278,64 @@ const CreateProduct = () => {
                   type="button"
                   className={
                     style.select_button +
-                    " " +
-                    (selectType === SelectType.manual ? style.active : "")
+                    ' ' +
+                    (selectType === SelectType.manual ? style.active : '')
                   }
                   onClick={() => setSelectType(SelectType.manual)}
                 >
                   Ввести вручную
                 </button>
               </div>
-              
+
               <div>
                 <div>
                   <p className={style.select_label}>Выберите бренд</p>
                   <select
                     className={style.select}
-                    value={productData.brand_id || ""}
+                    value={productData.brand_id || ''}
                     onChange={(e) => {
                       setProductData({
                         ...productData,
                         brand_id: +e.target.value,
                         model_id: 0,
-                        other_model: "",
-                      })
+                        other_model: '',
+                      });
                     }}
                   >
-                    <option disabled value="">Выберите бренд телефона</option>
-                    {
-                      brands?.map((brand: Brand) => (
-                        <option key={brand.id} value={brand.id.toString()}>
-                          {brand.name}
-                        </option>
-                      ))
-                    }
+                    <option disabled value="">
+                      Выберите бренд телефона
+                    </option>
+                    {brands?.map((brand: Brand) => (
+                      <option key={brand.id} value={brand.id.toString()}>
+                        {brand.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
-                
+
                 {selectType === SelectType.default ? (
                   <div>
                     <p className={style.select_label}>Выберите модель</p>
                     <select
                       className={style.select}
-                      value={productData.model_id || ""}
-                      onChange={(e) => setProductData({
-                        ...productData,
-                        model_id: +e.target.value,
-                        other_model: "",
-                      })}
+                      value={productData.model_id || ''}
+                      onChange={(e) =>
+                        setProductData({
+                          ...productData,
+                          model_id: +e.target.value,
+                          other_model: '',
+                        })
+                      }
                       disabled={!productData.brand_id}
                     >
-                      <option disabled value="">Выберите модель телефона</option>
-                      {
-                        oneBrand?.model?.map((model: Model) => (
-                          <option key={model.id} value={model.id.toString()}>
-                            {model.name}
-                          </option>
-                        )) || []
-                      }
+                      <option disabled value="">
+                        Выберите модель телефона
+                      </option>
+                      {oneBrand?.model?.map((model: Model) => (
+                        <option key={model.id} value={model.id.toString()}>
+                          {model.name}
+                        </option>
+                      )) || []}
                     </select>
                   </div>
                 ) : (
@@ -295,13 +344,15 @@ const CreateProduct = () => {
                     <input
                       className={style.input}
                       type="text"
-                      placeholder='Выберите модель телефона'
-                      value={productData.other_model || ""}
-                      onChange={(e) => setProductData({
-                        ...productData,
-                        other_model: e.target.value,
-                        model_id: 0,
-                      })}
+                      placeholder="Выберите модель телефона"
+                      value={productData.other_model || ''}
+                      onChange={(e) =>
+                        setProductData({
+                          ...productData,
+                          other_model: e.target.value,
+                          model_id: 0,
+                        })
+                      }
                     />
                   </div>
                 )}
@@ -318,9 +369,11 @@ const CreateProduct = () => {
                 type="number"
                 min="2000"
                 max={new Date().getFullYear()}
-                placeholder='Например: 2023'
+                placeholder="Например: 2023"
                 value={productData.year}
-                onChange={(e) => setProductData({ ...productData, year: e.target.value })}
+                onChange={(e) =>
+                  setProductData({ ...productData, year: e.target.value })
+                }
               />
             </div>
           </div>
@@ -330,11 +383,15 @@ const CreateProduct = () => {
             <p>Выберите характеристики</p>
             <div className={style.selects_wrapper}>
               <div>
-                <p style={{fontSize: '16px', marginBottom: '10px'}}>Выберите память</p>
-                <select 
+                <p style={{ fontSize: '16px', marginBottom: '10px' }}>
+                  Выберите память
+                </p>
+                <select
                   className={style.select}
-                  value={productData.storage || ""}
-                  onChange={(e) => setProductData({ ...productData, storage: +e.target.value })}
+                  value={productData.storage || ''}
+                  onChange={(e) =>
+                    setProductData({ ...productData, storage: +e.target.value })
+                  }
                 >
                   <option value="">Выберите память</option>
                   <option value="32">32 ГБ</option>
@@ -346,11 +403,15 @@ const CreateProduct = () => {
                 </select>
               </div>
               <div>
-                <p style={{fontSize: '16px', marginBottom: '10px'}}>Выберите оперативную память</p>
-                <select 
+                <p style={{ fontSize: '16px', marginBottom: '10px' }}>
+                  Выберите оперативную память
+                </p>
+                <select
                   className={style.select}
-                  value={productData.ram || ""}
-                  onChange={(e) => setProductData({ ...productData, ram: +e.target.value })}
+                  value={productData.ram || ''}
+                  onChange={(e) =>
+                    setProductData({ ...productData, ram: +e.target.value })
+                  }
                 >
                   <option value="">Выберите оперативную память</option>
                   <option value="2">2 ГБ</option>
@@ -370,7 +431,10 @@ const CreateProduct = () => {
             <div className={style.image_upload_section}>
               <div className={style.photo_upload_container}>
                 {images.length < 10 && (
-                  <div className={`${style.upload_placeholder} ${style.photo_upload_box}`} onClick={triggerFileInput}>
+                  <div
+                    className={`${style.upload_placeholder} ${style.photo_upload_box}`}
+                    onClick={triggerFileInput}
+                  >
                     <MdOutlineCameraAlt size={24} />
                     <span>Добавить фото</span>
                     <input
@@ -384,7 +448,10 @@ const CreateProduct = () => {
                   </div>
                 )}
                 {images.map((image, index) => (
-                  <div key={index} className={`${style.image_preview} ${style.photo_box}`}>
+                  <div
+                    key={index}
+                    className={`${style.image_preview} ${style.photo_box}`}
+                  >
                     <img
                       src={URL.createObjectURL(image)}
                       alt={`Preview ${index + 1}`}
@@ -409,7 +476,9 @@ const CreateProduct = () => {
               className={`${style.input} ${style.textarea}`}
               placeholder="Напишите что-нибудь..."
               value={productData.description}
-              onChange={(e) => setProductData({ ...productData, description: e.target.value })}
+              onChange={(e) =>
+                setProductData({ ...productData, description: e.target.value })
+              }
               maxLength={1000}
             />
             <p className={style.text_area_max_characters}>
@@ -425,8 +494,10 @@ const CreateProduct = () => {
                 type="button"
                 className={
                   style.select_button +
-                  " " +
-                  (selectTypeLocation === SelectType.default ? style.active : "")
+                  ' ' +
+                  (selectTypeLocation === SelectType.default
+                    ? style.active
+                    : '')
                 }
                 onClick={() => setSelectTypeLocation(SelectType.default)}
               >
@@ -436,50 +507,61 @@ const CreateProduct = () => {
                 type="button"
                 className={
                   style.select_button +
-                  " " +
-                  (selectTypeLocation === SelectType.manual ? style.active : "")
+                  ' ' +
+                  (selectTypeLocation === SelectType.manual ? style.active : '')
                 }
                 onClick={() => setSelectTypeLocation(SelectType.manual)}
               >
                 Ввести вручную
               </button>
             </div>
-            
+
             {selectTypeLocation === SelectType.default ? (
               <div>
                 <div>
                   <p className={style.select_label}>Выбрать регион</p>
                   <select
                     className={style.select}
-                    value={addressData.region_id || ""}
-                    onChange={(e) => setAddressData({ 
-                      ...addressData, 
-                      region_id: +e.target.value,
-                      district_id: null // Reset district when region changes
-                    })}
-                  >
-                    <option disabled value="">Выберите регион</option>
-                    {
-                      regions?.map((region: Region) => (
-                        <option key={region.id} value={region.id}>{region.name}</option>
-                      ))
+                    value={addressData.region_id || ''}
+                    onChange={(e) =>
+                      setAddressData({
+                        ...addressData,
+                        region_id: +e.target.value,
+                        district_id: null, // Reset district when region changes
+                      })
                     }
+                  >
+                    <option disabled value="">
+                      Выберите регион
+                    </option>
+                    {regions?.map((region: Region) => (
+                      <option key={region.id} value={region.id}>
+                        {region.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 <div>
                   <p className={style.select_label}>Выбрать город или район</p>
                   <select
                     className={style.select}
-                    value={addressData.district_id || ""}
-                    onChange={(e) => setAddressData({ ...addressData, district_id: +e.target.value })}
+                    value={addressData.district_id || ''}
+                    onChange={(e) =>
+                      setAddressData({
+                        ...addressData,
+                        district_id: +e.target.value,
+                      })
+                    }
                     disabled={!addressData.region_id}
                   >
-                    <option disabled value="">Выберите город или район</option>
-                    {
-                      oneRegion?.district?.map((district: District) => (
-                        <option key={district.id} value={district.id}>{district.name}</option>
-                      ))
-                    }
+                    <option disabled value="">
+                      Выберите город или район
+                    </option>
+                    {oneRegion?.district?.map((district: District) => (
+                      <option key={district.id} value={district.id}>
+                        {district.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
               </div>
@@ -494,94 +576,118 @@ const CreateProduct = () => {
           <div>
             <p>Цена</p>
             <div className={style.form__price}>
-              <input 
-                type="number" 
-                className={style.input} 
-                placeholder='Сумма' 
-                value={productData.price || ""}
-                onChange={(e) => setProductData({ ...productData, price: Number(e.target.value) })} 
+              <input
+                type="number"
+                className={style.input}
+                placeholder="Сумма"
+                value={productData.price || ''}
+                onChange={(e) =>
+                  setProductData({
+                    ...productData,
+                    price: Number(e.target.value),
+                  })
+                }
               />
               <select
-                style={{ width: "100px" }}
+                style={{ width: '100px' }}
                 className={style.select}
-                value={productData.currency_id || "1"}
-                onChange={(e) => setProductData({ ...productData, currency_id: +e.target.value })}
+                value={productData.currency_id || '1'}
+                onChange={(e) =>
+                  setProductData({
+                    ...productData,
+                    currency_id: +e.target.value,
+                  })
+                }
               >
                 {currency?.map((item: Currency) => (
-                  <option key={item.id} value={item.id}>{item.name}</option>
+                  <option key={item.id} value={item.id}>
+                    {item.name}
+                  </option>
                 ))}
               </select>
             </div>
-            
+
             {/* Negotiable */}
             <div>
               <p>Цена окончательная?</p>
               <div className={style.negotiable_wrapper}>
                 <div className={style.radio_wrapper}>
-                  <input 
-                    name='negotiable' 
-                    type="radio" 
+                  <input
+                    name="negotiable"
+                    type="radio"
                     checked={productData.negotiable === true}
-                    onChange={() => setProductData({ ...productData, negotiable: true })} 
+                    onChange={() =>
+                      setProductData({ ...productData, negotiable: true })
+                    }
                   />
                   <p>Торг есть</p>
                 </div>
                 <div className={style.radio_wrapper}>
-                  <input 
-                    name='negotiable' 
-                    type="radio" 
+                  <input
+                    name="negotiable"
+                    type="radio"
                     checked={productData.negotiable === false}
-                    onChange={() => setProductData({ ...productData, negotiable: false })} 
+                    onChange={() =>
+                      setProductData({ ...productData, negotiable: false })
+                    }
                   />
                   <p>Да, окончательная</p>
                 </div>
               </div>
             </div>
-            
+
             {/* Condition */}
             <div>
               <p>Состояние</p>
               <div className={style.negotiable_wrapper}>
                 <div className={style.radio_wrapper}>
-                  <input 
-                    name='condition' 
-                    type="radio" 
+                  <input
+                    name="condition"
+                    type="radio"
                     checked={productData.condition === true}
-                    onChange={() => setProductData({ ...productData, condition: true })} 
+                    onChange={() =>
+                      setProductData({ ...productData, condition: true })
+                    }
                   />
                   <p>Новый</p>
                 </div>
                 <div className={style.radio_wrapper}>
-                  <input 
-                    name='condition' 
-                    type="radio" 
+                  <input
+                    name="condition"
+                    type="radio"
                     checked={productData.condition === false}
-                    onChange={() => setProductData({ ...productData, condition: false })} 
+                    onChange={() =>
+                      setProductData({ ...productData, condition: false })
+                    }
                   />
                   <p>Б/У</p>
                 </div>
               </div>
             </div>
-            
+
             {/* Documentation */}
             <div>
               <p>Коробка с документами</p>
               <div className={style.negotiable_wrapper}>
                 <div className={style.radio_wrapper}>
-                  <input 
-                    name='has_document' 
-                    type="radio" 
+                  <input
+                    name="has_document"
+                    type="radio"
                     checked={productData.has_document === true}
-                    onChange={() => setProductData({ ...productData, has_document: true })} 
+                    onChange={() =>
+                      setProductData({ ...productData, has_document: true })
+                    }
                   />
                   <p>Есть</p>
                 </div>
                 <div className={style.radio_wrapper}>
-                  <input 
-                    name='has_document' 
-                    type="radio" 
+                  <input
+                    name="has_document"
+                    type="radio"
                     checked={productData.has_document === false}
-                    onChange={() => setProductData({ ...productData, has_document: false })} 
+                    onChange={() =>
+                      setProductData({ ...productData, has_document: false })
+                    }
                   />
                   <p>Нет</p>
                 </div>
@@ -594,18 +700,24 @@ const CreateProduct = () => {
             <p>Цвет телефона</p>
             <div className={style.color_wrapper}>
               {colors?.map((item: Color) => (
-                <div 
-                  key={item.id} 
-                  onClick={() => setProductData({
-                    ...productData,
-                    color_id: +item.id
-                  })}
+                <div
+                  key={item.id}
+                  onClick={() =>
+                    setProductData({
+                      ...productData,
+                      color_id: +item.id,
+                    })
+                  }
                 >
-                  <div 
-                    className={`${style.color_box} ${productData.color_id === +item.id ? style.selected_color : ''}`}
-                    style={{ 
-                      backgroundColor: item.code || item.name
-                    }} 
+                  <div
+                    className={`${style.color_box} ${
+                      productData.color_id === +item.id
+                        ? style.selected_color
+                        : ''
+                    }`}
+                    style={{
+                      backgroundColor: item.code || item.name,
+                    }}
                   />
                 </div>
               ))}
@@ -618,12 +730,17 @@ const CreateProduct = () => {
             <div className={style.phone_wrapper}>
               {phoneNumbers?.map((item: any) => (
                 <div key={item.phone_number} className={style.radio_wrapper}>
-                  <input 
-                    name='phone' 
-                    value={item.phone_number} 
-                    type="radio" 
+                  <input
+                    name="phone"
+                    value={item.phone_number}
+                    type="radio"
                     checked={productData.phone_number === item.phone_number}
-                    onChange={(e) => setProductData({ ...productData, phone_number: e.target.value })} 
+                    onChange={(e) =>
+                      setProductData({
+                        ...productData,
+                        phone_number: e.target.value,
+                      })
+                    }
                   />
                   <p>{item.phone_number}</p>
                 </div>
@@ -634,10 +751,12 @@ const CreateProduct = () => {
           {/* Submit Buttons */}
           <div className={style.form__submit_buttons}>
             <a href="">Предпросмотр</a>
-            <button type="button" onClick={handleClickPublishing}>Опубликовать</button>
+            <button type="button" onClick={handleClickPublishing}>
+              Опубликовать
+            </button>
           </div>
         </form>
-        
+
         <SuccessCreateModel isOpen={createModal} setIsOpen={setCreateModal} />
       </div>
     </div>

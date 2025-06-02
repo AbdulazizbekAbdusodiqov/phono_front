@@ -3,32 +3,54 @@ import { RiDeleteBin5Line } from 'react-icons/ri';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import Modal from '../../ui/Modal';
 import styles from './PhoneSection.module.scss';
-import { getFromStorage, setToStorage } from '../../../../utils/local-storege';
+import { getPhones, addPhone, deletePhone } from '../../../../api/phones';
+import { toast } from 'react-toastify';
+
+type Phone = {
+  _id: string;
+  phone: string;
+};
 
 const PhoneSection = () => {
-  const [phones, setPhones] = useState<string[]>([]);
+  const [phones, setPhones] = useState<Phone[]>([]);
   const [open, setOpen] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [newPhone, setNewPhone] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const fetchPhones = async () => {
+    setLoading(true);
+    const data = await getPhones();
+    if (data) setPhones(data);
+    setLoading(false);
+  };
 
   useEffect(() => {
-    setPhones(getFromStorage('phones') || []);
+    fetchPhones();
   }, []);
 
-  const addPhone = () => {
-    if (newPhone.trim()) {
-      const updated = [...phones, newPhone.trim()];
-      setPhones(updated);
-      setToStorage('phones', updated);
+  const handleAddPhone = async () => {
+    if (!newPhone.trim()) return;
+
+    const added = await addPhone(newPhone.trim());
+    if (added) {
+      setPhones((prev) => [...prev, added]);
       setNewPhone('');
       setShowForm(false);
     }
   };
 
-  const deletePhone = (index: number) => {
-    const updated = phones.filter((_, i) => i !== index);
-    setPhones(updated);
-    setToStorage('phones', updated);
+  const handleDeletePhone = async (id: string) => {
+    const confirmed = window.confirm('Ишончингиз комилми?');
+    if (!confirmed) return;
+
+    const res = await deletePhone(id);
+    if(res!){
+      toast("something went wrong on deleting")
+    }
+    if (res !== false) {
+      setPhones((prev) => prev.filter((item) => item._id !== id));
+    }
   };
 
   return (
@@ -40,21 +62,24 @@ const PhoneSection = () => {
             {open ? <FaChevronUp /> : <FaChevronDown />}
           </span>
         </div>
-  
+
         {open && (
           <div className={styles.subsection}>
-            {phones.map((phone, i) => (
-              <div className={styles.subItem} key={i}>
-                <div>{phone}</div>
-                <div
-                  className={`${styles.item} ${styles.delete}`}
-                  onClick={() => deletePhone(i)}
-                >
-                  <RiDeleteBin5Line />
+            {loading ? (
+              <div className={styles.loader}>Юкланмоқда...</div>
+            ) : (
+              phones.map((phone) => (
+                <div className={styles.subItem} key={phone._id}>
+                  <div>{phone.phone}</div>
+                  <div
+                    className={`${styles.item} ${styles.delete}`}
+                    onClick={() => handleDeletePhone(phone._id)}
+                  >
+                    <RiDeleteBin5Line />
+                  </div>
                 </div>
-              </div>
-            ))}
-  
+              ))
+            )}
             <div className={styles.addButton} onClick={() => setShowForm(true)}>
               + Добавить номер телефона
             </div>
@@ -71,7 +96,7 @@ const PhoneSection = () => {
           placeholder="Введите свой номер телефона"
           className={styles.input}
         />
-        <button onClick={addPhone} className={styles.button}>
+        <button onClick={handleAddPhone} className={styles.button}>
           Получить код
         </button>
       </Modal>

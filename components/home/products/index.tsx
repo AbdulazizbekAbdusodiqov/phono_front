@@ -33,7 +33,7 @@ const ProductSide = () => {
 
   const { data: products, isLoading } = useProducts(page, filters);
 
-  const handlePageChange = (newPage: number) => {
+  const handlePageChange = (newPage: number):any => {
     router.push(
       {
         pathname: router.pathname,

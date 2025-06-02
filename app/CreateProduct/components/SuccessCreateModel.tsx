@@ -8,7 +8,7 @@ interface SuccessCreateModelProps {
   setIsOpen: (value: boolean) => void;
 }
 
-const SuccessCreateModel = forwardRef<HTMLDivElement, SuccessCreateModelProps>(({ isOpen, setIsOpen }) => {
+const SuccessCreateModel = forwardRef<HTMLDivElement, SuccessCreateModelProps>(({ isOpen, setIsOpen }, ref) => {
     const modalRef = useRef<HTMLDivElement>(null);
     const overlayRef = useRef<HTMLDivElement>(null);
 
@@ -47,7 +47,14 @@ const SuccessCreateModel = forwardRef<HTMLDivElement, SuccessCreateModelProps>((
             style={{ display: isOpen ? 'flex' : 'none' }}
         >
             <div 
-                ref={modalRef} 
+                ref={(node) => {
+                    modalRef.current = node;
+                    if (typeof ref === 'function') {
+                        ref(node);
+                    } else if (ref) {
+                        ref.current = node;
+                    }
+                }}
                 className={`${styles.modal} ${isOpen ? styles.active : ''}`}
             >
                 <FaRegCircleCheck color="#4AD15F" />

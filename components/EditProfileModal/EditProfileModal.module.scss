@@ -54,6 +54,11 @@
   padding: 4px;
   border-radius: 4px;
   transition: background-color 0.2s ease;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 }
 
 .modalBody {
@@ -112,6 +117,12 @@
     border-color: #00000014;
     color: #666;
   }
+
+  &.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
 }
 
 .formGroup {
@@ -150,6 +161,11 @@
     line-height: 24px;
     color: #999ca0;
   }
+
+  &:disabled {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+  }
 }
 
 .dateInputContainer {
@@ -182,6 +198,13 @@
 
   &:active {
     transform: translateY(1px);
+  }
+
+  &.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+    background-color: #f5f5f5;
   }
 
   .leftIcon {
@@ -256,6 +279,31 @@
     background-color: #2f2a73;
     transform: translateY(0);
   }
+
+  &.loading {
+    background-color: #6b63c7;
+    cursor: not-allowed;
+  }
+}
+
+.errorMessage {
+  background: #fee;
+  color: #c53030;
+  padding: 12px 24px;
+  margin: 0 24px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  border-left: 4px solid #c53030;
+}
+
+.successMessage {
+  background: #f0fff4;
+  color: #38a169;
+  padding: 12px 24px;
+  margin: 0 24px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  border-left: 4px solid #38a169;
 }
 
 @media (max-width: 480px) {

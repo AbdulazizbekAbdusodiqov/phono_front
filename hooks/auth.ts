@@ -1,5 +1,5 @@
-import { useMutation } from "@tanstack/react-query";
-import { loginUser, sendOtp, signUpUser, verifyOtp } from "../api/user-auth";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { getMe, loginUser, sendOtp, signUpUser, verifyOtp } from "../api/user-auth";
 
 export const useSendOtp = () =>
   useMutation({
@@ -32,3 +32,10 @@ export const useLogin = () =>
       password: string;
     }) => loginUser({ phone_number, password }),
   });
+
+  export const useGetMe = (id:number)=>{
+    return useQuery({
+      queryKey: ["user"],
+      queryFn: ()=> getMe(id),
+    });
+  }

@@ -41,3 +41,15 @@ export const loginUser = async (data: any) => {
     toast.error(` ${error.response.data.message}`);
   }
 };
+
+export const getMe = async (id:number)=>{
+  try {
+    const token = JSON.parse(localStorage.getItem("accessToken") || "")
+    const res = await instance.get(`/user/${id}`)
+    return res.data
+  } catch (error:any) {
+    console.log(error);
+    toast.error(` ${error?.response.data.message}`);
+    
+  }
+}

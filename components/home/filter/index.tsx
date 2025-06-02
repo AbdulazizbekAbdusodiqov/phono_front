@@ -43,7 +43,7 @@ const FilterSide = ({ onClose, onApply }: FilterSideProps) => {
   const { data: brands, isLoading: brandsLoading } = useBrands();
   const { data: regions, isLoading: regionsLoading } = useRegions();
   const { data: colors, isLoading: colorsLoading } = useColors();
-
+  
   const memoryOptions = [
     { id: 1, name: "64" },
     { id: 2, name: "128" },
@@ -354,7 +354,7 @@ const FilterSide = ({ onClose, onApply }: FilterSideProps) => {
                       ? style.colorSwatchSelected
                       : ""
                   }`}
-                  style={{ backgroundColor: color.code }}
+                  style={{ backgroundColor: `${color.code || color.name}` }}
                   title={color.name}
                 />
               ))

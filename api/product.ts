@@ -3,6 +3,7 @@
 import instance from "./instance";
 import { toast } from "react-toastify";
 import { AddressData } from "../types/userData";
+import { CreateProductProps } from "../types";
 
 export const createProduct = async ({
   data,
@@ -35,8 +36,10 @@ export const createProduct = async ({
   }
 };
 
-export const getProducts = async (page = 1, search = "") => {
-
+export const getProducts = async (
+  page = 1,
+  filters: Record<string, string> = {}
+) => {
   try {
     const res = await instance.get(`/product`, {
       params: {

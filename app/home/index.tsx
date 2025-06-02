@@ -28,7 +28,6 @@ const HomePage = () => {
     setActiveFilters(filters);
     closeFilter();
     console.log("Applied filters:", filters);
-    // Here you would typically fetch filtered data or update the UI
   };
 
   return (

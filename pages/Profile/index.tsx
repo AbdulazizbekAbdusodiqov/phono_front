@@ -4,6 +4,7 @@ import Card from "../../components/Card"
 import { HeartIcon, PenIcon, SearchIcon } from "@/public/icons/profile"
 import Breadcrumb from "@/components/Breadcrumb"
 import EditProfileModal from "@/components/EditProfileModal/index"
+import { Settings } from "../../app"
 
 const products = [
   {
@@ -150,11 +151,16 @@ const Profile = () => {
       <div className={styles.hrLine} />
 
       <div className={styles.userInfo}>
-        <img src={userProfile.avatar || "/placeholder.svg"} alt="Avatar" className={styles.avatar} />
+        <img
+          src={userProfile.avatar || '/placeholder.svg'}
+          alt="Avatar"
+          className={styles.avatar}
+        />
         <div>
           <h2>{userProfile.username}</h2>
           <p>
-            Баланс: <span className={styles.balance}>{userProfile.balance}</span>
+            Баланс:{' '}
+            <span className={styles.balance}>{userProfile.balance}</span>
           </p>
         </div>
         <button className={styles.editButton} onClick={openModal}>
@@ -165,22 +171,34 @@ const Profile = () => {
       </div>
 
       <div className={styles.tabs}>
-        <span className={activeTab === "Объявления" ? styles.active : ""} onClick={() => handleTabClick("Объявления")}>
+        <span
+          className={activeTab === 'Объявления' ? styles.active : ''}
+          onClick={() => handleTabClick('Объявления')}
+        >
           Объявления
         </span>
-        <span className={activeTab === "Сообщения" ? styles.active : ""} onClick={() => handleTabClick("Сообщения")}>
+        <span
+          className={activeTab === 'Сообщения' ? styles.active : ''}
+          onClick={() => handleTabClick('Сообщения')}
+        >
           Сообщения
         </span>
-        <span className={activeTab === "Избранное" ? styles.active : ""} onClick={() => handleTabClick("Избранное")}>
+        <span
+          className={activeTab === 'Избранное' ? styles.active : ''}
+          onClick={() => handleTabClick('Избранное')}
+        >
           Избранное
         </span>
         <span
-          className={activeTab === "Контактные данные" ? styles.active : ""}
-          onClick={() => handleTabClick("Контактные данные")}
+          className={activeTab === 'Контактные данные' ? styles.active : ''}
+          onClick={() => handleTabClick('Контактные данные')}
         >
           Контактные данные
         </span>
-        <span className={activeTab === "Настройки" ? styles.active : ""} onClick={() => handleTabClick("Настройки")}>
+        <span
+          className={activeTab === 'Настройки' ? styles.active : ''}
+          onClick={() => handleTabClick('Настройки')}
+        >
           Настройки
         </span>
       </div>
@@ -195,7 +213,7 @@ const Profile = () => {
         <button className={styles.searchButton}>Поиск</button>
       </div>
 
-      {activeTab === "Избранное" && filteredProducts.length === 0 ? (
+      {activeTab === 'Избранное' && filteredProducts.length === 0 ? (
         <div className={styles.emptyState}>
           <div className={styles.emptyIcon}>
             <HeartIcon />
@@ -203,10 +221,16 @@ const Profile = () => {
           <h3>Нет избранных товаров</h3>
           <p>Добавьте товары в избранное, нажав на сердечко</p>
         </div>
+      ) : activeTab === 'Настройки' ? (
+        <Settings/>
       ) : (
         <div className={styles.cardGrid}>
           {filteredProducts.map((product) => (
-            <Card key={product.id} product={product} onFavoriteToggle={() => toggleFavorite(product.id)} />
+            <Card
+              key={product.id}
+              product={product}
+              onFavoriteToggle={() => toggleFavorite(product.id)}
+            />
           ))}
         </div>
       )}
@@ -223,7 +247,7 @@ const Profile = () => {
         onSave={handleSaveProfile}
       />
     </div>
-  )
+  );
 }
 
 export default Profile

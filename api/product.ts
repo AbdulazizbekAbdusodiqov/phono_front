@@ -1,6 +1,6 @@
-import instance from "./instance";
+// api/index.ts
 
-import { CreateProductProps } from "../types";
+import instance from "./instance";
 import { toast } from "react-toastify";
 import { AddressData } from "../types/userData";
 
@@ -36,11 +36,12 @@ export const createProduct = async ({
 };
 
 export const getProducts = async (page = 1, search = "") => {
+
   try {
     const res = await instance.get(`/product`, {
       params: {
         page,
-        search,
+        ...filters,
       },
     });
     return res.data;

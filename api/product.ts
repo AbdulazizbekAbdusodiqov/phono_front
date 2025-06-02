@@ -28,7 +28,7 @@ export const createProduct = async ({
     await instance.post("/product", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem("accessToken") || "")}`,
       },
     });
   } catch (error) {

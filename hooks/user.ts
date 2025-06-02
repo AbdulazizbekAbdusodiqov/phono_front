@@ -1,43 +1,64 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { getUserPhoneNumbers, createAddress, getRegions, getDistricts, getRegionById } from "../api/user";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  getUserPhoneNumbers,
+  createAddress,
+  getRegions,
+  getDistricts,
+  getRegionById,
+  updateUser,
+} from "../api/user";
 import { AddressData } from "../types/userData";
+import { toast } from "react-toastify";
 
+export const useUserPhoneNumbers = (id: number | string) =>
+  useQuery({
+    queryKey: ["user_phone_numbers", id],
+    queryFn: () => getUserPhoneNumbers(id),
+  });
 
-export const useUserPhoneNumbers = (id: number) => {
-    console.log(id);
-    
-    const { data, isLoading, error } = useQuery({
-        queryKey: ["user_phone_numbers", id],
-        queryFn: () => getUserPhoneNumbers(id),
-    });
-    return { data, isLoading, error };
-}
+export const useCreateAddress = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: AddressData) => createAddress(data),
+    onSuccess: () => {
+      toast.success("Адрес успешно создан!");
+      queryClient.invalidateQueries({ queryKey: ["addresses"] });
+    },
+    onError: (error: any) => {
+      toast.error(error?.message || "Ошибка при создании адреса");
+    },
+  });
+};
 
-export const useCreateAddress = (addressData: AddressData) => {
-    useMutation({
-        mutationFn: () => createAddress(addressData),
-    });
-}
-    
-export const useGetRegions = () => {
-    const { data, isLoading, error } = useQuery({
-        queryKey: ["regions"],
-        queryFn: () => getRegions(),
-    });
-    return { data, isLoading, error };
-}
-export const useGetRegionById = (id: number) => {
-    const { data, isLoading, error } = useQuery({
-        queryKey: ["region", id],
-        queryFn: () => getRegionById(id),
-    });
-    return { data, isLoading, error };
-}
+export const useGetRegions = () =>
+  useQuery({
+    queryKey: ["regions"],
+    queryFn: getRegions,
+  });
 
-export const useGetDistricts = () => {
-    const { data, isLoading, error } = useQuery({
-        queryKey: ["districts"],
-        queryFn: () => getDistricts(),
-    });
-    return { data, isLoading, error };
-}
+export const useGetRegionById = (id: number) =>
+  useQuery({
+    queryKey: ["region", id],
+    queryFn: () => getRegionById(id),
+    enabled: !!id,
+  });
+
+export const useGetDistricts = () =>
+  useQuery({
+    queryKey: ["districts"],
+    queryFn: getDistricts,
+  });
+
+export const useUpdateUser = (id: number) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: any) => updateUser(id, data),
+    onSuccess: () => {
+      toast.success("Профиль успешно обновлен!");
+      queryClient.invalidateQueries({ queryKey: ["user", id] });
+    },
+    onError: (error: any) => {
+      toast.error(error?.message || "Ошибка при обновлении пользователя");
+    },
+  });
+};

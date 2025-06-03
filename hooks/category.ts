@@ -4,7 +4,7 @@ import {
   getCategoryById,
   getColors,
   getCurrency
-} from "../api/category";
+} from "../endpoints/category";
 
 export const useCategory = () => {
   return useQuery({

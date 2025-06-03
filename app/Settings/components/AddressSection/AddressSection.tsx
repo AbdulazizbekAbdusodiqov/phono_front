@@ -7,7 +7,7 @@ import {
   getAddresses,
   addAddress,
   deleteAddress,
-} from '../../../../api/addresses';
+} from '../../../../endpoints/addresses';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../store/store';
 import { toast } from 'react-toastify';

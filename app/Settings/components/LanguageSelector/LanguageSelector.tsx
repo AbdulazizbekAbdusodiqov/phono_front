@@ -13,6 +13,7 @@ const LanguageSelector = () => {
 
   useEffect(() => {
     const saved = getFromStorage('language')[0];
+    
     if (saved) {
       const index = languages.indexOf(saved);
       if (index !== -1) setSelected(index);

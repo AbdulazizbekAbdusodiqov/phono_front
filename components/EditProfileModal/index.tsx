@@ -16,6 +16,12 @@ interface EditProfileModalProps {
     birthday?: string
     avatar?: string
   }
+  onSave: (data: {
+    name: string
+    familyName: string
+    birthday: string
+    avatar: string
+  }) => void
 }
 
 const EditProfileModal: React.FC<EditProfileModalProps> = ({

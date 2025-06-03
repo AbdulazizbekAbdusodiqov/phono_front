@@ -165,6 +165,7 @@ const Profile = () => {
       <EditProfileModal
         isOpen={isModalOpen}
         onClose={closeModal}
+        userId={Number(user?.id)}
         initialData={{
           name: userProfile.name,
           familyName: userProfile.familyName,

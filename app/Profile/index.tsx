@@ -8,89 +8,9 @@ import type { RootState } from "@/store/store"
 import { useSelector } from "react-redux"
 import { useGetMe } from "@/hooks/auth"
 import Settings from "../Settings"
+import { Product } from "../../types"
 
-const products = [
-  {
-    id: 1,
-    title: "Xiaomi Redmi Note 12",
-    condition: "Новый",
-    memory: "64 GB",
-    price: "1 680 000 UZS",
-    image: "/img/profile/Rectangle.png",
-    isFavorite: false,
-    isBargain: false,
-  },
-  {
-    id: 2,
-    title: "Samsung Galaxy S22 Ultra",
-    condition: "Новый",
-    memory: "64 GB",
-    price: "1 680 000 UZS",
-    image: "/img/profile/Rectangle-2.png",
-    isFavorite: false,
-    isBargain: true,
-  },
-  {
-    id: 3,
-    title: "Samsung Galaxy S22 Ultra",
-    condition: "Новый",
-    memory: "64 GB",
-    price: "1 680 000 UZS",
-    image: "/img/profile/Rectangle-3.png",
-    isFavorite: false,
-    isBargain: false,
-  },
-  {
-    id: 4,
-    title: "Apple iPhone SE",
-    condition: "Новый",
-    memory: "64 GB",
-    price: "1 680 000 UZS",
-    image: "/img/profile/Rectangle-4.png",
-    isFavorite: false,
-    isBargain: false,
-  },
-  {
-    id: 5,
-    title: "Samsung Galaxy S22 Ultra",
-    condition: "Новый",
-    memory: "64 GB",
-    price: "1 680 000 UZS",
-    image: "/img/profile/Rectangle-2.png",
-    isFavorite: false,
-    isBargain: false,
-  },
-  {
-    id: 6,
-    title: "Xiaomi Redmi Note 12",
-    condition: "Новый",
-    memory: "64 GB",
-    price: "1 680 000 UZS",
-    image: "/img/profile/Rectangle.png",
-    isFavorite: false,
-    isBargain: false,
-  },
-  {
-    id: 7,
-    title: "Apple iPhone SE",
-    condition: "Новый",
-    memory: "64 GB",
-    price: "1 680 000 UZS",
-    image: "/img/profile/Rectangle-4.png",
-    isFavorite: false,
-    isBargain: true,
-  },
-  {
-    id: 8,
-    title: "Samsung Galaxy S22 Ultra",
-    condition: "Новый",
-    memory: "64 GB",
-    price: "1 680 000 UZS",
-    image: "/img/profile/Rectangle-3.png",
-    isFavorite: false,
-    isBargain: false,
-  },
-]
+
 
 type TabType = "Объявления" | "Сообщения" | "Избранное" | "Контактные данные" | "Настройки"
 
@@ -99,7 +19,8 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState<TabType>("Объявления")
   const { user, isAuthenticated } = useSelector((state: RootState) => state.auth)
   const { data: me } = useGetMe(Number(user?.id))
-
+  const productsList = me?.product
+  
   const userProfile = {
     username: me ? `${me.first_name} ${me.last_name}` : "Имя пользователя",
     balance: me?.balance ? `${me.balance} сум` : "0 сум",
@@ -109,8 +30,7 @@ const Profile = () => {
     birthday: me?.birth_date || "1999-03-16",
   }
 
-  const [productsList, setProductsList] = useState(products)
-
+  
   const openModal = () => {
     setIsModalOpen(true)
   }
@@ -132,16 +52,7 @@ const Profile = () => {
     setActiveTab(tab)
   }
 
-  const toggleFavorite = (productId: number) => {
-    setProductsList((prevProducts) =>
-      prevProducts.map((product) =>
-        product.id === productId ? { ...product, isFavorite: !product.isFavorite } : product,
-      ),
-    )
-  }
-
-  const filteredProducts =
-    activeTab === "Избранное" ? productsList.filter((product) => product.isFavorite) : productsList
+  
 
   return (
     <div className={`${styles.profile} ${styles.container}`}>
@@ -195,7 +106,7 @@ const Profile = () => {
         <button className={styles.searchButton}>Поиск</button>
       </div>
 
-      {activeTab === "Избранное" && filteredProducts.length === 0 ? (
+      {activeTab === "Избранное" && productsList.length === 0 ? (
         <div className={styles.emptyState}>
           <div className={styles.emptyIcon}>
             <HeartIcon />
@@ -207,8 +118,8 @@ const Profile = () => {
         <Settings />
       ) : (
         <div className={styles.cardGrid}>
-          {filteredProducts.map((product) => (
-            <Card key={product.id} product={product} onFavoriteToggle={() => toggleFavorite(product.id)} />
+          {productsList?.map((product:Product) => (
+            <Card key={product.id} product={product} />
           ))}
         </div>
       )}

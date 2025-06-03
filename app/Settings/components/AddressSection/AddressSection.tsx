@@ -24,6 +24,7 @@ const AddressSection = () => {
       setShowForm(false);
     }
   };
+  
 
   const deleteAddress = (index: number) => {
     const updated = addresses.filter((_, i) => i !== index);

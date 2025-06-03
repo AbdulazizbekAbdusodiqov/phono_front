@@ -1,7 +1,7 @@
 import instance from './instance';
 import { toast } from 'react-toastify';
 
-export const getPhones = async (id: String | undefined) => {
+export const getPhones = async (id: number | undefined) => {
   try {
     const res = await instance.get(`/phone-number/byUser/${id}`);
     return res.data;
@@ -13,9 +13,9 @@ export const getPhones = async (id: String | undefined) => {
   }
 };
 
-export const addPhone = async (phone: string) => {
+export const addPhone = async (phone: string, user_id: number | undefined) => {
   try {
-    const res = await instance.post('/phone-number', { phone });
+    const res = await instance.post('/phone-number', { user_id, phone });
     toast.success('Телефон рақам қўшилди');
     return res.data;
   } catch (error: any) {
@@ -24,7 +24,7 @@ export const addPhone = async (phone: string) => {
   }
 };
 
-export const deletePhone = async (id: string): Promise<boolean> => {
+export const deletePhone = async (id: number): Promise<boolean> => {
   try {
     await instance.delete(`/phone-number/${id}`);
     toast.success('Телефон рақам ўчирилди');

@@ -20,9 +20,10 @@ const EmailSection = () => {
   const { user, isAuthenticated } = useSelector(
     (state: RootState) => state.auth,
   );
+  console.log('user_id: ', user);
 
   // Serverdan email ro'yxatini olish
-  const fetchEmails = async (id: String | undefined) => {
+  const fetchEmails = async (id: number | undefined) => {
     setLoading(true);
     const data = await getEmails(id);
     if (data && Array.isArray(data)) {
@@ -80,7 +81,7 @@ const EmailSection = () => {
 
     const id = emailToDelete; // Agar id va email bir xil bo'lsa
 
-    await apiDeleteEmail(id);
+    await apiDeleteEmail(+id, user?.id);
 
     setEmails((prev) => prev.filter((_, i) => i !== index));
     setLoading(false);

@@ -24,7 +24,7 @@ const PhoneSection = () => {
   );
 
 
-  const fetchPhones = async (id: String | undefined) => {
+  const fetchPhones = async (id: number | undefined) => {
     setLoading(true);
     const data = await getPhones(id);
     if (data) setPhones(data);
@@ -38,7 +38,7 @@ const PhoneSection = () => {
   const handleAddPhone = async () => {
     if (!newPhone.trim()) return;
 
-    const added = await addPhone(newPhone.trim());
+    const added = await addPhone(newPhone.trim(), user?.id);
     if (added) {
       setPhones((prev) => [...prev, added]);
       setNewPhone('');
@@ -50,7 +50,7 @@ const PhoneSection = () => {
     const confirmed = window.confirm('Ишончингиз комилми?');
     if (!confirmed) return;
 
-    const res = await deletePhone(id);
+    const res = await deletePhone(+id);
     if(res!){
       toast("something went wrong on deleting")
     }

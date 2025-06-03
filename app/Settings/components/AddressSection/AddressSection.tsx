@@ -28,10 +28,10 @@ const AddressSection = () => {
       (state: RootState) => state.auth,
     );
 
-  const fetchAddresses = async (id: string | undefined) => {
+  const fetchAddresses = async (id: number | undefined) => {
     if (!id) return;
     setLoading(true);
-    const data = await getAddresses(id);
+    const data = await getAddresses(+id);
     if (data) setAddresses(data);
     setLoading(false);
   };
@@ -55,7 +55,7 @@ const AddressSection = () => {
     const confirmed = window.confirm('Ишончингиз комилми?');
     if (!confirmed) return;
 
-    const res = await deleteAddress(id);
+    const res = await deleteAddress(+id);
     if(res!){
           toast("something went wrong on deleting")
         }

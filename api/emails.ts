@@ -1,9 +1,9 @@
 import instance from './instance';
 import { toast } from 'react-toastify';
 
-export const getEmails = async () => {
+export const getEmails = async (id: String | undefined) => {
   try {
-    const res = await instance.get('/email');
+    const res = await instance.get(`/email/byUser/${id}`);
     return res.data;
   } catch (error: any) {
     console.error(error);

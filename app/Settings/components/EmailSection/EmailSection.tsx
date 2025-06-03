@@ -8,6 +8,8 @@ import {
   addEmail as apiAddEmail,
   deleteEmail as apiDeleteEmail,
 } from '../../../../api/emails'; // import qiling
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../store/store';
 
 const EmailSection = () => {
   const [emails, setEmails] = useState<string[]>([]);
@@ -15,11 +17,14 @@ const EmailSection = () => {
   const [showForm, setShowForm] = useState(false);
   const [newEmail, setNewEmail] = useState('');
   const [loading, setLoading] = useState(false);
+  const { user, isAuthenticated } = useSelector(
+    (state: RootState) => state.auth,
+  );
 
   // Serverdan email ro'yxatini olish
-  const fetchEmails = async () => {
+  const fetchEmails = async (id: String | undefined) => {
     setLoading(true);
-    const data = await getEmails();
+    const data = await getEmails(id);
     if (data && Array.isArray(data)) {
       setEmails(data);
     }
@@ -27,8 +32,8 @@ const EmailSection = () => {
   };
 
   useEffect(() => {
-    fetchEmails();
-  }, []);
+    fetchEmails(user?.id);
+  }, [user?.id]);
 
   // Email qo'shish
   const addEmail = async () => {

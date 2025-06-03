@@ -1,9 +1,9 @@
 import instance from './instance';
 import { toast } from 'react-toastify';
 
-export const getAddresses = async () => {
+export const getAddresses = async (id: String | undefined) => {
   try {
-    const res = await instance.get('/address');
+    const res = await instance.get(`/address/byUser/${id}`);
     return res.data;
   } catch (error: any) {
     console.error(error);
@@ -26,8 +26,10 @@ export const deleteAddress = async (id: string) => {
   try {
     await instance.delete(`/address/${id}`);
     toast.success('Манзил ўчирилди');
+    return true;
   } catch (error: any) {
     console.error(error);
     toast.error(error.response?.data?.message || 'Манзил ўчиришда хатолик');
+    return false
   }
 };

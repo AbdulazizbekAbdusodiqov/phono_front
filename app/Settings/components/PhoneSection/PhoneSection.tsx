@@ -5,6 +5,8 @@ import Modal from '../../ui/Modal';
 import styles from './PhoneSection.module.scss';
 import { getPhones, addPhone, deletePhone } from '../../../../api/phones';
 import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../store/store';
 
 type Phone = {
   _id: string;
@@ -17,17 +19,21 @@ const PhoneSection = () => {
   const [showForm, setShowForm] = useState(false);
   const [newPhone, setNewPhone] = useState('');
   const [loading, setLoading] = useState(false);
+  const { user, isAuthenticated } = useSelector(
+    (state: RootState) => state.auth,
+  );
 
-  const fetchPhones = async () => {
+
+  const fetchPhones = async (id: String | undefined) => {
     setLoading(true);
-    const data = await getPhones();
+    const data = await getPhones(id);
     if (data) setPhones(data);
     setLoading(false);
   };
 
   useEffect(() => {
-    fetchPhones();
-  }, []);
+    fetchPhones(user?.id);
+  }, [user?.id]);
 
   const handleAddPhone = async () => {
     if (!newPhone.trim()) return;

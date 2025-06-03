@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { getMe, loginUser, sendOtp, signUpUser, verifyOtp } from "../api/user-auth";
+import { getMe, loginUser, sendOtp, signUpUser, verifyOtp } from "../endpoints/user-auth";
 
 export const useSendOtp = () =>
   useMutation({

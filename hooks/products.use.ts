@@ -1,7 +1,7 @@
 // hooks/products.use.ts
 
 import { useQuery } from "@tanstack/react-query";
-import { getProducts } from "../api";
+import { getProducts } from "../endpoints";
 
 export const useProducts = (page: number, filters: Record<string, string>) => {
   return useQuery({

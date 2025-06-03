@@ -7,7 +7,7 @@ import {
   getEmails,
   addEmail as apiAddEmail,
   deleteEmail as apiDeleteEmail,
-} from '../../../../api/emails'; // import qiling
+} from '../../../../endpoints/emails'; // import qiling
 
 const EmailSection = () => {
   const [emails, setEmails] = useState<string[]>([]);

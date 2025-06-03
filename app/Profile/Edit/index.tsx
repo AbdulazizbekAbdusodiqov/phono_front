@@ -30,7 +30,7 @@ const ProductDetails = () => {
 
   const [productData, setProductData] = useState<ProductData>({
     id: 1,
-    title: "iPhone 12 Pro 64 GB",
+    title: "iPhone 12 Pro 128 GB",
     price: "9 000 000 UZS",
     location: "Юнусабадский район, Ташкент",
     condition: "Новый",

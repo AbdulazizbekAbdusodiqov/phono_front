@@ -2,8 +2,10 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useEffect, useState } from 'react';
+import { JSX, SetStateAction, useEffect, useState } from 'react';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+import { AddressData } from '../../../types/userData';
+import { Dispatch } from '@reduxjs/toolkit';
 
 // Dynamically import the Map component with SSR disabled
 const MapWithNoSSR = dynamic(
@@ -14,7 +16,11 @@ const MapWithNoSSR = dynamic(
   }
 );
 
-export default function MapComponent() {
+interface MapComponentProps {
+  addressData: AddressData;
+  setAddressData: React.Dispatch<React.SetStateAction<AddressData>>;
+}
+const MapComponent = ({ addressData, setAddressData }: MapComponentProps): JSX.Element => {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -25,5 +31,7 @@ export default function MapComponent() {
     return <div style={{ height: '400px', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Loading map... <AiOutlineLoading3Quarters/></div>;
   }
 
-  return <MapWithNoSSR />;
-}
+  return <MapWithNoSSR addressData={addressData} setAddressData={setAddressData} />;
+};
+
+export default MapComponent;

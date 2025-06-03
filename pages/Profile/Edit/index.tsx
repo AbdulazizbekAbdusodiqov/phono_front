@@ -1,4 +1,4 @@
-import ProductDetails from "@/app/Edit";
+import ProductDetails from "@/app/Profile/Edit";
 import React from "react";
 
 const EditPage = () => {

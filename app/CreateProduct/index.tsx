@@ -78,7 +78,7 @@ const CreateProduct = () => {
     model_id: 0,
     year: '',
     price: 0,
-    currency_id: 0,
+    currency_id: 1,
     description: '',
     negotiable: false,
     phone_number: '',
@@ -115,42 +115,21 @@ const CreateProduct = () => {
   const { data: oneRegion } = useGetRegionById(addressData.region_id || 0);
 
   const handleClickPublishing = async () => {
-    console.log('Product Data:', productData);
-    console.log('Address Data:', addressData);
-    console.log('Uploaded Images:', images);
-
-    // Validation
-    if (
-      !productData.title ||
-      !productData.brand_id ||
-      !productData.model_id ||
-      !productData.year ||
-      !productData.price ||
-      !productData.currency_id ||
-      !productData.description ||
-      !productData.phone_number ||
-      !productData.color_id
-    ) {
-      toast.error('Please fill all required fields');
-      return;
-    }
-
-    // Address validation based on selection type
-    if (selectTypeLocation === SelectType.default) {
-      if (!addressData.region_id || !addressData.district_id) {
-        toast.error('Please select region and district');
-        return;
-      }
-    }
-
     try {
+      if(selectType === SelectType.manual){
+        productData.model_id = 0
+      }
+      else if(selectType === SelectType.default){
+        productData.other_model = '';
+      }
       const response = await createProduct({
         data: productData,
         images: images,
         addressData: addressData,
       });
-      toast.success('Product created successfully');
-      setCreateModal(true);
+        toast.success('Product created successfully');
+        setCreateModal(true);
+        router.push(`/Profile`);
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'Failed to create product');
     }
@@ -567,7 +546,10 @@ const CreateProduct = () => {
               </div>
             ) : (
               <div>
-                <MapComponent />
+                <MapComponent 
+                  addressData={addressData} 
+                  setAddressData={setAddressData} 
+                />
               </div>
             )}
           </div>

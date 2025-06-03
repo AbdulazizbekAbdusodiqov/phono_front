@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getColors } from "../api/colors";
+import { getColors } from "../endpoints/colors";
 
 export const useColors = () => {
   return useQuery({

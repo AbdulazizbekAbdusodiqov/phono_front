@@ -3,7 +3,7 @@ import { RiDeleteBin5Line } from 'react-icons/ri';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import Modal from '../../ui/Modal';
 import styles from './PhoneSection.module.scss';
-import { getPhones, addPhone, deletePhone } from '../../../../api/phones';
+import { getPhones, addPhone, deletePhone } from '../../../../endpoints/phones';
 import { toast } from 'react-toastify';
 
 type Phone = {

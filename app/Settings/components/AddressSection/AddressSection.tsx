@@ -50,6 +50,7 @@ const AddressSection = () => {
       setShowForm(false);
     }
   };
+  
 
   const handleDeleteAddress = async (id: string) => {
     const confirmed = window.confirm('Ишончингиз комилми?');

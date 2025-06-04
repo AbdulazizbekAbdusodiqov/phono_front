@@ -10,17 +10,15 @@ import { useGetMe } from "@/hooks/auth"
 import Settings from "../Settings"
 import { Product } from "../../types"
 
-
-
 type TabType = "Объявления" | "Сообщения" | "Избранное" | "Контактные данные" | "Настройки"
 
-const Profile = () => {
+const Profile = ({children}: {children: React.ReactNode}) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [activeTab, setActiveTab] = useState<TabType>("Объявления")
   const { user, isAuthenticated } = useSelector((state: RootState) => state.auth)
   const { data: me } = useGetMe(Number(user?.id))
   const productsList = me?.product
-  
+
   const userProfile = {
     username: me ? `${me.first_name} ${me.last_name}` : "Имя пользователя",
     balance: me?.balance ? `${me.balance} сум` : "0 сум",
@@ -30,7 +28,7 @@ const Profile = () => {
     birthday: me?.birth_date || "1999-03-16",
   }
 
-  
+
   const openModal = () => {
     setIsModalOpen(true)
   }
@@ -52,7 +50,7 @@ const Profile = () => {
     setActiveTab(tab)
   }
 
-  
+
 
   return (
     <div className={`${styles.profile} ${styles.container}`}>
@@ -118,10 +116,15 @@ const Profile = () => {
         <Settings />
       ) : (
         <div className={styles.cardGrid}>
-          {productsList?.map((product:Product) => (
+          {productsList?.map((product: Product) => (
             <Card key={product.id} product={product} />
           ))}
         </div>
+      )}
+      {activeTab === "Сообщения" && (
+          <div className={styles.chat}>
+            {children}
+          </div>
       )}
 
       <EditProfileModal

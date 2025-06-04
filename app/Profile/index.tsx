@@ -58,7 +58,7 @@ const Profile = () => {
     birth_date: string;
     profile_img: string;
   }) => {
-    console.log("Profile data to be saved:", data);
+    console.log("Profile data to be saved:",data);
   };
 
   const toggleFavorite = (id: number) => {

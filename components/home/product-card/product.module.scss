@@ -74,12 +74,9 @@
     align-items: center;
     justify-content: center;
     padding: 4px;
+    transition: color 0.3s ease;
 
     &.active {
-      color: #ff4d4f;
-    }
-
-    &:hover {
       color: #ff4d4f;
     }
   }
@@ -133,43 +130,5 @@
     padding: 4px 8px;
     border-radius: 4px;
     font-size: 12px;
-  }
-}
-
-/* Skeleton styles */
-.skeleton {
-  background: #f0f0f0;
-}
-
-.skeleton_pulse {
-  animation: pulse 1.5s infinite;
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200% 100%;
-}
-
-.skeleton_title {
-  height: 24px;
-  width: 70%;
-  border-radius: 4px;
-}
-
-.skeleton_label {
-  height: 16px;
-  width: 80px;
-  border-radius: 4px;
-}
-
-.skeleton_price {
-  height: 24px;
-  width: 120px;
-  border-radius: 4px;
-}
-
-@keyframes pulse {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
   }
 }

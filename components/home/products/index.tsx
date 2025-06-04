@@ -1,16 +1,17 @@
-// components/home/products/index.tsx
-
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import style from "./product.module.scss";
 import { useProducts } from "../../../hooks/products.use";
 import ProductSkeleton from "../product-card/product-card.skelton";
-import ProductCard from "../product-card";
+import Card from "@/components/Card";
+import { useFavorites } from "../../../hooks/useFavorites";
 
 const ProductSide = () => {
   const router = useRouter();
   const [page, setPage] = useState(1);
   const [filters, setFilters] = useState<Record<string, string>>({});
+  
+  const { toggleFavorite, isFavorite } = useFavorites();
 
   useEffect(() => {
     const query = router.query;
@@ -26,6 +27,7 @@ const ProductSide = () => {
     if (query.othermodel) filterParams.othermodel = query.othermodel as string;
     if (query.condition) filterParams.condition = query.condition as string;
     if (query["is-top"]) filterParams["is-top"] = query["is-top"] as string;
+    
 
     setPage(pageFromUrl);
     setFilters(filterParams);
@@ -33,7 +35,7 @@ const ProductSide = () => {
 
   const { data: products, isLoading } = useProducts(page, filters);
 
-  const handlePageChange = (newPage: number):any => {
+  const handlePageChange = (newPage: number) => {
     router.push(
       {
         pathname: router.pathname,
@@ -66,11 +68,15 @@ const ProductSide = () => {
     <>
       <div className={style.products_grid}>
         {products?.data?.map((product: any) => (
-          <ProductCard key={product.id} product={product} />
+          <Card
+            key={product.id}
+            product={product}
+            isFavorite={isFavorite(product.id)} 
+            onToggleFavorite={toggleFavorite}   
+          />
         ))}
       </div>
 
-      {/* Pagination */}
       {products?.meta?.lastPage > 1 && (
         <div className={style.pagination}>
           <button
@@ -102,4 +108,4 @@ const ProductSide = () => {
   );
 };
 
-export default ProductSide
+export default ProductSide;

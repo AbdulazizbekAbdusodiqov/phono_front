@@ -43,7 +43,7 @@ const ProductCard = ({ product }: { product?: any }) => {
               className={`${style.heart_btn} ${
                 like_count > 0 ? style.active : ""
               }`}
-              onClick={(e) => e.preventDefault()} // prevent link navigation
+              onClick={(e) => e.preventDefault()}
             >
               <FaRegHeart size={20} />
             </button>

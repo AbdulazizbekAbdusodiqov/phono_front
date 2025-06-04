@@ -18,7 +18,6 @@ export const getUserPhoneNumbers = async (id: number | string) => {
     const res = await instance.get(`/phone-number/getmynumbers/${id}`, {
       headers: { Authorization: `Bearer ${getToken()}` },
     });
-    console.log(res.data);
     return res.data;
   } catch (error: any) {
     console.error(error);
@@ -32,7 +31,6 @@ export const getRegions = async () => {
     const res = await instance.get(`/region`, {
       headers: { Authorization: `Bearer ${getToken()}` },
     });
-    console.log(res.data);
     return res.data;
   } catch (error: any) {
     console.error(error);
@@ -46,7 +44,6 @@ export const getRegionById = async (id: number) => {
     const res = await instance.get(`/region/${id}`, {
       headers: { Authorization: `Bearer ${getToken()}` },
     });
-    console.log(res.data);
     return res.data;
   } catch (error: any) {
     console.error(error);
@@ -60,7 +57,6 @@ export const getDistricts = async () => {
     const res = await instance.get(`/district`, {
       headers: { Authorization: `Bearer ${getToken()}` },
     });
-    console.log(res.data);
     return res.data;
   } catch (error: any) {
     console.error(error);
@@ -74,7 +70,6 @@ export const createAddress = async (data: AddressData) => {
     const res = await instance.post(`/address`, data, {
       headers: { Authorization: `Bearer ${getToken()}` },
     });
-    console.log(res.data);
     return res.data;
   } catch (error: any) {
     console.error(error);
@@ -88,7 +83,6 @@ export const getAddresses = async () => {
     const res = await instance.get(`/address`, {
       headers: { Authorization: `Bearer ${getToken()}` },
     });
-    console.log(res.data);
     return res.data;
   } catch (error: any) {
     console.error(error);
@@ -96,13 +90,16 @@ export const getAddresses = async () => {
     throw error;
   }
 };
+
 export const updateUser = async (id: number, data: any) => {
   const formData = new FormData();
-
+  
   Object.entries(data).forEach(([key, value]) => {
-    if (value !== undefined && value !== null) {
-      if (value instanceof File) {
-        formData.append(key, value);
+    if (value !== undefined && value !== null && value !== "") {
+      if (key === "profile_img") {
+        if (value instanceof File) {
+          formData.append(key, value);
+        }
       } else {
         formData.append(key, String(value));
       }
@@ -112,6 +109,7 @@ export const updateUser = async (id: number, data: any) => {
   const res = await instance.put(`/user/${id}`, formData, {
     headers: {
       Authorization: `Bearer ${getToken()}`,
+      'Content-Type': 'multipart/form-data', 
     },
   });
 

@@ -6,7 +6,7 @@ const getToken = () => JSON.parse(localStorage.getItem("accessToken") || '""');
 
 export const getUserPhoneNumbers = async (id: number | string) => {
   try {
-    const res = await instance.get(`/phone-number/getmynumbers/${id}`, {
+    const res = await instance.get(`/phone-number/byUser/${id}`, {
       headers: { Authorization: `Bearer ${getToken()}` },
     });
     console.log(res.data);

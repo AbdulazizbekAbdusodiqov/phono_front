@@ -3,7 +3,16 @@ import { toast } from 'react-toastify';
 
 export const getEmails = async (id: number | undefined) => {
   try {
-    const res = await instance.get(`/email/byUser/${id}`);
+    console.log(
+      'keldi: ',
+      JSON.parse(localStorage.getItem('accessToken') || ''),
+    );
+    const res = await instance.get(`/email/byUser/${id}`,{
+      headers:{
+        Authorization:`Bearer ${JSON.parse(localStorage.getItem("accessToken") || "")}`
+      }
+    });
+    console.log("keldi4");
     return res.data;
   } catch (error: any) {
     console.error(error);

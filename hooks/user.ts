@@ -1,6 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
-  getUserPhoneNumbers,
   createAddress,
   getRegions,
   getDistricts,
@@ -9,11 +8,12 @@ import {
 } from "../endpoints/user";
 import { AddressData } from "../types/userData";
 import { toast } from "react-toastify";
+import { getPhones } from "../endpoints/phones";
 
-export const useUserPhoneNumbers = (id: number | string) =>
+export const useUserPhoneNumbers = (id: number | undefined) =>
   useQuery({
     queryKey: ["user_phone_numbers", id],
-    queryFn: () => getUserPhoneNumbers(id),
+    queryFn: () => getPhones(id),
   });
 
 export const useCreateAddress = () => {

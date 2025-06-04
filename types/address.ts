@@ -1,10 +1,10 @@
 export interface Address{
-  id:number       
+  id:number
   user_id:number
   name:string
   lat?:string
   long?:string
-  is_main:boolean   
+  is_main:boolean
   region_id?:number
   district_id?:number
   address:string

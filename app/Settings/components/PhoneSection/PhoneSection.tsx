@@ -9,8 +9,9 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../../store/store';
 
 type Phone = {
+  id: number;
   _id: string;
-  phone: string;
+  phone_number: string;
 };
 
 const PhoneSection = () => {
@@ -28,6 +29,7 @@ const PhoneSection = () => {
     setLoading(true);
     const data = await getPhones(id);
     if (data) setPhones(data);
+    console.log("data: ", data);
     setLoading(false);
   };
 
@@ -46,16 +48,17 @@ const PhoneSection = () => {
     }
   };
 
-  const handleDeletePhone = async (id: string) => {
+  const handleDeletePhone = async (phoneId: number) => {
+    console.log("delete bosildi");
     const confirmed = window.confirm('Ишончингиз комилми?');
     if (!confirmed) return;
 
-    const res = await deletePhone(+id);
-    if(res!){
+    const res = await deletePhone(user?.id, +phoneId);
+    if(res == false){
       toast("something went wrong on deleting")
-    }
-    if (res !== false) {
-      setPhones((prev) => prev.filter((item) => item._id !== id));
+    } else {
+      console.log("res: ", res);
+      setPhones((prev) => prev.filter((item) => item.id !== phoneId));
     }
   };
 
@@ -76,10 +79,10 @@ const PhoneSection = () => {
             ) : (
               phones.map((phone) => (
                 <div className={styles.subItem} key={phone._id}>
-                  <div>{phone.phone}</div>
+                  <div>{phone.phone_number}</div>
                   <div
                     className={`${styles.item} ${styles.delete}`}
-                    onClick={() => handleDeletePhone(phone._id)}
+                    onClick={() => handleDeletePhone(phone.id)}
                   >
                     <RiDeleteBin5Line />
                   </div>

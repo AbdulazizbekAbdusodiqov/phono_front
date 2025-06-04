@@ -3,7 +3,15 @@ import { toast } from 'react-toastify';
 
 export const getPhones = async (id: number | undefined) => {
   try {
-    const res = await instance.get(`/phone-number/byUser/${id}`);
+    console.log('phone-number: ', id);
+    const res = await instance.get(`/phone-number/byUser/${id}`, {
+      headers: {
+        Authorization: `Bearer ${JSON.parse(
+          localStorage.getItem('accessToken') || '',
+        )}`,
+      },
+    });
+    console.log('phones: ', res.data);
     return res.data;
   } catch (error: any) {
     console.error(error);
@@ -13,9 +21,27 @@ export const getPhones = async (id: number | undefined) => {
   }
 };
 
-export const addPhone = async (phone: string, user_id: number | undefined) => {
+export const addPhone = async (
+  phone_number: string,
+  user_id: number | undefined,
+) => {
   try {
-    const res = await instance.post('/phone-number', { user_id, phone });
+    const res = await instance.post(
+      `/phone-number/byUser/${user_id}`,
+      {
+        user_id,
+        phone_number, // ✅ faqat phone_number va is_main yuboriladi
+        is_main: true, // ✅ bu qiymat kerak bo‘ladi, aks holda xato beradi
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${JSON.parse(
+            localStorage.getItem('accessToken') || '',
+          )}`,
+        },
+      },
+    );
+
     toast.success('Телефон рақам қўшилди');
     return res.data;
   } catch (error: any) {
@@ -24,9 +50,22 @@ export const addPhone = async (phone: string, user_id: number | undefined) => {
   }
 };
 
-export const deletePhone = async (id: number): Promise<boolean> => {
+
+export const deletePhone = async (
+  id: number | undefined,
+  phone_id: number,
+): Promise<boolean> => {
   try {
-    await instance.delete(`/phone-number/${id}`);
+    console.log('user_id: ', id);
+    console.log('phone_id: ', phone_id);
+    const result = await instance.delete(`/phone-number/${id}?phoneId=${phone_id}`, {
+      headers: {
+        Authorization: `Bearer ${JSON.parse(
+          localStorage.getItem('accessToken') || '',
+        )}`,
+      },
+    });
+    console.log("result: ", result);
     toast.success('Телефон рақам ўчирилди');
     return true;
   } catch (error: any) {
@@ -35,4 +74,3 @@ export const deletePhone = async (id: number): Promise<boolean> => {
     return false;
   }
 };
-  

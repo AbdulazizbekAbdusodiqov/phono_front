@@ -67,6 +67,7 @@ const CreateProduct = () => {
   const [selectTypeLocation, setSelectTypeLocation] = useState<SelectType>(
     SelectType.default,
   );
+  
   const [createModal, setCreateModal] = useState<boolean>(false);
   const { user, isAuthenticated } = useSelector(
     (state: RootState) => state.auth,

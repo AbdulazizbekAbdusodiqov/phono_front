@@ -102,4 +102,4 @@ const ProductSide = () => {
   );
 };
 
-export default ProductSide;
+export default ProductSide

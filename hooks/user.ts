@@ -50,15 +50,16 @@ export const useGetDistricts = () =>
   });
 
 export const useUpdateUser = (id: number) => {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (data: any) => updateUser(id, data),
     onSuccess: () => {
-      toast.success("Профиль успешно обновлен!");
-      queryClient.invalidateQueries({ queryKey: ["user", id] });
+      toast.success("Профиль успешно обновлен!")
+      queryClient.invalidateQueries({ queryKey: ["user", id] })
     },
     onError: (error: any) => {
-      toast.error(error?.message || "Ошибка при обновлении пользователя");
+      toast.error(error?.message || "Ошибка при обновлении пользователя")
     },
-  });
-};
+  })
+}
+

@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import style from "./home.module.scss";
 import CategorySide from "../../components/home/category";

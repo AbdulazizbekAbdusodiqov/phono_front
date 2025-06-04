@@ -2,7 +2,16 @@ import { toast } from "react-toastify";
 import instance from "./instance";
 import { AddressData } from "../types/userData";
 
-const getToken = () => JSON.parse(localStorage.getItem("accessToken") || '""');
+const getToken = (): string => {
+  try {
+    const token = localStorage.getItem("accessToken");
+    return token ? JSON.parse(token) : "";
+  } catch (e) {
+    console.error("Failed to parse token", e);
+    return "";
+  }
+};
+
 
 export const getUserPhoneNumbers = async (id: number | string) => {
   try {
@@ -87,17 +96,24 @@ export const getAddresses = async () => {
     throw error;
   }
 };
-
 export const updateUser = async (id: number, data: any) => {
-  try {
-    const res = await instance.put(`/user/${id}`, data, {
-      headers: { Authorization: `Bearer ${getToken()}` },
-    });
-    console.log(res.data);
-    return res.data;
-  } catch (error: any) {
-    console.error(error);
-    toast.error(error.response?.data?.message || "Ошибка обновления пользователя");
-    throw error;
-  }
+  const formData = new FormData();
+
+  Object.entries(data).forEach(([key, value]) => {
+    if (value !== undefined && value !== null) {
+      if (value instanceof File) {
+        formData.append(key, value);
+      } else {
+        formData.append(key, String(value));
+      }
+    }
+  });
+
+  const res = await instance.put(`/user/${id}`, formData, {
+    headers: {
+      Authorization: `Bearer ${getToken()}`,
+    },
+  });
+
+  return res.data;
 };

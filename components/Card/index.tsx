@@ -37,12 +37,18 @@ const Card: React.FC<CardProps> = ({ product, isFavorite, onToggleFavorite }) =>
             {isFavorite ? <FaHeart color="#FF4E64" /> : <FaRegHeart color="#999CA0" />}
           </div>
         </div>
+
         <p className={styles.wrapper}>
-          <b>Состояние:</b> <span className={styles.condition}>{condition}</span>
+          <b>Состояние:</b>{" "}
+          <span className={styles.condition}>
+            {condition ? "Новый" : "Б/у"}
+          </span>
         </p>
+
         <p className={styles.wrapper}>
           <b>Память:</b> <span className={styles.memory}>{storage}</span>
         </p>
+
         <div className={styles.footer}>
           <span className={styles.price}>{price}</span>
           {negotiable && <span className={styles.badge}>Торг есть</span>}

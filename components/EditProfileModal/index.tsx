@@ -10,6 +10,9 @@ import {
 } from "@/public/icons/profile";
 import CustomCalendar from "./CustomCalendar";
 import styles from "./EditProfileModal.module.scss";
+import { useGetMe } from "@/hooks/auth";
+import { RootState } from "@/store/store";
+import { useSelector } from "react-redux";
 
 interface EditProfileModalProps {
   isOpen: boolean;
@@ -39,6 +42,9 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
+  const { user } = useSelector((state: RootState) => state.auth);
+  const { data: me } = useGetMe(Number(user?.id));
+
   const updateUserMutation = useUpdateUser(userId);
 
   const formik = useFormik({
@@ -46,34 +52,33 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
       first_name: initialData.first_name || "",
       last_name: initialData.last_name || "",
       birth_date: initialData.birth_date || "",
-      profile_img: initialData.profile_img || "/img/profile/Avatar.svg",
     },
     onSubmit: async (values) => {
       try {
+        const formData = new FormData();
+        formData.append("first_name", values.first_name.trim());        
+        formData.append("last_name", values.last_name.trim());
+        formData.append("birth_date", values.birth_date);
+      
         if (selectedFile) {
-          // Agar fayl tanlangan bo'lsa, FormData yarating
-          const formData = new FormData();
-          formData.append("first_name", values.first_name.trim());
-          formData.append("last_name", values.last_name.trim());
-          formData.append("birth_date", values.birth_date);
           formData.append("image", selectedFile);
-
-          await updateUserMutation.mutateAsync(formData);
-        } else {
-          // Fayl tanlanmagan bo'lsa, oddiy obyekt yuboring
-          const dataToSend = {
-            first_name: values.first_name.trim(),
-            last_name: values.last_name.trim(),
-            birth_date: values.birth_date,
-            profile_img: values.profile_img,
-          };
-
-          await updateUserMutation.mutateAsync(dataToSend);
         }
+
+        await updateUserMutation.mutateAsync(formData);
 
         if (onSave) {
-          onSave(values);
+          onSave({
+            ...values,
+            profile_img:
+              selectedFile && selectedFile.name
+                ? URL.createObjectURL(selectedFile)
+                : me?.profile_img || "",
+          });
         }
+
+        console.log(formData);
+        
+
         onClose();
       } catch (error) {
         console.error("Ошибка при сохранении профиля:", error);
@@ -85,12 +90,6 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
     const file = event.target.files?.[0];
     if (file) {
       setSelectedFile(file);
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const result = e.target?.result as string;
-        formik.setFieldValue("profile_img", result);
-      };
-      reader.readAsDataURL(file);
     }
   };
 
@@ -132,16 +131,20 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
           <div className={styles.modalBody}>
             <div className={styles.avatarSection}>
               <div className={styles.avatarContainer}>
-                {formik.values.profile_img ? (
+                {selectedFile ? (
                   <img
-                    src={formik.values.profile_img || "/placeholder.svg"}
+                    src={URL.createObjectURL(selectedFile)}
+                    alt="Avatar"
+                    className={styles.avatar}
+                  />
+                ) : me?.profile_img ? (
+                  <img
+                    src={`${process.env.NEXT_PUBLIC_BASE_URL}/uploads/${me.profile_img}`}
                     alt="Avatar"
                     className={styles.avatar}
                   />
                 ) : (
-                  <div className={styles.avatarPlaceholder}>
-                    <AvatarIcon />
-                  </div>
+                  <AvatarIcon />
                 )}
               </div>
               <label className={styles.uploadButton}>
@@ -195,8 +198,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
                   </div>
                   <div className={styles.rightIcon}>
                     <span className={styles.dateValue}>
-                      {formatDisplayDate(formik.values.birth_date) ||
-                        "Выберите дату"}
+                      {formatDisplayDate(formik.values.birth_date)}
                     </span>
                     <ArrowRightIcon />
                   </div>

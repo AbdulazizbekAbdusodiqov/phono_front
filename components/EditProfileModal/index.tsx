@@ -24,12 +24,13 @@ interface EditProfileModalProps {
     birth_date?: string;
     profile_img?: string;
   };
-  onSave?: (data: {
+  onSave?: (data:{
     first_name: string;
     last_name: string;
     birth_date: string;
     profile_img: string;
   }) => void;
+  
 }
 
 const EditProfileModal: React.FC<EditProfileModalProps> = ({
@@ -53,37 +54,55 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
       last_name: initialData.last_name || "",
       birth_date: initialData.birth_date || "",
     },
-    onSubmit: async (values) => {
+   onSubmit: async (values) => {
       try {
         const formData = new FormData();
-        formData.append("first_name", values.first_name.trim());        
-        formData.append("last_name", values.last_name.trim());
-        formData.append("birth_date", values.birth_date);
-      
-        if (selectedFile) {
-          formData.append("image", selectedFile);
+
+        if (values.first_name.trim()) {
+          formData.append("first_name", values.first_name.trim());
+        } else {
+          formData.append("first_name", "");
         }
 
-        await updateUserMutation.mutateAsync(formData);
+        if (values.last_name.trim()) {
+          formData.append("last_name", values.last_name.trim());
+        } else {
+          formData.append("last_name", "");
+        }
+
+        if (values.birth_date) {
+          formData.append("birth_date", values.birth_date);          
+        } else {
+          formData.append("birth_date", "");
+        }
+
+        if (selectedFile) {
+          formData.append("image", selectedFile);
+
+        }
+      
+        const updatedUser = await updateUserMutation.mutateAsync(formData);
 
         if (onSave) {
           onSave({
-            ...values,
-            profile_img:
-              selectedFile && selectedFile.name
-                ? URL.createObjectURL(selectedFile)
-                : me?.profile_img || "",
+            first_name: values.first_name,
+            last_name: values.last_name,
+            birth_date: values.birth_date,
+            profile_img: selectedFile
+              ? URL.createObjectURL(selectedFile)
+              : updatedUser?.profile_img
+              ? `${process.env.NEXT_PUBLIC_BASE_URL}/uploads/${updatedUser.profile_img}`
+              : "",
           });
         }
-
-        console.log(formData);
-        
-
+      
+       setSelectedFile(null);
         onClose();
       } catch (error) {
         console.error("Ошибка при сохранении профиля:", error);
       }
-    },
+}
+
   });
 
   const handleAvatarUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -231,6 +250,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
             >
               Сохранить
             </button>
+            
           </div>
         </form>
       </div>

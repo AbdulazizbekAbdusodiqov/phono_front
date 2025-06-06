@@ -20,7 +20,7 @@ const Card: React.FC<CardProps> = ({ product, isFavorite, onToggleFavorite }) =>
   };
 
   return (
-    <Link href={`/Profile/Edit`} className={styles.card}>
+    <Link href={`/Profile/Edit/${id}`} className={styles.card}>
       <img
         src={
           product_image && product_image.length > 0

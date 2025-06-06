@@ -4,6 +4,8 @@ import Image from "next/image"
 import Breadcrumb from "@/components/Breadcrumb"
 import EditProductModal from "@/components/EditProductModal/index"
 import { EditIcon, FavoriteIcon, LeftNavIcon, LocationIcon, RightNavIcon, TopIcon } from "@/public/icons/profile"
+import { useRouter } from "next/router"
+import { useProductById } from "../../../hooks/products.use"
 
 interface ProductData {
   id: number
@@ -24,12 +26,17 @@ interface ProductData {
 }
 
 const Edit = () => {
+  const router = useRouter()
+  const { id } = router.query
+  console.log(id);
+  const {data: product} = useProductById(Number(id))
   const [activeTab, setActiveTab] = useState("description")
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
-
+  console.log(product);
+  
   const [productData, setProductData] = useState<ProductData>({
-    id: 1,
+    id: Number(id),
     title: "iPhone 12 Pro 128 GB",
     price: "9 000 000 UZS",
     location: "Юнусабадский район, Ташкент",

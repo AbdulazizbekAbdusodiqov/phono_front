@@ -81,3 +81,13 @@ export const getProducts = async (
     toast.error(`${error.response?.data?.message || "Something went wrong"}`);
   }
 };
+
+export const getProductById = async (id: number) => {
+  try {
+    const res = await instance.get(`/product/${id}`);
+    return res.data;
+  } catch (error: any) {
+    console.error(error);
+    toast.warning(`${error.response?.data?.message || "Something went wrong"}`);
+  }
+};  

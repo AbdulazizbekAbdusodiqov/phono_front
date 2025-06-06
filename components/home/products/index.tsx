@@ -5,6 +5,7 @@ import { useProducts } from "../../../hooks/products.use";
 import ProductSkeleton from "../product-card/product-card.skelton";
 import Card from "@/components/Card";
 import { useFavorites } from "../../../hooks/useFavorites";
+import ProductCard from "../product-card";
 
 const ProductSide = () => {
   const router = useRouter();
@@ -68,7 +69,7 @@ const ProductSide = () => {
     <>
       <div className={style.products_grid}>
         {products?.data?.map((product: any) => (
-          <Card
+          <ProductCard
             key={product.id}
             product={product}
             isFavorite={isFavorite(product.id)} 

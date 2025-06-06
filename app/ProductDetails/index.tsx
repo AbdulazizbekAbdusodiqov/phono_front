@@ -1,5 +1,5 @@
 import { useState } from "react"
-import styles from "./Edit.module.scss"
+import styles from "./ProductDetails.module.scss"
 import Image from "next/image"
 import Breadcrumb from "@/components/Breadcrumb"
 import EditProductModal from "@/components/EditProductModal/index"
@@ -23,7 +23,7 @@ interface ProductData {
   images: string[]
 }
 
-const Edit = () => {
+const ProductDetails = () => {
   const [activeTab, setActiveTab] = useState("description")
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
@@ -67,7 +67,7 @@ const Edit = () => {
 
   const handleFavoriteToggle = async () => {
     try {
-      const response = await fetch(`/api/products/${productData.id}/favorite`, {
+      const response = await fetch(`/api/product/${productData.id}/favorite`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -92,9 +92,9 @@ const Edit = () => {
     setIsEditModalOpen(false)
   }
 
-  const handleProductSave = async (updatedData: Partial<ProductData>) => {
+  const handleProductSave = async (updatedData: Partial<ProductData>) => {    
     try {
-      const response = await fetch(`/api/products/${productData.id}`, {
+      const response = await fetch(`/api/product/${productData.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -114,7 +114,7 @@ const Edit = () => {
 
   const handlePromote = async () => {
     try {
-      const response = await fetch(`/api/products/${productData.id}/promote`, {
+      const response = await fetch(`/api/product/${productData.id}/promote`, {
         method: "POST",
       })
 
@@ -266,4 +266,4 @@ const Edit = () => {
   )
 }
 
-export default Edit
+export default ProductDetails

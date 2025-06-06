@@ -90,28 +90,23 @@ export const getAddresses = async () => {
     throw error;
   }
 };
-
-export const updateUser = async (id: number, data: any) => {
-  const formData = new FormData();
-  
-  Object.entries(data).forEach(([key, value]) => {
-    if (value !== undefined && value !== null && value !== "") {
-      if (key === "profile_img") {
-        if (value instanceof File) {
-          formData.append(key, value);
-        }
-      } else {
-        formData.append(key, String(value));
-      }
+export const updateUser = async (id: number, data: FormData) => {
+  try {
+    console.log("FormData ichidagi qiymatlar:");
+    for (const pair of data.entries()) {
+      console.log(`${pair[0]}: ${pair[1]}`);
     }
-  });
 
-  const res = await instance.put(`/user/${id}`, formData, {
-    headers: {
-      Authorization: `Bearer ${getToken()}`,
-      'Content-Type': 'multipart/form-data', 
-    },
-  });
+    const response = await instance.put(`/user/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
-  return res.data;
+    return response.data;
+  } catch (error) {
+    console.error("Ошибка при обновлении пользователя", error);
+    throw error;
+  }
 };

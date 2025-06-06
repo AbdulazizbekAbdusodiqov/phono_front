@@ -38,7 +38,7 @@ const Profile = () => {
   );
   
   const userProfile = {
-    first_name: me ? `${me.first_name} ${me.last_name}` : "Имя пользователя",
+    first_name: me ? `${me.first_name} ${me.last_name}` : "",
     balance: me?.balance ? `${me.balance} сум` : "0 сум",
     profile_img: `${process.env.NEXT_PUBLIC_BASE_URL}/uploads/${me?.profile_img}` || "/img/profile/Avatar.svg",
     name: me?.first_name || "",
@@ -58,7 +58,8 @@ const Profile = () => {
     birth_date: string;
     profile_img: string;
   }) => {
-    console.log("Profile data to be saved:",data);
+    console.log("");
+    
   };
 
   const toggleFavorite = (id: number) => {

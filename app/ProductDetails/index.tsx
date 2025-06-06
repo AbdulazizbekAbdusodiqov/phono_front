@@ -4,8 +4,11 @@ import Image from "next/image"
 import Breadcrumb from "@/components/Breadcrumb"
 import EditProductModal from "@/components/EditProductModal/index"
 import { EditIcon, FavoriteIcon, LeftNavIcon, LocationIcon, RightNavIcon, TopIcon } from "@/public/icons/profile"
-import { useProductById } from "../../hooks/products.use"
+import { useAllProducts, useProductById } from "../../hooks/products.use"
 import { useRouter } from "next/router"
+import favorites from "../../pages/favorites"
+import { Product } from "../../types"
+import Card from "../../components/Card"
 
 interface ProductData {
   id: number
@@ -31,9 +34,22 @@ const ProductDetails = () => {
   const [activeTab, setActiveTab] = useState("description")
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
-
+  const [favorites, setFavorites] = useState<number[]>(() => {
+    if (typeof window !== "undefined") {
+      return JSON.parse(localStorage.getItem("favorites") || "[]");
+    }
+    return [];
+  });
   const { data: productData2 } = useProductById(Number(id))
   console.log(productData2);
+
+  const { data: allProductData } = useAllProducts()
+  console.log(allProductData);
+  const toggleFavorite = (id: number) => {
+    setFavorites((prev) =>
+      prev.includes(id) ? prev.filter((favId) => favId !== id) : [...prev, id]
+    );
+  };
   
   const [productData, setProductData] = useState<ProductData>({
     id: 1,
@@ -134,12 +150,13 @@ const ProductDetails = () => {
   }
 
   return (
-    <div className={styles.detailsPage}>
-      <div className={styles.breadcrumbs}>
-        <Breadcrumb />
-      </div>
+    <>
+      <div className={styles.detailsPage}>
+        <div className={styles.breadcrumbs}>
+          <Breadcrumb />
+        </div>
 
-      <div className={styles.container}>
+        <div className={styles.container}>
         <div className={styles.gallery}>
           <div className={styles.mainImage}>
             <Image
@@ -259,6 +276,18 @@ const ProductDetails = () => {
       </div>
 
       <div className={styles.description}>
+      <div>
+        <div>
+      {allProductData?.map((product: Product) => (
+        <Card
+          key={product.id}
+          product={product}
+          isFavorite={favorites.includes(product.id)}
+          onToggleFavorite={toggleFavorite}
+        />
+      ))}
+    </div>
+    </div>
         {activeTab === "description" && <p>{productData.description}</p>}
         {activeTab === "reviews" && <p>Отзывы пользователей будут отображаться здесь.</p>}
       </div>
@@ -270,6 +299,8 @@ const ProductDetails = () => {
         onSave={handleProductSave}
       />
     </div>
+    
+    </>
   )
 }
 

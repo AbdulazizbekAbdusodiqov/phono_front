@@ -64,6 +64,7 @@ export const createProduct = async ({
   }
 };
 
+
 export const getProducts = async (
   page = 1,
   filters: Record<string, string> = {}
@@ -78,7 +79,8 @@ export const getProducts = async (
     return res.data;
   } catch (error: any) {
     console.error(error);
-    toast.error(`${error.response?.data?.message || "Something went wrong"}`);
+    toast.error(error.response?.data?.message || "Something went wrong");
+    throw error;
   }
 };
 
@@ -88,6 +90,7 @@ export const getProductById = async (id: number) => {
     return res.data;
   } catch (error: any) {
     console.error(error);
-    toast.warning(`${error.response?.data?.message || "Something went wrong"}`);
+    toast.warning(error.response?.data?.message || "Something went wrong");
+    throw error;
   }
-};  
+};

@@ -59,7 +59,6 @@ const Profile = () => {
     profile_img: string;
   }) => {
     console.log("");
-    
   };
 
   const toggleFavorite = (id: number) => {

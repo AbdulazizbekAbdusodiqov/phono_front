@@ -4,7 +4,9 @@ export const useFavorites = () => {
   const [favorites, setFavorites] = useState<number[]>([]);
 
   useEffect(() => {
-    const storedFavorites = JSON.parse(localStorage.getItem("favorites") || "[]");
+    const storedFavorites = JSON.parse(
+      localStorage.getItem("favorites") || "[]",
+    );
     setFavorites(storedFavorites);
   }, []);
 

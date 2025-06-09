@@ -2,29 +2,29 @@
 @use "@/styles/fonts";
 
 .footer {
-    font-family: 'SF-Pro-Display-Regular', sans-serif;
-    margin-bottom: 60px;
-    .line {
-        max-width: 1230px;
-        border-radius: 1px;
-        margin: 0 auto;
-        height: 1px;
-        background-color: #999ca0;
-    }
+  font-family: "SF-Pro-Display-Regular", sans-serif;
+  margin-bottom: 60px;
+  .line {
+    max-width: 1230px;
+    border-radius: 1px;
+    margin: 0 auto;
+    height: 1px;
+    background-color: #999ca0;
+  }
 
-    .container {
-        @extend .container;
-        padding: 0px 10px;
-        background-color: #fff;
-        margin-top: 50px;
-    }
+  .container {
+    @extend .container;
+    padding: 0px 10px;
+    background-color: #fff;
+    margin-top: 50px;
+  }
 
-    &__top {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        gap: 30px;
-    }
+  &__top {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 30px;
+  }
 
   &__brand {
     font-size: 32px;
@@ -68,20 +68,19 @@
     }
 
     &__store_social {
-        display: flex;
-        flex-direction: column;
+      display: flex;
+      flex-direction: column;
+      align-self: flex-end;
+      gap: 10px;
+
+      .footer__store_badge {
         align-self: flex-end;
+      }
+
+      .footer__social_icons {
+        display: flex;
         gap: 10px;
-
-        .footer__store_badge {
-            align-self: flex-end;
-        }
-
-        .footer__social_icons {
-            display: flex;
-            gap: 10px;
-
-        }
+      }
     }
   }
 }

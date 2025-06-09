@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { GrLanguage } from 'react-icons/gr';
-import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
-import { RiCheckboxBlankCircleFill } from 'react-icons/ri';
-import styles from './LanguageSelector.module.scss';
-import { getFromStorage, setToStorage } from '../../../../utils/local-storege';
+import React, { useState, useEffect } from "react";
+import { GrLanguage } from "react-icons/gr";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { RiCheckboxBlankCircleFill } from "react-icons/ri";
+import styles from "./LanguageSelector.module.scss";
+import { getFromStorage, setToStorage } from "../../../../utils/local-storege";
 
-const languages = ['Русский', 'O‘zbek', 'English'];
+const languages = ["Русский", "O‘zbek", "English"];
 
 const LanguageSelector = () => {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(0);
 
   useEffect(() => {
-    const saved = getFromStorage('language')[0] || [];
-    
+    const saved = getFromStorage("language")[0] || [];
+
     if (saved) {
       const index = languages.indexOf(saved);
       if (index !== -1) setSelected(index);
@@ -22,7 +22,7 @@ const LanguageSelector = () => {
 
   const changeLang = (index: number) => {
     setSelected(index);
-    setToStorage('language', [languages[index]]);
+    setToStorage("language", [languages[index]]);
   };
 
   return (
@@ -42,7 +42,7 @@ const LanguageSelector = () => {
                 key={i}
                 onClick={() => changeLang(i)}
               >
-                <span style={{ color: i === selected ? '#000' : '#ccc' }}>
+                <span style={{ color: i === selected ? "#000" : "#ccc" }}>
                   <RiCheckboxBlankCircleFill />
                 </span>
                 <span>{lang}</span>

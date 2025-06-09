@@ -1,12 +1,12 @@
-@use '@/styles/container';
-@use '@/styles/fonts';
+@use "@/styles/container";
+@use "@/styles/fonts";
 
 .container {
   display: flex;
   flex-direction: column;
   gap: 12px;
   padding: 16px;
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
 }
 
 .sections {

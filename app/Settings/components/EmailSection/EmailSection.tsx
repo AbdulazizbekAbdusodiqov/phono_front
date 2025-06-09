@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { RiDeleteBin5Line } from 'react-icons/ri';
-import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
-import Modal from '../../ui/Modal';
-import styles from './EmailSection.module.scss';
+import React, { useState, useEffect } from "react";
+import { RiDeleteBin5Line } from "react-icons/ri";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import Modal from "../../ui/Modal";
+import styles from "./EmailSection.module.scss";
 import {
   getEmails,
   addEmail as apiAddEmail,
   deleteEmail as apiDeleteEmail,
-} from '../../../../endpoints/emails';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../../store/store';
-import { toast } from 'react-toastify';
+} from "../../../../endpoints/emails";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../store/store";
+import { toast } from "react-toastify";
 
 type Email = {
   _id: string;
@@ -21,7 +21,7 @@ const EmailSection = () => {
   const [emails, setEmails] = useState<Email[]>([]);
   const [open, setOpen] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const [newEmail, setNewEmail] = useState('');
+  const [newEmail, setNewEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const { user } = useSelector((state: RootState) => state.auth);
 
@@ -44,18 +44,18 @@ const EmailSection = () => {
     const added = await apiAddEmail(newEmail.trim());
     if (added) {
       setEmails((prev) => [...prev, added]);
-      setNewEmail('');
+      setNewEmail("");
       setShowForm(false);
     }
   };
 
   const deleteEmail = async (id: string) => {
-    const confirmed = window.confirm('Ишончингиз комилми?');
+    const confirmed = window.confirm("Ишончингиз комилми?");
     if (!confirmed) return;
 
     const res = await apiDeleteEmail(+id, user?.id);
     if (res!) {
-      toast('Ошибка при удалении');
+      toast("Ошибка при удалении");
     } else {
       setEmails((prev) => prev.filter((email) => email._id !== id));
     }

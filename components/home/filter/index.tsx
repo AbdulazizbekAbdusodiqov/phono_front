@@ -43,7 +43,7 @@ const FilterSide = ({ onClose, onApply }: FilterSideProps) => {
   const { data: brands, isLoading: brandsLoading } = useBrands();
   const { data: regions, isLoading: regionsLoading } = useRegions();
   const { data: colors, isLoading: colorsLoading } = useColors();
-  
+
   const memoryOptions = [
     { id: 1, name: "64" },
     { id: 2, name: "128" },
@@ -85,12 +85,12 @@ const FilterSide = ({ onClose, onApply }: FilterSideProps) => {
     setOpenDropdown(null);
     router.push("/");
     if (onClose) {
-      onClose()
+      onClose();
     }
   };
 
   const handleApply = () => {
-    const query: Record<string, string > = {};
+    const query: Record<string, string> = {};
 
     if (filters.colorId) {
       const color = colors?.find((c: any) => c.id === filters.colorId);
@@ -113,7 +113,6 @@ const FilterSide = ({ onClose, onApply }: FilterSideProps) => {
 
     if (filters.condition) {
       if (filters.condition == "new") {
-        
         query.condition = "true";
       } else {
         query.condition = "false";
@@ -166,7 +165,12 @@ const FilterSide = ({ onClose, onApply }: FilterSideProps) => {
               disabled={regionsLoading}
             >
               <span>{getSelectedName(filters.regionId, regions || [])}</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" stroke="currentColor">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
                 <path d="M6 9l6 6 6-6" />
               </svg>
             </button>
@@ -193,8 +197,12 @@ const FilterSide = ({ onClose, onApply }: FilterSideProps) => {
         <div className={style.toggleSection}>
           <label className={style.label}>Только TOP объявления</label>
           <button
-            className={`${style.switch} ${filters.topAdsOnly ? style.switchOn : ""}`}
-            onClick={() => handleFilterChange("topAdsOnly", !filters.topAdsOnly)}
+            className={`${style.switch} ${
+              filters.topAdsOnly ? style.switchOn : ""
+            }`}
+            onClick={() =>
+              handleFilterChange("topAdsOnly", !filters.topAdsOnly)
+            }
           >
             <div className={style.switchThumb} />
           </button>
@@ -270,7 +278,12 @@ const FilterSide = ({ onClose, onApply }: FilterSideProps) => {
                   }
                 >
                   <span>{getSelectedName(filters.brandId, brands || [])}</span>
-                  <svg width="16" height="16" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
                     <path d="M6 9l6 6 6-6" />
                   </svg>
                 </button>
@@ -315,7 +328,12 @@ const FilterSide = ({ onClose, onApply }: FilterSideProps) => {
               }
             >
               <span>{getSelectedMemoryName()}</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" stroke="currentColor">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
                 <path d="M6 9l6 6 6-6" />
               </svg>
             </button>

@@ -19,7 +19,7 @@
   padding: 16px;
   width: 100%;
   max-width: 320px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   animation: fadeIn 0.2s ease;
 }
 
@@ -54,11 +54,11 @@
   padding: 4px 8px;
   border-radius: 6px;
   transition: background-color 0.2s ease;
-  
+
   &:hover {
     background-color: #f5f5f5;
   }
-  
+
   svg {
     color: #666;
   }
@@ -77,7 +77,7 @@
   border-radius: 6px;
   color: #666;
   transition: all 0.2s ease;
-  
+
   &:hover {
     background-color: #f5f5f5;
     color: #333;
@@ -121,39 +121,39 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  
+
   &:hover {
     background-color: #f0f0f0;
   }
-  
+
   &.selected {
     background-color: #4e46b4;
     color: white;
     font-weight: 600;
-    
+
     &:hover {
       background-color: #3d3691;
     }
   }
-  
+
   &.today {
     background-color: #e8f4fd;
     color: #1976d2;
     font-weight: 600;
-    
+
     &:hover {
       background-color: #d1e7dd;
     }
-    
+
     &.selected {
       background-color: #4e46b4;
       color: white;
     }
   }
-  
+
   &.otherMonth {
     color: #ccc;
-    
+
     &:hover {
       background-color: #f8f8f8;
       color: #999;
@@ -182,16 +182,16 @@
   color: #333;
   border-radius: 6px;
   transition: all 0.2s ease;
-  
+
   &:hover {
     background-color: #f0f0f0;
   }
-  
+
   &.selectedYear {
     background-color: #4e46b4;
     color: white;
     font-weight: 600;
-    
+
     &:hover {
       background-color: #3d3691;
     }
@@ -219,7 +219,7 @@
 
 .deleteButton {
   color: #4e46b4;
-  
+
   &:hover {
     background-color: #f0f0ff;
   }
@@ -227,7 +227,7 @@
 
 .todayButton {
   color: #4e46b4;
-  
+
   &:hover {
     background-color: #f0f0ff;
   }
@@ -238,12 +238,12 @@
     max-width: 280px;
     padding: 12px;
   }
-  
+
   .day {
     min-height: 28px;
     font-size: 13px;
   }
-  
+
   .dayHeader {
     font-size: 12px;
     padding: 6px 2px;

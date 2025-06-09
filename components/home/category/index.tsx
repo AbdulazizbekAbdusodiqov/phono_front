@@ -33,7 +33,7 @@ const CategorySide = () => {
 
   const handleViewAll = () => {
     setVisibleCount((prev) =>
-      Math.min(prev + LOAD_MORE_COUNT, categories.length)
+      Math.min(prev + LOAD_MORE_COUNT, categories.length),
     );
   };
 

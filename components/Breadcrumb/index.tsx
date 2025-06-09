@@ -5,13 +5,15 @@ import styles from "./Breadcrumb.module.scss";
 const rusNamesMap: Record<string, string> = {
   profile: "Профиль",
   edit: "Мои объявления",
-  productdetails: "Объявления"
+  productdetails: "Объявления",
 };
 
 const isIdSegment = (segment: string) => {
   if (/^\d+$/.test(segment)) return true;
   if (
-    /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/.test(segment)
+    /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/.test(
+      segment,
+    )
   )
     return true;
   return false;
@@ -24,7 +26,7 @@ const Breadcrumb = () => {
   const breadcrumbs = [
     { name: "Главная", href: "/" },
     ...segments
-      .filter((segment) => !isIdSegment(segment)) 
+      .filter((segment) => !isIdSegment(segment))
       .map((segment, index) => {
         const href =
           "/" +

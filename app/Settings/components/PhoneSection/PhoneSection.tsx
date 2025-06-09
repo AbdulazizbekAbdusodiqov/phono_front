@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { RiDeleteBin5Line } from 'react-icons/ri';
-import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
-import Modal from '../../ui/Modal';
-import styles from './PhoneSection.module.scss';
-import { getPhones, addPhone, deletePhone } from '../../../../endpoints/phones';
-import { toast } from 'react-toastify';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../../store/store';
+import React, { useState, useEffect } from "react";
+import { RiDeleteBin5Line } from "react-icons/ri";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import Modal from "../../ui/Modal";
+import styles from "./PhoneSection.module.scss";
+import { getPhones, addPhone, deletePhone } from "../../../../endpoints/phones";
+import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../store/store";
 
 type Phone = {
   id: number;
@@ -18,12 +18,11 @@ const PhoneSection = () => {
   const [phones, setPhones] = useState<Phone[]>([]);
   const [open, setOpen] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const [newPhone, setNewPhone] = useState('');
+  const [newPhone, setNewPhone] = useState("");
   const [loading, setLoading] = useState(false);
   const { user, isAuthenticated } = useSelector(
     (state: RootState) => state.auth,
   );
-
 
   const fetchPhones = async (id: number | undefined) => {
     setLoading(true);
@@ -43,19 +42,19 @@ const PhoneSection = () => {
     const added = await addPhone(newPhone.trim(), user?.id);
     if (added) {
       setPhones((prev) => [...prev, added]);
-      setNewPhone('');
+      setNewPhone("");
       setShowForm(false);
     }
   };
 
   const handleDeletePhone = async (phoneId: number) => {
     console.log("delete bosildi");
-    const confirmed = window.confirm('Ишончингиз комилми?');
+    const confirmed = window.confirm("Ишончингиз комилми?");
     if (!confirmed) return;
 
     const res = await deletePhone(user?.id, +phoneId);
-    if(res == false){
-      toast("something went wrong on deleting")
+    if (res == false) {
+      toast("something went wrong on deleting");
     } else {
       console.log("res: ", res);
       setPhones((prev) => prev.filter((item) => item.id !== phoneId));

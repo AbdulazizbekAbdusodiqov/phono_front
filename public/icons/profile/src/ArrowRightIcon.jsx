@@ -13,5 +13,5 @@ const SvgComponent = (props) => (
       d="m11.5 7 9 9-9 9"
     />
   </svg>
-)
-export default SvgComponent
+);
+export default SvgComponent;

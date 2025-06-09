@@ -15,70 +15,72 @@ interface FindAddressDto {
 export const createProduct = async ({
   data,
   images,
-  addressData
+  addressData,
 }: {
   data: CreateProductProps;
   images: File[];
   addressData: AddressData;
 }) => {
   try {
-    const token = JSON.parse(localStorage.getItem("accessToken") || "")
+    const token = JSON.parse(localStorage.getItem("accessToken") || "");
     const findAddressDto: FindAddressDto = {
       region_id: addressData.region_id || undefined,
       district_id: addressData.district_id || undefined,
       long: addressData.long || undefined,
       lat: addressData.lat || undefined,
-    }
+    };
     for (const key in findAddressDto) {
       if (!findAddressDto[key as keyof FindAddressDto]) {
         delete findAddressDto[key as keyof FindAddressDto];
       }
     }
-    const address = await instance.post<AddressRes>(`/address/getByUser/${data.user_id}`, findAddressDto, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  
-  
-  const formData = new FormData();
-  //@ts-ignore
-  formData.append("address_id", address.data?.id);
-  Object.entries(data).forEach(([key, value]) => {
+    const address = await instance.post<AddressRes>(
+      `/address/getByUser/${data.user_id}`,
+      findAddressDto,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    const formData = new FormData();
+    //@ts-ignore
+    formData.append("address_id", address.data?.id);
+    Object.entries(data).forEach(([key, value]) => {
       formData.append(key, value);
     });
-    
+
     images.forEach((img) => {
       formData.append("images", img);
     });
-    try{
+    try {
       console.log(formData.get("address_id"));
-      
+
       const res = await instance.post("/product/create", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    console.log(res.data);
-    return res.data;
-  }catch(error:any){
-    console.log("Errorjon:",error);
-    toast.error(error.response?.data?.message || "Something went wrong");
-  }
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(res.data);
+      return res.data;
+    } catch (error: any) {
+      console.log("Errorjon:", error);
+      toast.error(error.response?.data?.message || "Something went wrong");
+    }
     // console.log( "Product created successfully: ",res.data);
-    
+
     // return res.data;
-  } catch (error:any) {
-    console.log("Errorjon:",error);
+  } catch (error: any) {
+    console.log("Errorjon:", error);
     toast.error(error.response?.data?.message || "Something went wrong");
   }
 };
 
-
 export const getProducts = async (
   page = 1,
-  filters: Record<string, string> = {}
+  filters: Record<string, string> = {},
 ) => {
   try {
     const res = await instance.get(`/product`, {
@@ -104,7 +106,7 @@ export const getProductById = async (id: number) => {
     toast.warning(error.response?.data?.message || "Something went wrong");
     throw error;
   }
-};  
+};
 
 export const getAllProducts = async () => {
   try {
@@ -115,3 +117,14 @@ export const getAllProducts = async () => {
     toast.warning(`${error.response?.data?.message || "Something went wrong"}`);
   }
 };
+
+// export const getReviews = async (productId: number) => {
+//   try {
+//     const res = await instance.get(`/reviews/product/${productId}`);
+//     return res.data;
+//   } catch (error: any) {
+//     console.error(error);
+//     toast.error(error.response?.data?.message || "Fikrlarni olishda muammo bo'ldi");
+//     throw error;
+//   }
+// };

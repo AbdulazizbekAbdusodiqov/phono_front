@@ -1,20 +1,18 @@
-import React, { useEffect } from 'react';
-import styles from './Settings.module.scss';
-import PhoneSection from './components/PhoneSection/PhoneSection';
-import EmailSection from './components/EmailSection/EmailSection';
-import AddressSection from './components/AddressSection/AddressSection';
-import LanguageSelector from './components/LanguageSelector/LanguageSelector';
-import { IoExitOutline } from 'react-icons/io5';
-import { RiDeleteBin5Line } from 'react-icons/ri';
-import { toast } from 'react-toastify';
-import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store/store';
-import { jwtDecode } from 'jwt-decode';
-
+import React, { useEffect } from "react";
+import styles from "./Settings.module.scss";
+import PhoneSection from "./components/PhoneSection/PhoneSection";
+import EmailSection from "./components/EmailSection/EmailSection";
+import AddressSection from "./components/AddressSection/AddressSection";
+import LanguageSelector from "./components/LanguageSelector/LanguageSelector";
+import { IoExitOutline } from "react-icons/io5";
+import { RiDeleteBin5Line } from "react-icons/ri";
+import { toast } from "react-toastify";
+import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
+import { jwtDecode } from "jwt-decode";
 
 const Settings: React.FC = () => {
-
   const router = useRouter();
 
   const { user, isAuthenticated } = useSelector(
@@ -22,44 +20,44 @@ const Settings: React.FC = () => {
   );
 
   useEffect(() => {
-      if (isAuthenticated) {
-        const token = localStorage.getItem('accessToken');
-        if (token) {
-          try {
-            const decoded = jwtDecode(token);
-            const currentTime = Date.now() / 1000; // seconds
-  
-            if (
-              typeof decoded === 'object' &&
-              decoded &&
-              'exp' in decoded &&
-              typeof (decoded as any).exp === 'number' &&
-              (decoded as any).exp < currentTime
-            ) {
-              toast.info(
-                "Tizim sizni xavfsizlik uchun chiqarib qo'ydi. Iltimos, qayta kiring.",
-              );
-              router.push('/login');
-            }
-          } catch (error) {
+    if (isAuthenticated) {
+      const token = localStorage.getItem("accessToken");
+      if (token) {
+        try {
+          const decoded = jwtDecode(token);
+          const currentTime = Date.now() / 1000; // seconds
+
+          if (
+            typeof decoded === "object" &&
+            decoded &&
+            "exp" in decoded &&
+            typeof (decoded as any).exp === "number" &&
+            (decoded as any).exp < currentTime
+          ) {
             toast.info(
               "Tizim sizni xavfsizlik uchun chiqarib qo'ydi. Iltimos, qayta kiring.",
             );
-            router.push('/login');
+            router.push("/login");
           }
-        } else {
+        } catch (error) {
           toast.info(
             "Tizim sizni xavfsizlik uchun chiqarib qo'ydi. Iltimos, qayta kiring.",
           );
-          router.push('/login');
+          router.push("/login");
         }
       } else {
         toast.info(
           "Tizim sizni xavfsizlik uchun chiqarib qo'ydi. Iltimos, qayta kiring.",
         );
-        router.push('/login');
+        router.push("/login");
       }
-    }, [isAuthenticated, router]);
+    } else {
+      toast.info(
+        "Tizim sizni xavfsizlik uchun chiqarib qo'ydi. Iltimos, qayta kiring.",
+      );
+      router.push("/login");
+    }
+  }, [isAuthenticated, router]);
   return (
     <div className={styles.container}>
       <div className={styles.sections}>

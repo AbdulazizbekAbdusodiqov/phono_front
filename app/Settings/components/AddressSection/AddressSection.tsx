@@ -114,9 +114,6 @@ const AddressSection = () => {
           long: long.toString(),
           is_main: false,
           address,
-          _id: "",
-          full_address: "",
-          id: 0,
           region_id: undefined,
           district_id: undefined,
         };
@@ -153,8 +150,6 @@ const AddressSection = () => {
           region_id: addressData.region_id || undefined,
           district_id: addressData.district_id || undefined,
           address: fullAddress.trim(),
-          _id: "",
-          full_address: "",
         };
         console.log("newAddress: ", newAddress);
         const cleanedAddress: AddAddress = {
@@ -196,7 +191,7 @@ const AddressSection = () => {
       toast("something went wrong on deleting");
     }
     if (res !== false) {
-      setAddresses((prev) => prev.filter((item) => item.id !== id));
+      setAddresses((prev) => prev.filter((item) => item.id !== +id));
     } else {
       toast.error("Манзилни ўчиришда хатолик юз берди");
     }
@@ -225,7 +220,7 @@ const AddressSection = () => {
                   <div>{address.address}</div>
                   <div
                     className={`${styles.item} ${styles.delete}`}
-                    onClick={() => handleDeleteAddress(address.id)}
+                    onClick={() => handleDeleteAddress(address.id.toString())}
                   >
                     <RiDeleteBin5Line />
                   </div>

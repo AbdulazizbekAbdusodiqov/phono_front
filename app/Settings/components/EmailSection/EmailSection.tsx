@@ -57,11 +57,11 @@ const EmailSection = () => {
 
     if (!confirmed) return;
 
-    const res = await apiDeleteEmail(id, user?.id);
+    const res = await apiDeleteEmail(+id, user?.id);
     if (res!) {
       toast("Ошибка при удалении");
     } else {
-      setEmails((prev) => prev.filter((email) => email.id !== id));
+      setEmails((prev) => prev.filter((email) => email.id !== +id));
     }
   };
 
@@ -85,7 +85,7 @@ const EmailSection = () => {
                   <div>{email.email}</div>
                   <div
                     className={`${styles.item} ${styles.delete}`}
-                    onClick={() => deleteEmail(email.id)}
+                    onClick={() => deleteEmail(email.id.toString())}
                   >
                     <RiDeleteBin5Line />
                   </div>

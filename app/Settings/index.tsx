@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Settings.module.scss";
 import PhoneSection from "./components/PhoneSection/PhoneSection";
 import EmailSection from "./components/EmailSection/EmailSection";
@@ -11,6 +11,7 @@ import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import { jwtDecode } from "jwt-decode";
+import { sign_OutUser } from "../../endpoints";
 
 
 const Settings: React.FC = () => {

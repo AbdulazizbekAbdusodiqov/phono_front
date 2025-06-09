@@ -128,9 +128,12 @@ const CreateProduct = () => {
         images: images,
         addressData: addressData,
       });
+      console.log("response: ",response);
+      if(response?.data?.id){
         toast.success('Product created successfully');
         setCreateModal(true);
-        router.push(`/Profile`);
+        // router.push(`/Profile`);
+      }
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'Failed to create product');
     }

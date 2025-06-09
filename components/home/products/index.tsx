@@ -3,10 +3,8 @@ import { useEffect, useState } from "react";
 import style from "./product.module.scss";
 import { useProducts } from "../../../hooks/products.use";
 import ProductSkeleton from "../product-card/product-card.skelton";
-import Card from "@/components/Card";
 import { useFavorites } from "../../../hooks/useFavorites";
 import ProductCard from "../product-card";
-import Spinner from "@/components/Spinner";
 
 const ProductSide = () => {
   const router = useRouter();
@@ -51,7 +49,6 @@ const ProductSide = () => {
   if (isLoading) {
     return (
       <div className={style.products_grid}>
-        <Spinner />
         {Array.from({ length: 4 }).map((_, i) => (
           <ProductSkeleton key={i} />
         ))}

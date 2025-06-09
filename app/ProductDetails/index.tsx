@@ -3,14 +3,12 @@ import styles from "./ProductDetails.module.scss"
 import Image from "next/image"
 import Breadcrumb from "@/components/Breadcrumb"
 import EditProductModal from "@/components/EditProductModal/index"
-import { EditIcon, FavoriteIcon, LeftNavIcon, LocationIcon, RightNavIcon, TopIcon } from "@/public/icons/profile"
-import { useAllProducts, useProductById } from "../../hooks/products.use"
+import { EditIcon, LeftNavIcon, LocationIcon, RightNavIcon, TopIcon } from "@/public/icons/profile"
+import { useProductById } from "../../hooks/products.use"
 import { useRouter } from "next/router"
-import favorites from "../../pages/favorites"
-import { Product } from "../../types"
 import Card from "../../components/Card"
 import { useFavorites } from "../../hooks/useFavorites"
-import Spinner from "../../components/Spinner"
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 
 interface ProductData {
   id: number
@@ -32,9 +30,9 @@ interface ProductData {
 const ProductDetails = () => {
   const router = useRouter()
   const id = router.query.id
-
+  const likedProducts = JSON.parse(localStorage.getItem("favorites") || "[]")
   const { data: productData2, isLoading } = useProductById(Number(id))
-
+  
   const [productData, setProductData] = useState<ProductData | null>(null)
   const [activeTab, setActiveTab] = useState<"description" | "reviews">("description")
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
@@ -76,7 +74,7 @@ const ProductDetails = () => {
   }, [productData2])
 
   if (isLoading || !productData) {
-    return <Spinner />
+    return null
   }
 
 
@@ -201,7 +199,9 @@ const ProductDetails = () => {
               }`}
               onClick={handleFavoriteToggle}
             >
-              <FavoriteIcon />
+            <div className={styles.like}>
+              {likedProducts.includes(Number(id)) ? <FaHeart color="#FF4E64" /> : <FaRegHeart color="#999CA0" />}
+            </div>
             </button>
           </div>
 

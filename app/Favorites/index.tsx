@@ -8,7 +8,6 @@ import type { RootState } from "@/store/store";
 import { useGetMe } from "@/hooks/auth";
 import { Product } from "../../types";
 import { HeartIcon } from "@/public/icons/profile";
-import Spinner from "@/components/Spinner";
 
 const Favorites = () => {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -27,7 +26,6 @@ const Favorites = () => {
         <h1 className={styles.title}>Избранное</h1>
         <div className={styles.hrLine} />
         <div className={styles.emptyState}>
-          <Spinner/>
         </div>
       </div>
     );

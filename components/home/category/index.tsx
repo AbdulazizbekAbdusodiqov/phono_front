@@ -5,6 +5,7 @@ import { useCategory } from "../../../hooks/category";
 import CategoryCardSkeleton from "../category-card/category-card.skelton";
 import PlusImg from "../../../public/img/Plus.svg";
 import Image from "next/image";
+import Spinner from "@/components/Spinner";
 
 const DEFAULT_VISIBLE_COUNT = 11;
 const LOAD_MORE_COUNT = 6;
@@ -16,6 +17,7 @@ const CategorySide = () => {
   if (isLoading) {
     return (
       <div className={style.category_card_wrapper}>
+        <Spinner />
         {Array.from({ length: 10 }).map((_, idx) => (
           <CategoryCardSkeleton key={idx} />
         ))}

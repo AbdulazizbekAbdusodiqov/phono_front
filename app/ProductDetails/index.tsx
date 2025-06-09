@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import styles from "./ProductDetails.module.scss"
 import Image from "next/image"
 import Breadcrumb from "@/components/Breadcrumb"
@@ -23,7 +23,6 @@ interface ProductData {
   publishDate: string
   views: number
   description: string
-  isFavorite: boolean
   isNegotiable: boolean
   images: string[]
 }
@@ -31,82 +30,74 @@ interface ProductData {
 const ProductDetails = () => {
   const router = useRouter()
   const id = router.query.id
-  const [activeTab, setActiveTab] = useState("description")
+
+  const { data: productData2, isLoading } = useProductById(Number(id))
+
+  const [productData, setProductData] = useState<ProductData | null>(null)
+  const [activeTab, setActiveTab] = useState<"description" | "reviews">("description")
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
-  const [favorites, setFavorites] = useState<number[]>(() => {
-    if (typeof window !== "undefined") {
-      return JSON.parse(localStorage.getItem("favorites") || "[]");
-    }
-    return [];
-  });
-  const { data: productData2 } = useProductById(Number(id))
-  console.log(productData2);
 
-  const { data: allProductData } = useAllProducts()
-  console.log(allProductData);
-  const toggleFavorite = (id: number) => {
-    setFavorites((prev) =>
-      prev.includes(id) ? prev.filter((favId) => favId !== id) : [...prev, id]
-    );
-  };
-  
-  const [productData, setProductData] = useState<ProductData>({
-    id: 1,
-    title: "iPhone 12 Pro 128 GB",
-    price: "9 000 000 UZS",
-    location: "Юнусабадский район, Ташкент",
-    condition: "Новый",
-    memory: "64 GB",
-    year: "2021",
-    color: "Синий",
-    hasDocuments: true,
-    publishDate: "17 мая 2022",
-    views: 250,
-    description:
-      "Apple iPhone 12 Pro работает на базе самого быстрого процессора на сегодняшний день с применением 5-нанометровой технологии, который обеспечивает ему невероятную плавность работы. Такой процессор также легко справляется с многозадачностью и позволяет запускать ресурсоёмкие игры и смотреть видео в высоком разрешении.",
-    isFavorite: false,
-    isNegotiable: true,
-    images: [
-      "/img/edit/Rectangle-5.png",
-      "/img/edit/Rectangle-6.png",
-      "/img/edit/Rectangle-7.png",
-      "/img/edit/Rectangle-8.png",
-      "/img/edit/Rectangle-5.png",
-    ],
-  })
+  const { toggleFavorite, isFavorite } = useFavorites()
+
+  const mapBackendToProductData = (backendData: any): ProductData => {
+    return {
+      id: backendData.id,
+      title: backendData.title,
+      price: backendData.price + " " + (backendData.currency?.name || "USD"),
+      location: backendData.address?.name || "Неизвестно",
+      condition: backendData.condition ? "Новый" : "Б/у",
+      memory: `${backendData.storage} GB / ${backendData.ram} GB RAM`,
+      year: backendData.year || "Не указан",
+      color: backendData.color?.name || "Неизвестно",
+      hasDocuments: backendData.has_document || false,
+      publishDate: new Date(backendData.createdAt).toLocaleDateString("ru-RU", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      }),
+      views: backendData.view_count || 0,
+      description: backendData.description || "",
+      isNegotiable: backendData.negotiable || false,
+      images:
+        backendData.product_image?.map(
+          (img: any) => `${process.env.NEXT_PUBLIC_BASE_URL}/${img.url}`
+        ) || ["/placeholder.svg"],
+    }
+  }
+
+  useEffect(() => {
+    if (productData2) {
+      setProductData(mapBackendToProductData(productData2))
+      setCurrentImageIndex(0)
+    }
+  }, [productData2])
+
+  if (isLoading || !productData) {
+    return <Spinner />
+  }
+
 
   const handlePrevImage = () => {
-    setCurrentImageIndex((prev) => (prev === 0 ? productData.images.length - 1 : prev - 1))
+    setCurrentImageIndex((prev) =>
+      prev === 0 ? productData.images.length - 1 : prev - 1
+    )
   }
 
   const handleNextImage = () => {
-    setCurrentImageIndex((prev) => (prev === productData.images.length - 1 ? 0 : prev + 1))
+    setCurrentImageIndex((prev) =>
+      prev === productData.images.length - 1 ? 0 : prev + 1
+    )
   }
 
   const handleImageSelect = (index: number) => {
     setCurrentImageIndex(index)
   }
 
-  const handleFavoriteToggle = async () => {
-    try {
-      const response = await fetch(`/api/product/${productData.id}/favorite`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-
-      if (response.ok) {
-        setProductData((prev) => ({
-          ...prev,
-          isFavorite: !prev.isFavorite,
-        }))
-      }
-    } catch (error) {
-      console.error("Error toggling favorite:", error)
-    }
+  const handleFavoriteToggle = () => {
+    toggleFavorite(productData.id)
   }
+
   const handleEditClick = () => {
     setIsEditModalOpen(true)
   }
@@ -115,9 +106,9 @@ const ProductDetails = () => {
     setIsEditModalOpen(false)
   }
 
-  const handleProductSave = async (updatedData: Partial<ProductData>) => {    
+  const handleProductSave = async (updatedData: Partial<ProductData>) => {
     try {
-      const response = await fetch(`/api/product/${productData.id}`, {
+      const response = await fetch(`/api/product/${productData!.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -127,7 +118,7 @@ const ProductDetails = () => {
 
       if (response.ok) {
         const updated = await response.json()
-        setProductData((prev) => ({ ...prev, ...updated }))
+        setProductData((prev) => prev && ({ ...prev, ...mapBackendToProductData(updated) }))
         setIsEditModalOpen(false)
       }
     } catch (error) {
@@ -203,7 +194,9 @@ const ProductDetails = () => {
           <div className={styles.header}>
             <h1>{productData.title}</h1>
             <button
-              className={`${styles.favoriteBtn} ${productData.isFavorite ? styles.favorited : ""}`}
+              className={`${styles.favoriteBtn} ${
+                isFavorite(productData.id) ? styles.favorited : ""
+              }`}
               onClick={handleFavoriteToggle}
             >
               <FavoriteIcon />
@@ -270,7 +263,10 @@ const ProductDetails = () => {
         >
           Описание
         </span>
-        <span className={activeTab === "reviews" ? styles.activeTab : ""} onClick={() => setActiveTab("reviews")}>
+        <span
+          className={activeTab === "reviews" ? styles.activeTab : ""}
+          onClick={() => setActiveTab("reviews")}
+        >
           Отзывы (0)
         </span>
       </div>

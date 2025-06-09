@@ -32,7 +32,6 @@ interface EditProfileModalProps {
   }) => void;
   
 }
-
 const EditProfileModal: React.FC<EditProfileModalProps> = ({
   isOpen,
   onClose,
@@ -44,7 +43,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const { user } = useSelector((state: RootState) => state.auth);
-  const { data: me } = useGetMe(Number(user?.id));
+  const { data: me, refetch } = useGetMe(Number(user?.id));
 
   const updateUserMutation = useUpdateUser(userId);
 
@@ -98,6 +97,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
       
        setSelectedFile(null);
         onClose();
+        refetch()
       } catch (error) {
         console.error("Ошибка при сохранении профиля:", error);
       }

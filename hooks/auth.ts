@@ -33,9 +33,10 @@ export const useLogin = () =>
     }) => loginUser({ phone_number, password }),
   });
 
-  export const useGetMe = (id:number)=>{
-    return useQuery({
-      queryKey: ["user"],
-      queryFn: ()=> getMe(id),
-    });
-  }
+export const useGetMe = (id: number) => {
+  return useQuery({
+    queryKey: ["user", id],
+    queryFn: () => getMe(id),
+    enabled: !!id,           
+  });
+};

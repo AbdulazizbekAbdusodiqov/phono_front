@@ -2,6 +2,7 @@ import React, { forwardRef, useEffect, useRef } from "react";
 import styles from "./Modal.module.scss";
 import { FaRegCircleCheck } from "react-icons/fa6";
 import Button from "../../../components/Button/Button";
+import { useRouter } from "next/navigation";
 
 interface SuccessCreateModelProps {
   isOpen: boolean;
@@ -12,9 +13,11 @@ const SuccessCreateModel = forwardRef<HTMLDivElement, SuccessCreateModelProps>(
   ({ isOpen, setIsOpen }, ref) => {
     const modalRef = useRef<HTMLDivElement>(null);
     const overlayRef = useRef<HTMLDivElement>(null);
+    const router = useRouter();
 
     const handleClickOk = () => {
       setIsOpen(false);
+      router.push(`/Profile`);
     };
 
     useEffect(() => {

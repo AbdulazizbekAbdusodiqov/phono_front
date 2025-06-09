@@ -28,7 +28,7 @@ const MapComponent = ({ addressData, setAddressData }: MapComponentProps): JSX.E
   }, []);
 
   if (!isMounted) {
-    return <div style={{ height: '400px', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Loading map... <AiOutlineLoading3Quarters/></div>;
+    return <div style={{ height: '400px', width: '100px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Loading map... <AiOutlineLoading3Quarters/></div>;
   }
 
   return <MapWithNoSSR addressData={addressData} setAddressData={setAddressData} />;

@@ -52,8 +52,8 @@ export const sign_OutUser = async (userId: number | undefined) => {
     }
     console.log("sign-out");
     const res = await instance.post(`/user-auth/sign-out`, { userId });
-    
-    if (res.status === 200) {
+    console.log("res::: ", res);
+    if (res.status === 201) {
       localStorage.removeItem('accessToken');
       toast.success('Successfully signed out');
       return res.data;

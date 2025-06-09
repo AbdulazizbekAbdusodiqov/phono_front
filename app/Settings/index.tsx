@@ -1,9 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './Settings.module.scss';
 import PhoneSection from './components/PhoneSection/PhoneSection';
 import EmailSection from './components/EmailSection/EmailSection';
 import AddressSection from './components/AddressSection/AddressSection';
-import LanguageSelector from './components/LanguageSelector/LanguageSelector';
 import { IoExitOutline } from 'react-icons/io5';
 import { RiDeleteBin5Line } from 'react-icons/ri';
 import { toast } from 'react-toastify';
@@ -13,14 +12,53 @@ import { RootState } from '../../store/store';
 import { jwtDecode } from 'jwt-decode';
 import { sign_OutUser } from '../../endpoints';
 
-
 const Settings: React.FC = () => {
-
   const router = useRouter();
-
   const { user, isAuthenticated } = useSelector(
     (state: RootState) => state.auth,
   );
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const checkAuth = () => {
+      const token =
+        typeof window !== 'undefined'
+          ? localStorage.getItem('accessToken')
+          : null;
+
+      if (!token || !isAuthenticated) {
+        toast.info(
+          "Tizim sizni xavfsizlik uchun chiqarib qo'ydi. Iltimos, qayta kiring.",
+        );
+        router.replace('/login');
+        return;
+      }
+
+      try {
+        const decoded: any = jwtDecode(token);
+        const currentTime = Date.now() / 1000;
+
+        if (decoded.exp < currentTime) {
+          toast.info(
+            "Tizim sizni xavfsizlik uchun chiqarib qo'ydi. Iltimos, qayta kiring.",
+          );
+          router.replace('/login');
+          return;
+        }
+      } catch (error) {
+        toast.info(
+          "Tizim sizni xavfsizlik uchun chiqarib qo'ydi. Iltimos, qayta kiring.",
+        );
+        router.replace('/login');
+        return;
+      }
+
+      setLoading(false); // faqat hamma tekshiruvdan o'tgandan keyin yuklash tugaydi
+    };
+
+    checkAuth();
+  }, [isAuthenticated, router]);
 
   const handleExit = async (id: number | undefined) => {
     if (!id) {
@@ -37,61 +75,20 @@ const Settings: React.FC = () => {
       toast.error('Failed to sign out');
     }
   };
-  
 
-  useEffect(() => {
-      if (isAuthenticated) {
-        const token = localStorage.getItem('accessToken');
-        if (token) {
-          try {
-            const decoded = jwtDecode(token);
-            const currentTime = Date.now() / 1000; // seconds
-  
-            if (
-              typeof decoded === 'object' &&
-              decoded &&
-              'exp' in decoded &&
-              typeof (decoded as any).exp === 'number' &&
-              (decoded as any).exp < currentTime
-            ) {
-              toast.info(
-                "Tizim sizni xavfsizlik uchun chiqarib qo'ydi. Iltimos, qayta kiring.",
-              );
-              router.push('/login');
-            }
-          } catch (error) {
-            toast.info(
-              "Tizim sizni xavfsizlik uchun chiqarib qo'ydi. Iltimos, qayta kiring.",
-            );
-            router.push('/login');
-          }
-        } else {
-          toast.info(
-            "Tizim sizni xavfsizlik uchun chiqarib qo'ydi. Iltimos, qayta kiring.",
-          );
-          router.push('/login');
-        }
-      } else {
-        toast.info(
-          "Tizim sizni xavfsizlik uchun chiqarib qo'ydi. Iltimos, qayta kiring.",
-        );
-        router.push('/login');
-      }
-    }, [isAuthenticated, router]);
+  // 🔒 Auth tekshiruvi tugamaguncha hech narsa ko‘rsatmaymiz
+  if (loading) return null; // yoki <div>Loading...</div> ko‘rsatsa ham bo‘ladi
+
   return (
     <div className={styles.container}>
       <div className={styles.sections}>
         <PhoneSection />
         <EmailSection />
         <AddressSection />
-        {/* <LanguageSelector /> */}
       </div>
 
-      <div
-        className={styles.item}
-        onClick={() => handleExit(user?.id)}
-      >
-        <span >
+      <div className={styles.item} onClick={() => handleExit(user?.id)}>
+        <span>
           <IoExitOutline /> Выйти с аккаунта
         </span>
       </div>
@@ -109,6 +106,7 @@ const Settings: React.FC = () => {
 };
 
 export default Settings;
+
 // import React, { useEffect, useState } from 'react';
 // import styles from './Settings.module.scss';
 // import { GrLanguage } from 'react-icons/gr';

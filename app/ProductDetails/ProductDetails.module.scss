@@ -153,6 +153,26 @@
           color: #FF4E64;
         }
       }
+      .like {
+        cursor: pointer;
+        padding: 4px;
+        border-radius: 50%;
+        transition: background-color 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #999CA0;
+
+        svg {
+          width: 34px;
+          height: 30px;
+          transition: transform 0.2s ease;
+        }
+
+        &:active svg {
+          transform: scale(1.2);
+        }
+      }
     }
 
     .price {

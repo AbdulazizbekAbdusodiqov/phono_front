@@ -5,6 +5,13 @@ import { toast } from "react-toastify";
 import { AddressData } from "../types/userData";
 import { Address, AddressRes, CreateProductProps } from "../types";
 
+interface FindAddressDto {
+  region_id?: number;
+  district_id?: number;
+  lat?: string;
+  long?: string;
+}
+
 export const createProduct = async ({
   data,
   images,
@@ -16,25 +23,28 @@ export const createProduct = async ({
 }) => {
   try {
     const token = JSON.parse(localStorage.getItem("accessToken") || "")
-    for (const key in addressData) {
-      const value = addressData[key as keyof AddressData];
-      if (value === null ) {
-          delete addressData[key as keyof AddressData];        
-      } else if (value === "") {
-          if (key === 'name' || key === 'address') {
-              (addressData as any)[key] = "test";
-          }
+    const findAddressDto: FindAddressDto = {
+      region_id: addressData.region_id || undefined,
+      district_id: addressData.district_id || undefined,
+      long: addressData.long || undefined,
+      lat: addressData.lat || undefined,
+    }
+    for (const key in findAddressDto) {
+      if (!findAddressDto[key as keyof FindAddressDto]) {
+        delete findAddressDto[key as keyof FindAddressDto];
       }
-  }
-  
-  const address = await instance.post<AddressRes>("/address", addressData, {
+    }
+    const address = await instance.post<AddressRes>(`/address/getByUser/${data.user_id}`, findAddressDto, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
-  data.address_id = address?.data?.data?.id;
+  
+  
   const formData = new FormData();
-    Object.entries(data).forEach(([key, value]) => {
+  //@ts-ignore
+  formData.append("address_id", address.data?.id);
+  Object.entries(data).forEach(([key, value]) => {
       formData.append(key, value);
     });
     
@@ -42,8 +52,9 @@ export const createProduct = async ({
       formData.append("images", img);
     });
     try{
-    
-      const res = await instance.post("/product", formData, {
+      console.log(formData.get("address_id"));
+      
+      const res = await instance.post("/product/create", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${token}`,
@@ -92,5 +103,15 @@ export const getProductById = async (id: number) => {
     console.error(error);
     toast.warning(error.response?.data?.message || "Something went wrong");
     throw error;
+  }
+};  
+
+export const getAllProducts = async () => {
+  try {
+    const res = await instance.get(`/product/all`);
+    return res.data;
+  } catch (error: any) {
+    console.error(error);
+    toast.warning(`${error.response?.data?.message || "Something went wrong"}`);
   }
 };

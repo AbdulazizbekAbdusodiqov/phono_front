@@ -2,20 +2,13 @@ import { useState, useEffect } from "react"
 import styles from "./ProductDetails.module.scss"
 import Image from "next/image"
 import Breadcrumb from "@/components/Breadcrumb"
-import EditProductModal from "@/components/EditProductModal"
-import {
-  EditIcon,
-  FavoriteIcon,
-  LeftNavIcon,
-  LocationIcon,
-  RightNavIcon,
-  TopIcon,
-} from "@/public/icons/profile"
-import { useProductById } from "../../hooks/products.use"
+import EditProductModal from "@/components/EditProductModal/index"
+import { EditIcon, FavoriteIcon, LeftNavIcon, LocationIcon, RightNavIcon, TopIcon } from "@/public/icons/profile"
+import { useAllProducts, useProductById } from "../../hooks/products.use"
 import { useRouter } from "next/router"
-import Spinner from "@/components/Spinner"
-
-import { useFavorites } from "../../hooks/useFavorites"
+import favorites from "../../pages/favorites"
+import { Product } from "../../types"
+import Card from "../../components/Card"
 
 interface ProductData {
   id: number
@@ -84,6 +77,7 @@ const ProductDetails = () => {
     return <Spinner />
   }
 
+
   const handlePrevImage = () => {
     setCurrentImageIndex((prev) =>
       prev === 0 ? productData.images.length - 1 : prev - 1
@@ -147,12 +141,13 @@ const ProductDetails = () => {
   }
 
   return (
-    <div className={styles.detailsPage}>
-      <div className={styles.breadcrumbs}>
-        <Breadcrumb />
-      </div>
+    <>
+      <div className={styles.detailsPage}>
+        <div className={styles.breadcrumbs}>
+          <Breadcrumb />
+        </div>
 
-      <div className={styles.container}>
+        <div className={styles.container}>
         <div className={styles.gallery}>
           <div className={styles.mainImage}>
             <Image
@@ -277,6 +272,18 @@ const ProductDetails = () => {
       </div>
 
       <div className={styles.description}>
+      <div>
+        <div>
+      {allProductData?.map((product: Product) => (
+        <Card
+          key={product.id}
+          product={product}
+          isFavorite={favorites.includes(product.id)}
+          onToggleFavorite={toggleFavorite}
+        />
+      ))}
+    </div>
+    </div>
         {activeTab === "description" && <p>{productData.description}</p>}
         {activeTab === "reviews" && <p>Отзывы пользователей будут отображаться здесь.</p>}
       </div>
@@ -288,6 +295,8 @@ const ProductDetails = () => {
         onSave={handleProductSave}
       />
     </div>
+    
+    </>
   )
 }
 

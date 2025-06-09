@@ -9,6 +9,8 @@ import { useRouter } from "next/router"
 import favorites from "../../pages/favorites"
 import { Product } from "../../types"
 import Card from "../../components/Card"
+import { useFavorites } from "../../hooks/useFavorites"
+import Spinner from "../../components/Spinner"
 
 interface ProductData {
   id: number
@@ -274,14 +276,41 @@ const ProductDetails = () => {
       <div className={styles.description}>
       <div>
         <div>
-      {allProductData?.map((product: Product) => (
+      {productData && (
         <Card
-          key={product.id}
-          product={product}
-          isFavorite={favorites.includes(product.id)}
+          key={productData.id}
+          product={{
+            ...productData,
+            storage: parseInt(productData.memory.split(' ')[0]) || 0, // Extract storage from memory string
+            ram: parseInt(productData.memory.split(' ')[3]) || 0, // Extract RAM from memory string
+            brand_id: 0, // You'll need to get this from your API
+            color_id: 0, // You'll need to get this from your API
+            currency_id: 1, // Default currency ID
+            slug: productData.title.toLowerCase().replace(/\s+/g, '-'),
+            is_top: false,
+            is_checked: 1, // Assuming 1 means APPROVED
+            is_active: true,
+            is_deleted: false,
+            view_count: productData.views,
+            like_count: 0,
+            brand: { id: 0, name: productData.title.split(' ')[0] || 'Unknown' },
+            color: { id: 0, name: productData.color, code: '' }, // Map color string to color object
+            currency: { id: 1, name: 'UZS' },
+            product_image: productData.images.map((img, index) => ({
+              id: index,
+              product_id: productData.id,
+              url: img.replace(/^.*\//, '') // Extract filename from URL
+            })),
+            condition: productData.condition === 'Новый',
+            negotiable: productData.isNegotiable,
+            has_document: productData.hasDocuments,
+            phone_number: '', // You might want to add this to your ProductData
+            price: parseFloat(productData.price) || 0
+          }}
+          isFavorite={isFavorite(productData.id)}
           onToggleFavorite={toggleFavorite}
         />
-      ))}
+      )}
     </div>
     </div>
         {activeTab === "description" && <p>{productData.description}</p>}

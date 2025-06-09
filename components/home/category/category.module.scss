@@ -1,11 +1,13 @@
 .category_card_wrapper {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     gap: 20px;
     margin-top: 50px;
-    padding: 0 15px;
+    @media (max-width: 572px) {
+        padding: 0 20px;
+    }
 }
 
 .empty_message {

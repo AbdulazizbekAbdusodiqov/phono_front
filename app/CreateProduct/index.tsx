@@ -161,7 +161,6 @@ const CreateProduct = () => {
         toast.info("Please enter a phone number")
       }
 
-
       const response = await createProduct({
         data: productData,
         images: images,

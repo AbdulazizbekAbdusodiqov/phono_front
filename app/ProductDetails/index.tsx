@@ -80,6 +80,7 @@ const ProductDetails = () => {
     };
   };
 
+
   useEffect(() => {
     if (productData2) {
       const mapped = mapBackendToProductData(productData2);
@@ -172,6 +173,7 @@ const ProductDetails = () => {
                   />
                 ))}
               </div>
+
             </div>
             <div className={styles.thumbnails}>
               {productData.images.slice(1, 4).map((image, index) => (

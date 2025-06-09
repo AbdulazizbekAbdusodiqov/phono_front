@@ -13,7 +13,8 @@ import { RootState } from "../../../../store/store";
 import { toast } from "react-toastify";
 
 type Email = {
-  _id: string;
+  id: number;
+  user_id: number;
   email: string;
 };
 
@@ -28,6 +29,8 @@ const EmailSection = () => {
   const fetchEmails = async (userId: number | undefined) => {
     setLoading(true);
     const data = await getEmails(userId);
+    console.log("emails:  :", userId);
+    console.log('emails:  :', data);
     if (data && Array.isArray(data)) {
       setEmails(data);
       console.log("emails: ", data);
@@ -41,7 +44,7 @@ const EmailSection = () => {
 
   const addEmail = async () => {
     if (!newEmail.trim()) return;
-    const added = await apiAddEmail(newEmail.trim());
+    const added = await apiAddEmail(user?.id, newEmail.trim());
     if (added) {
       setEmails((prev) => [...prev, added]);
       setNewEmail("");
@@ -51,13 +54,14 @@ const EmailSection = () => {
 
   const deleteEmail = async (id: string) => {
     const confirmed = window.confirm("Ишончингиз комилми?");
+
     if (!confirmed) return;
 
-    const res = await apiDeleteEmail(+id, user?.id);
+    const res = await apiDeleteEmail(id, user?.id);
     if (res!) {
       toast("Ошибка при удалении");
     } else {
-      setEmails((prev) => prev.filter((email) => email._id !== id));
+      setEmails((prev) => prev.filter((email) => email.id !== id));
     }
   };
 
@@ -77,11 +81,11 @@ const EmailSection = () => {
               <div className={styles.loader}>Юкланмоқда...</div>
             ) : (
               emails.map((email) => (
-                <div className={styles.subItem} key={email._id}>
+                <div className={styles.subItem} key={email.id}>
                   <div>{email.email}</div>
                   <div
                     className={`${styles.item} ${styles.delete}`}
-                    onClick={() => deleteEmail(email._id)}
+                    onClick={() => deleteEmail(email.id)}
                   >
                     <RiDeleteBin5Line />
                   </div>

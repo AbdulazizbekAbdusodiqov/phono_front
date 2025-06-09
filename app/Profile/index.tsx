@@ -77,7 +77,7 @@ const Profile = () => {
 
       <div className={styles.userInfo}>
         <img
-          src={userProfile.profile_img || "/placeholder.svg"}
+          src={userProfile.profile_img || "mobile_phone_image.jpg"}
           alt="Avatar"
           className={styles.avatar}
         />

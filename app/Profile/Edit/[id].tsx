@@ -184,6 +184,7 @@ const ProductDetails = () => {
                   />
                 ))}
               </div>
+
             </div>
             <div className={styles.thumbnails}>
               {productData.images.slice(1, 4).map((image, index) => (
@@ -199,6 +200,7 @@ const ProductDetails = () => {
               ))}
             </div>
           </div>
+
 
           <div className={styles.info}>
             <div className={styles.header}>

@@ -30,7 +30,7 @@ const ProductCard: React.FC<CardProps> = ({
         src={
           product_image && product_image.length > 0
             ? `${process.env.NEXT_PUBLIC_BASE_URL}/${product_image[0].url}`
-            : "/placeholder.svg"
+            : "mobile_phone_image.jpg"
         }
         alt={title}
         className={styles.image}

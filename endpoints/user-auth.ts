@@ -42,6 +42,29 @@ export const loginUser = async (data: any) => {
   }
 };
 
+export const sign_OutUser = async (userId: number | undefined) => {
+  try {
+
+    if (!userId) {
+      console.warn('No user ID provided for sign-out');
+      toast.error('User ID not found');
+      return;
+    }
+    console.log("sign-out");
+    const res = await instance.post(`/user-auth/sign-out`, { userId });
+    
+    if (res.status === 200) {
+      localStorage.removeItem('accessToken');
+      toast.success('Successfully signed out');
+      return res.data;
+    } else {
+      toast.error('Failed to sign out');
+    }
+  } catch (error: any) {
+    console.error('Sign-out error:', error);
+    toast.error(error?.response?.data?.message || 'Sign out failed');
+  }
+};
 export const getMe = async (id:number)=>{
   try {
     const token = JSON.parse(localStorage.getItem("accessToken") || "")

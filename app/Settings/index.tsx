@@ -11,6 +11,7 @@ import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { jwtDecode } from 'jwt-decode';
+import { sign_OutUser } from '../../endpoints';
 
 
 const Settings: React.FC = () => {
@@ -20,6 +21,23 @@ const Settings: React.FC = () => {
   const { user, isAuthenticated } = useSelector(
     (state: RootState) => state.auth,
   );
+
+  const handleExit = async (id: number | undefined) => {
+    if (!id) {
+      toast.error('User ID not found');
+      return;
+    }
+
+    const result = await sign_OutUser(id);
+
+    if (result) {
+      toast.success('Successfully signed out');
+      router.push('/login');
+    } else {
+      toast.error('Failed to sign out');
+    }
+  };
+  
 
   useEffect(() => {
       if (isAuthenticated) {
@@ -71,9 +89,9 @@ const Settings: React.FC = () => {
 
       <div
         className={styles.item}
-        onClick={() => toast("Logout qilinmoqchi lekin hozir iloji yo'q")}
+        onClick={() => handleExit(user?.id)}
       >
-        <span>
+        <span >
           <IoExitOutline /> Выйти с аккаунта
         </span>
       </div>

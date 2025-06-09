@@ -1,3 +1,4 @@
+import { AddAddress } from '../app/Settings/components/AddressSection/AddressSection';
 import { Address } from '../types';
 import instance from './instance';
 import { toast } from 'react-toastify';
@@ -18,8 +19,9 @@ export const getAddresses = async (id: number | undefined) => {
   }
 };
 
-export const addAddress = async (address: Address) => {
+export const addAddress = async (address: AddAddress) => {
   try {
+    console.log("address: ", address);
     const res = await instance.post(
       `/address/byUser/${address.user_id}`,
       { address },

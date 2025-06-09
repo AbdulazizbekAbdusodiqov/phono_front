@@ -17,15 +17,24 @@ import { useGetRegionById, useGetRegions } from '../../../../hooks/user';
 import { useRouter } from 'next/router';
 
 type Address = {
-  _id: string;
   user_id: number;
   name: string;
-  full_address: string;
   id: number;
   lat: string;
   long: string
   address: string;
   is_main: boolean
+  region_id: number | undefined;
+  district_id: number | undefined;
+};
+
+export type AddAddress = {
+  user_id: number;
+  name: string;
+  lat?: string;
+  long?: string;
+  address: string;
+  is_main: boolean;
   region_id: number | undefined;
   district_id: number | undefined;
 };
@@ -98,16 +107,13 @@ const AddressSection = () => {
           return;
         }
 
-        const newAddress: Address = {
+        const newAddress: AddAddress = {
           user_id: user_id,
           name,
           lat: lat.toString(),
           long: long.toString(),
-          is_main: false, // yoki siz xohlagan qiymat
+          is_main: false,
           address,
-          _id: '',
-          full_address: '',
-          id: 0,
           region_id: undefined,
           district_id: undefined
         };
@@ -133,9 +139,9 @@ const AddressSection = () => {
           toast.error('Manzil va nom bo‘sh bo‘lishi mumkin emas');
           return;
         }
+        
 
-        const newAddress: Address = {
-          id: 0,
+        const newAddress: AddAddress = {
           user_id: Number(user?.id) || 0,
           name: name.trim(),
           lat: '',
@@ -144,11 +150,23 @@ const AddressSection = () => {
           region_id: addressData.region_id || undefined,
           district_id: addressData.district_id || undefined,
           address: fullAddress.trim(),
-          _id: '',
-          full_address: ''
+        };
+        console.log("newAddress: ", newAddress);
+        const cleanedAddress: AddAddress = {
+          user_id: Number(user?.id),
+          name: name.trim(),
+          address: fullAddress.trim(),
+          lat: addressData.lat || undefined,
+          long: addressData.long || undefined,
+          is_main: false,
+          region_id: addressData.region_id || undefined,
+          district_id: addressData.district_id || undefined,
         };
 
-        const added = await addAddress(newAddress);
+        const added = await addAddress(cleanedAddress);
+        
+
+        // const added = await addAddress(newAddress);
         if (added) {
           setAddresses((prev) => [...prev, added]);
           setName('');
@@ -164,7 +182,7 @@ const AddressSection = () => {
   };
   
 
-  const handleDeleteAddress = async (id: string) => {
+  const handleDeleteAddress = async (id: number) => {
     const confirmed = window.confirm('Ишончингиз комилми?');
     if (!confirmed) return;
 
@@ -173,7 +191,7 @@ const AddressSection = () => {
       toast('something went wrong on deleting');
     }
     if (res !== false) {
-      setAddresses((prev) => prev.filter((item) => item._id !== id));
+      setAddresses((prev) => prev.filter((item) => item.id !== id));
     } else {
       toast.error('Манзилни ўчиришда хатолик юз берди');
     }
@@ -195,14 +213,14 @@ const AddressSection = () => {
               <div className={styles.loader}>Юкланмоқда...</div>
             ) : (
               addresses.map((address) => (
-                <div className={styles.subItem} key={address._id}>
+                <div className={styles.subItem} key={address.id}>
                   <div>
                     <strong>{address.name}</strong>
                   </div>
-                  <div>{address.full_address}</div>
+                  <div>{address.address}</div>
                   <div
                     className={`${styles.item} ${styles.delete}`}
-                    onClick={() => handleDeleteAddress(address._id)}
+                    onClick={() => handleDeleteAddress(address.id)}
                   >
                     <RiDeleteBin5Line />
                   </div>
@@ -254,18 +272,20 @@ const AddressSection = () => {
 
             {selectTypeLocation === SelectType.default ? (
               <div>
+                {/* Region va district selectlari */}
                 <div>
                   <p className={styles.select_label}>Выбрать регион</p>
                   <select
                     className={styles.select}
                     value={addressData.region_id || ''}
-                    onChange={(e) =>
-                      setAddressData({
-                        ...addressData,
-                        region_id: +e.target.value,
-                        district_id: null, // Reset district when region changes
-                      })
-                    }
+                    onChange={(e) => {
+                      const value = +e.target.value;
+                      setAddressData((prev) => ({
+                        ...prev,
+                        region_id: value,
+                        district_id: null, // reset district
+                      }));
+                    }}
                   >
                     <option disabled value="">
                       Выберите регион
@@ -277,16 +297,17 @@ const AddressSection = () => {
                     ))}
                   </select>
                 </div>
+
                 <div>
                   <p className={styles.select_label}>Выбрать город или район</p>
                   <select
                     className={styles.select}
                     value={addressData.district_id || ''}
                     onChange={(e) =>
-                      setAddressData({
-                        ...addressData,
+                      setAddressData((prev) => ({
+                        ...prev,
                         district_id: +e.target.value,
-                      })
+                      }))
                     }
                     disabled={!addressData.region_id}
                   >
@@ -300,22 +321,40 @@ const AddressSection = () => {
                     ))}
                   </select>
                 </div>
+
+                {/* YANGI: Manzil nomi va to‘liq manzil uchun inputlar */}
+                <div className={styles.inputGroup}>
+                  <label>Название адреса</label>
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Например: Дом, Офис..."
+                    className={styles.input}
+                  />
+                </div>
+
+                <div className={styles.inputGroup}>
+                  <label>Полный адрес</label>
+                  <input
+                    type="text"
+                    value={fullAddress}
+                    onChange={(e) => setFullAddress(e.target.value)}
+                    placeholder="Улица, номер дома и т.д."
+                    className={styles.input}
+                  />
+                </div>
               </div>
             ) : (
-              <div>
-                <MapComponent
-                  addressData={addressData}
-                  setAddressData={setAddressData}
-                />
-              </div>
+              <MapComponent
+                addressData={addressData}
+                setAddressData={setAddressData}
+              />
             )}
           </div>
         </div>
 
-        <button
-          onClick={handleAddAddress}
-          className={styles.button}
-        >
+        <button onClick={handleAddAddress} className={styles.button}>
           Сохранить
         </button>
       </Modal>

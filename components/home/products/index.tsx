@@ -10,7 +10,7 @@ const ProductSide = () => {
   const router = useRouter();
   const [page, setPage] = useState(1);
   const [filters, setFilters] = useState<Record<string, string>>({});
-  
+
   const { toggleFavorite, isFavorite } = useFavorites();
 
   useEffect(() => {
@@ -27,7 +27,6 @@ const ProductSide = () => {
     if (query.othermodel) filterParams.othermodel = query.othermodel as string;
     if (query.condition) filterParams.condition = query.condition as string;
     if (query["is-top"]) filterParams["is-top"] = query["is-top"] as string;
-    
 
     setPage(pageFromUrl);
     setFilters(filterParams);
@@ -42,7 +41,7 @@ const ProductSide = () => {
         query: { ...router.query, page: newPage },
       },
       undefined,
-      { shallow: true }
+      { shallow: true },
     );
   };
 
@@ -71,8 +70,8 @@ const ProductSide = () => {
           <ProductCard
             key={product.id}
             product={product}
-            isFavorite={isFavorite(product.id)} 
-            onToggleFavorite={toggleFavorite}   
+            isFavorite={isFavorite(product.id)}
+            onToggleFavorite={toggleFavorite}
           />
         ))}
       </div>

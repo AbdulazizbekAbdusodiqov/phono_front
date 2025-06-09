@@ -53,9 +53,8 @@ export const useUpdateUser = (id: number) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    
     mutationFn: (data: FormData) => updateUser(id, data),
-    
+
     onSuccess: () => {
       toast.success("Профиль успешно обновлен!");
       queryClient.invalidateQueries({ queryKey: ["user", id] });

@@ -29,7 +29,7 @@ export const getColors = async () => {
     console.log(error);
     toast.error(` ${error.response.data.message}`);
   }
-}
+};
 
 export const getCurrency = async () => {
   try {

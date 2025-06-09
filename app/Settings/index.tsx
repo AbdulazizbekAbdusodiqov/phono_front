@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import styles from './Settings.module.scss';
-import PhoneSection from './components/PhoneSection/PhoneSection';
-import EmailSection from './components/EmailSection/EmailSection';
-import AddressSection from './components/AddressSection/AddressSection';
-import { IoExitOutline } from 'react-icons/io5';
-import { RiDeleteBin5Line } from 'react-icons/ri';
-import { toast } from 'react-toastify';
-import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store/store';
-import { jwtDecode } from 'jwt-decode';
-import { sign_OutUser } from '../../endpoints';
+import React, { useEffect } from "react";
+import styles from "./Settings.module.scss";
+import PhoneSection from "./components/PhoneSection/PhoneSection";
+import EmailSection from "./components/EmailSection/EmailSection";
+import AddressSection from "./components/AddressSection/AddressSection";
+import LanguageSelector from "./components/LanguageSelector/LanguageSelector";
+import { IoExitOutline } from "react-icons/io5";
+import { RiDeleteBin5Line } from "react-icons/ri";
+import { toast } from "react-toastify";
+import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
+import { jwtDecode } from "jwt-decode";
+
 
 const Settings: React.FC = () => {
   const router = useRouter();
@@ -21,6 +22,7 @@ const Settings: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+
     const checkAuth = () => {
       const token =
         typeof window !== 'undefined'
@@ -50,6 +52,7 @@ const Settings: React.FC = () => {
         toast.info(
           "Tizim sizni xavfsizlik uchun chiqarib qo'ydi. Iltimos, qayta kiring.",
         );
+
         router.replace('/login');
         return;
       }

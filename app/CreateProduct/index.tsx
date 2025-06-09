@@ -1,31 +1,31 @@
-import React, { useEffect, useRef, useState } from 'react';
-import style from './CreateProduct.module.scss';
-import { MdOutlineCameraAlt } from 'react-icons/md';
-import MapComponent from './components/MapComponent';
-import SuccessCreateModel from './components/SuccessCreateModel';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store/store';
-import { useRouter } from 'next/navigation';
-import { CreateProductProps } from '@/types';
-import { jwtDecode } from 'jwt-decode';
-import { toast } from 'react-toastify';
+import React, { useEffect, useRef, useState } from "react";
+import style from "./CreateProduct.module.scss";
+import { MdOutlineCameraAlt } from "react-icons/md";
+import MapComponent from "./components/MapComponent";
+import SuccessCreateModel from "./components/SuccessCreateModel";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
+import { useRouter } from "next/navigation";
+import { CreateProductProps } from "@/types";
+import { jwtDecode } from "jwt-decode";
+import { toast } from "react-toastify";
 import {
   useCategory,
   useCategoryById,
   useColors,
   useCurrency,
-} from '../../hooks/category';
+} from "../../hooks/category";
 import {
   useGetRegionById,
   useGetRegions,
   useUserPhoneNumbers,
-} from '../../hooks/user';
-import { AddressData } from '../../types/userData';
-import { createProduct } from '../../endpoints/product';
+} from "../../hooks/user";
+import { AddressData } from "../../types/userData";
+import { createProduct } from "../../endpoints/product";
 
 enum SelectType {
-  default = 'default',
-  manual = 'manual',
+  default = "default",
+  manual = "manual",
 }
 
 interface Color {
@@ -67,29 +67,29 @@ const CreateProduct = () => {
   const [selectTypeLocation, setSelectTypeLocation] = useState<SelectType>(
     SelectType.default,
   );
-  
+
   const [createModal, setCreateModal] = useState<boolean>(false);
   const { user, isAuthenticated } = useSelector(
     (state: RootState) => state.auth,
   );
 
   const [productData, setProductData] = useState<CreateProductProps>({
-    title: '',
+    title: "",
     brand_id: 0,
     model_id: 0,
-    year: '',
+    year: "",
     price: 0,
     currency_id: 1,
-    description: '',
+    description: "",
     negotiable: false,
-    phone_number: '',
+    phone_number: "",
     user_id: Number(user?.id) || 0,
     address_id: 0,
     color_id: 0,
     has_document: false,
     ram: 0,
     storage: 0,
-    other_model: '',
+    other_model: "",
     condition: false,
   });
 
@@ -97,10 +97,10 @@ const CreateProduct = () => {
     user_id: Number(user?.id) || 0,
     region_id: null,
     district_id: null,
-    name: '',
+    name: "",
     lat: null,
     long: null,
-    address: '',
+    address: "",
   });
 
   const [images, setImages] = useState<File[]>([]);
@@ -117,26 +117,25 @@ const CreateProduct = () => {
 
   const handleClickPublishing = async () => {
     try {
-      if(selectType === SelectType.manual){
-        productData.model_id = 0
-      }
-      else if(selectType === SelectType.default){
-        productData.other_model = '';
+      if (selectType === SelectType.manual) {
+        productData.model_id = 0;
+      } else if (selectType === SelectType.default) {
+        productData.other_model = "";
       }
       const response = await createProduct({
         data: productData,
         images: images,
         addressData: addressData,
       });
-      console.log("response: ",response);
-      if(response){
-        toast.success('Product created successfully');
+      console.log("response: ", response);
+      if (response) {
+        toast.success("Product created successfully");
         setCreateModal(true);
         router.push(`/Profile`);
       }
     } catch (error: any) {
-      console.log("Errorjon: ",error);
-      toast.error(error.response?.data?.message || 'Failed to create product');
+      console.log("Errorjon: ", error);
+      toast.error(error.response?.data?.message || "Failed to create product");
     }
   };
 
@@ -158,41 +157,41 @@ const CreateProduct = () => {
   // Authentication check
   useEffect(() => {
     if (isAuthenticated) {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem("accessToken");
       if (token) {
         try {
           const decoded = jwtDecode(token);
           const currentTime = Date.now() / 1000; // seconds
 
           if (
-            typeof decoded === 'object' &&
+            typeof decoded === "object" &&
             decoded &&
-            'exp' in decoded &&
-            typeof (decoded as any).exp === 'number' &&
+            "exp" in decoded &&
+            typeof (decoded as any).exp === "number" &&
             (decoded as any).exp < currentTime
           ) {
             toast.info(
               "Tizim sizni xavfsizlik uchun chiqarib qo'ydi. Iltimos, qayta kiring.",
             );
-            router.push('/login');
+            router.push("/login");
           }
         } catch (error) {
           toast.info(
             "Tizim sizni xavfsizlik uchun chiqarib qo'ydi. Iltimos, qayta kiring.",
           );
-          router.push('/login');
+          router.push("/login");
         }
       } else {
         toast.info(
           "Tizim sizni xavfsizlik uchun chiqarib qo'ydi. Iltimos, qayta kiring.",
         );
-        router.push('/login');
+        router.push("/login");
       }
     } else {
       toast.info(
         "Tizim sizni xavfsizlik uchun chiqarib qo'ydi. Iltimos, qayta kiring.",
       );
-      router.push('/login');
+      router.push("/login");
     }
   }, [isAuthenticated, router]);
 
@@ -205,11 +204,11 @@ const CreateProduct = () => {
     ) {
       const brandName =
         brands?.find((brand: Brand) => brand.id == productData.brand_id)
-          ?.name || '';
+          ?.name || "";
       const modelName =
         oneBrand?.model?.find(
           (model: Model) => model.id == productData.model_id,
-        )?.name || '';
+        )?.name || "";
       setProductData((prev) => ({
         ...prev,
         title: `${brandName} ${modelName}`.trim(),
@@ -221,7 +220,7 @@ const CreateProduct = () => {
     ) {
       const brandName =
         brands?.find((brand: Brand) => brand.id == productData.brand_id)
-          ?.name || '';
+          ?.name || "";
       setProductData((prev) => ({
         ...prev,
         title: `${brandName} ${productData.other_model}`.trim(),
@@ -251,8 +250,8 @@ const CreateProduct = () => {
                   type="button"
                   className={
                     style.select_button +
-                    ' ' +
-                    (selectType === SelectType.default ? style.active : '')
+                    " " +
+                    (selectType === SelectType.default ? style.active : "")
                   }
                   onClick={() => setSelectType(SelectType.default)}
                 >
@@ -262,8 +261,8 @@ const CreateProduct = () => {
                   type="button"
                   className={
                     style.select_button +
-                    ' ' +
-                    (selectType === SelectType.manual ? style.active : '')
+                    " " +
+                    (selectType === SelectType.manual ? style.active : "")
                   }
                   onClick={() => setSelectType(SelectType.manual)}
                 >
@@ -276,13 +275,13 @@ const CreateProduct = () => {
                   <p className={style.select_label}>Выберите бренд</p>
                   <select
                     className={style.select}
-                    value={productData.brand_id || ''}
+                    value={productData.brand_id || ""}
                     onChange={(e) => {
                       setProductData({
                         ...productData,
                         brand_id: +e.target.value,
                         model_id: 0,
-                        other_model: '',
+                        other_model: "",
                       });
                     }}
                   >
@@ -302,12 +301,12 @@ const CreateProduct = () => {
                     <p className={style.select_label}>Выберите модель</p>
                     <select
                       className={style.select}
-                      value={productData.model_id || ''}
+                      value={productData.model_id || ""}
                       onChange={(e) =>
                         setProductData({
                           ...productData,
                           model_id: +e.target.value,
-                          other_model: '',
+                          other_model: "",
                         })
                       }
                       disabled={!productData.brand_id}
@@ -329,7 +328,7 @@ const CreateProduct = () => {
                       className={style.input}
                       type="text"
                       placeholder="Выберите модель телефона"
-                      value={productData.other_model || ''}
+                      value={productData.other_model || ""}
                       onChange={(e) =>
                         setProductData({
                           ...productData,
@@ -367,12 +366,12 @@ const CreateProduct = () => {
             <p>Выберите характеристики</p>
             <div className={style.selects_wrapper}>
               <div>
-                <p style={{ fontSize: '16px', marginBottom: '10px' }}>
+                <p style={{ fontSize: "16px", marginBottom: "10px" }}>
                   Выберите память
                 </p>
                 <select
                   className={style.select}
-                  value={productData.storage || ''}
+                  value={productData.storage || ""}
                   onChange={(e) =>
                     setProductData({ ...productData, storage: +e.target.value })
                   }
@@ -387,12 +386,12 @@ const CreateProduct = () => {
                 </select>
               </div>
               <div>
-                <p style={{ fontSize: '16px', marginBottom: '10px' }}>
+                <p style={{ fontSize: "16px", marginBottom: "10px" }}>
                   Выберите оперативную память
                 </p>
                 <select
                   className={style.select}
-                  value={productData.ram || ''}
+                  value={productData.ram || ""}
                   onChange={(e) =>
                     setProductData({ ...productData, ram: +e.target.value })
                   }
@@ -424,7 +423,7 @@ const CreateProduct = () => {
                     <input
                       type="file"
                       ref={fileInputRef}
-                      style={{ display: 'none' }}
+                      style={{ display: "none" }}
                       accept="image/*"
                       multiple
                       onChange={handleImageChange}
@@ -478,10 +477,10 @@ const CreateProduct = () => {
                 type="button"
                 className={
                   style.select_button +
-                  ' ' +
+                  " " +
                   (selectTypeLocation === SelectType.default
                     ? style.active
-                    : '')
+                    : "")
                 }
                 onClick={() => setSelectTypeLocation(SelectType.default)}
               >
@@ -491,8 +490,8 @@ const CreateProduct = () => {
                 type="button"
                 className={
                   style.select_button +
-                  ' ' +
-                  (selectTypeLocation === SelectType.manual ? style.active : '')
+                  " " +
+                  (selectTypeLocation === SelectType.manual ? style.active : "")
                 }
                 onClick={() => setSelectTypeLocation(SelectType.manual)}
               >
@@ -506,7 +505,7 @@ const CreateProduct = () => {
                   <p className={style.select_label}>Выбрать регион</p>
                   <select
                     className={style.select}
-                    value={addressData.region_id || ''}
+                    value={addressData.region_id || ""}
                     onChange={(e) =>
                       setAddressData({
                         ...addressData,
@@ -529,7 +528,7 @@ const CreateProduct = () => {
                   <p className={style.select_label}>Выбрать город или район</p>
                   <select
                     className={style.select}
-                    value={addressData.district_id || ''}
+                    value={addressData.district_id || ""}
                     onChange={(e) =>
                       setAddressData({
                         ...addressData,
@@ -551,9 +550,9 @@ const CreateProduct = () => {
               </div>
             ) : (
               <div>
-                <MapComponent 
-                  addressData={addressData} 
-                  setAddressData={setAddressData} 
+                <MapComponent
+                  addressData={addressData}
+                  setAddressData={setAddressData}
                 />
               </div>
             )}
@@ -567,7 +566,7 @@ const CreateProduct = () => {
                 type="number"
                 className={style.input}
                 placeholder="Сумма"
-                value={productData.price || ''}
+                value={productData.price || ""}
                 onChange={(e) =>
                   setProductData({
                     ...productData,
@@ -576,9 +575,9 @@ const CreateProduct = () => {
                 }
               />
               <select
-                style={{ width: '100px' }}
+                style={{ width: "100px" }}
                 className={style.select}
-                value={productData.currency_id || '1'}
+                value={productData.currency_id || "1"}
                 onChange={(e) =>
                   setProductData({
                     ...productData,
@@ -700,7 +699,7 @@ const CreateProduct = () => {
                     className={`${style.color_box} ${
                       productData.color_id === +item.id
                         ? style.selected_color
-                        : ''
+                        : ""
                     }`}
                     style={{
                       backgroundColor: item.code || item.name,

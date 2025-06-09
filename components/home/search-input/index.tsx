@@ -10,7 +10,7 @@ interface SearchInputProps {
 const SearchInput: React.FC<SearchInputProps> = ({ onFilterClick }) => {
   const router = useRouter();
   const [query, setQuery] = useState(
-    () => router.query.search?.toString() || ""
+    () => router.query.search?.toString() || "",
   );
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

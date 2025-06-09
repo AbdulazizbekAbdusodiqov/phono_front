@@ -3,7 +3,7 @@ import {
   getCategory,
   getCategoryById,
   getColors,
-  getCurrency
+  getCurrency,
 } from "../endpoints/category";
 
 export const useCategory = () => {
@@ -19,7 +19,6 @@ export const useCategoryById = (id: number) => {
     queryFn: () => getCategoryById(id),
   });
 };
-
 
 export const useColors = () => {
   return useQuery({

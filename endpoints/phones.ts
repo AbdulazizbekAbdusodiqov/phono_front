@@ -1,22 +1,22 @@
-import instance from './instance';
-import { toast } from 'react-toastify';
+import instance from "./instance";
+import { toast } from "react-toastify";
 
 export const getPhones = async (id: number | undefined) => {
   try {
-    console.log('phone-number: ', id);
+    console.log("phone-number: ", id);
     const res = await instance.get(`/phone-number/byUser/${id}`, {
       headers: {
         Authorization: `Bearer ${JSON.parse(
-          localStorage.getItem('accessToken') || '',
+          localStorage.getItem("accessToken") || "",
         )}`,
       },
     });
-    console.log('phones: ', res.data);
+    console.log("phones: ", res.data);
     return res.data;
   } catch (error: any) {
     console.error(error);
     toast.error(
-      error.response?.data?.message || 'Телефон номерларини олишда хатолик',
+      error.response?.data?.message || "Телефон номерларини олишда хатолик",
     );
   }
 };
@@ -30,47 +30,49 @@ export const addPhone = async (
       `/phone-number/byUser/${user_id}`,
       {
         user_id,
-        phone_number, // ✅ faqat phone_number va is_main yuboriladi
-        is_main: true, // ✅ bu qiymat kerak bo‘ladi, aks holda xato beradi
+        phone_number,
+        is_main: true,
       },
       {
         headers: {
           Authorization: `Bearer ${JSON.parse(
-            localStorage.getItem('accessToken') || '',
+            localStorage.getItem("accessToken") || "",
           )}`,
         },
       },
     );
 
-    toast.success('Телефон рақам қўшилди');
+    toast.success("Телефон рақам қўшилди");
     return res.data;
   } catch (error: any) {
     console.error(error);
-    toast.error(error.response?.data?.message || 'Телефон қўшишда хатолик');
+    toast.error(error.response?.data?.message || "Телефон қўшишда хатолик");
   }
 };
-
 
 export const deletePhone = async (
   id: number | undefined,
   phone_id: number,
 ): Promise<boolean> => {
   try {
-    console.log('user_id: ', id);
-    console.log('phone_id: ', phone_id);
-    const result = await instance.delete(`/phone-number/${id}?phoneId=${phone_id}`, {
-      headers: {
-        Authorization: `Bearer ${JSON.parse(
-          localStorage.getItem('accessToken') || '',
-        )}`,
+    console.log("user_id: ", id);
+    console.log("phone_id: ", phone_id);
+    const result = await instance.delete(
+      `/phone-number/${id}?phoneId=${phone_id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${JSON.parse(
+            localStorage.getItem("accessToken") || "",
+          )}`,
+        },
       },
-    });
+    );
     console.log("result: ", result);
-    toast.success('Телефон рақам ўчирилди');
+    toast.success("Телефон рақам ўчирилди");
     return true;
   } catch (error: any) {
     console.error(error);
-    toast.error(error.response?.data?.message || 'Телефон ўчиришда хатолик');
+    toast.error(error.response?.data?.message || "Телефон ўчиришда хатолик");
     return false;
   }
 };

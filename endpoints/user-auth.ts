@@ -42,6 +42,7 @@ export const loginUser = async (data: any) => {
   }
 };
 
+
 export const sign_OutUser = async (userId: number | undefined) => {
   try {
 
@@ -67,12 +68,11 @@ export const sign_OutUser = async (userId: number | undefined) => {
 };
 export const getMe = async (id:number)=>{
   try {
-    const token = JSON.parse(localStorage.getItem("accessToken") || "")
-    const res = await instance.get(`/user/${id}`)
-    return res.data
-  } catch (error:any) {
+    const token = JSON.parse(localStorage.getItem("accessToken") || "");
+    const res = await instance.get(`/user/${id}`);
+    return res.data;
+  } catch (error: any) {
     console.log(error);
     toast.error(` ${error?.response.data.message}`);
-    
   }
-}
+};

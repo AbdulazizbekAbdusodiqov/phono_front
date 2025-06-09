@@ -1,21 +1,21 @@
+import { Address } from "../types";
+import instance from "./instance";
+import { toast } from "react-toastify";
 import { AddAddress } from '../app/Settings/components/AddressSection/AddressSection';
-import { Address } from '../types';
-import instance from './instance';
-import { toast } from 'react-toastify';
 
 export const getAddresses = async (id: number | undefined) => {
   try {
     const res = await instance.get(`/address/byUser/${id}`, {
       headers: {
         Authorization: `Bearer ${JSON.parse(
-          localStorage.getItem('accessToken') || '',
+          localStorage.getItem("accessToken") || "",
         )}`,
       },
     });
     return res.data;
   } catch (error: any) {
     console.error(error);
-    toast.error(error.response?.data?.message || 'Манзилларни олишда хатолик');
+    toast.error(error.response?.data?.message || "Манзилларни олишда хатолик");
   }
 };
 
@@ -28,28 +28,28 @@ export const addAddress = async (address: AddAddress) => {
       {
         headers: {
           Authorization: `Bearer ${JSON.parse(
-            localStorage.getItem('accessToken') || '',
+            localStorage.getItem("accessToken") || "",
           )}`,
         },
       },
     );
 
-    toast.success('Манзил қўшилди');
+    toast.success("Манзил қўшилди");
     return res.data;
   } catch (error: any) {
     console.error(error);
-    toast.error(error.response?.data?.message || 'Манзил қўшишда хатолик');
+    toast.error(error.response?.data?.message || "Манзил қўшишда хатолик");
   }
 };
 
 export const deleteAddress = async (id: number) => {
   try {
     await instance.delete(`/address/${id}`);
-    toast.success('Манзил ўчирилди');
+    toast.success("Манзил ўчирилди");
     return true;
   } catch (error: any) {
     console.error(error);
-    toast.error(error.response?.data?.message || 'Манзил ўчиришда хатолик');
+    toast.error(error.response?.data?.message || "Манзил ўчиришда хатолик");
     return false;
   }
 };

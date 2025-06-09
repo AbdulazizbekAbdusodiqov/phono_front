@@ -12,7 +12,7 @@ export const getEmails = async (id: number | undefined) => {
         Authorization:`Bearer ${JSON.parse(localStorage.getItem("accessToken") || "")}`
       }
     });
-    console.log("keldi4");
+    console.log("keldi4", res.data);
     return res.data;
   } catch (error: any) {
     console.error(error);
@@ -20,9 +20,20 @@ export const getEmails = async (id: number | undefined) => {
   }
 };
 
-export const addEmail = async (email: string) => {
+export const addEmail = async (id: number | undefined, email: string) => {
   try {
-    const res = await instance.post('/email', { email });
+    console.log("my email: ", email);
+    const res = await instance.post(
+      `/email/byUser/${id}`,
+      { user_id: id, email, is_main: true },
+      {
+        headers: {
+          Authorization: `Bearer ${JSON.parse(
+            localStorage.getItem('accessToken') || '',
+          )}`,
+        },
+      },
+    );
     toast.success('Почта қўшилди');
     return res.data;
   } catch (error: any) {
@@ -31,9 +42,17 @@ export const addEmail = async (email: string) => {
   }
 };
 
-export const deleteEmail = async (id: number, user_id: number | undefined) => {
+export const deleteEmail = async (email_id: number, user_id: number | undefined) => {
   try {
-    await instance.delete(`/email/${user_id}`);
+    console.log('email_id: ', email_id);
+    console.log('user_id: ', user_id);
+    await instance.delete(`/email/${user_id}?emailId=${email_id}`, {
+      headers: {
+        Authorization: `Bearer ${JSON.parse(
+          localStorage.getItem('accessToken') || '',
+        )}`,
+      },
+    });
     toast.success('Почта ўчирилди');
   } catch (error: any) {
     console.error(error);

@@ -324,7 +324,7 @@ const ProductDetails = () => {
         onSave={handleProductSave}
       />
     </div>
-    
+
     </>
   )
 }

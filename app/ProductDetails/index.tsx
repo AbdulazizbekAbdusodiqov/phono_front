@@ -62,7 +62,7 @@ const ProductDetails = () => {
       images:
         backendData.product_image?.map(
           (img: any) => `${process.env.NEXT_PUBLIC_BASE_URL}/${img.url}`
-        ) || ["/placeholder.svg"],
+        ) || ["mobile_phone_image.jpg"],
     }
   }
 
@@ -151,7 +151,7 @@ const ProductDetails = () => {
         <div className={styles.gallery}>
           <div className={styles.mainImage}>
             <Image
-              src={productData.images[currentImageIndex] || "/placeholder.svg"}
+              src={productData.images[currentImageIndex] || "mobile_phone_image.jpg"}
               alt={productData.title}
               width={500}
               height={500}
@@ -179,7 +179,7 @@ const ProductDetails = () => {
             {productData.images.slice(1, 4).map((image, index) => (
               <Image
                 key={index}
-                src={image || "/placeholder.svg"}
+                src={image || "mobile_phone_image.jpg"}
                 alt={`${productData.title} ${index + 1}`}
                 width={100}
                 height={100}

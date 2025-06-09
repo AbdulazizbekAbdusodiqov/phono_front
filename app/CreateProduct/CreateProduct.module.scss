@@ -251,13 +251,10 @@
           border: 1px solid #e0e0e0;
           cursor: pointer;
           transition: all 0.2s ease;
-
-          &:hover {
-            transform: scale(1.05);
-          }
-
+          
           &.selected_color {
-            border: 2px solid #000;
+            position: relative;
+            border: 1px solid rgb(134, 255, 134);
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
           }
         }

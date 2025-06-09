@@ -184,7 +184,7 @@ export default function MapContent({ addressData, setAddressData }: MapContentPr
   if (!position) return <p>Xarita yuklanmoqda... <AiOutlineLoading3Quarters/></p>;
 
   return (
-    <MapContainer center={position} zoom={13} style={{ height: '400px', width: '100%' }}>
+    <MapContainer center={position} zoom={13} style={{ height: '400px', maxWidth: '777px', width: '100%' }}>
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -196,7 +196,7 @@ export default function MapContent({ addressData, setAddressData }: MapContentPr
       <AddSearchControl />
       <Marker position={position}>
         <Popup>
-          <div className="mb-2">
+          {/* <div className="mb-2">
             <input
               type="text"
               className="w-full p-1 border rounded mb-1"
@@ -211,7 +211,7 @@ export default function MapContent({ addressData, setAddressData }: MapContentPr
                 }));
               }}
             />
-          </div>
+          </div> */}
           <div className="text-sm">
             <div className="font-medium">Manzil:</div>
             <div className="mb-1">{address}</div>

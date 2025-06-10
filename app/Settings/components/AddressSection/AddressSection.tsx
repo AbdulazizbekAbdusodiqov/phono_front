@@ -214,10 +214,12 @@ const AddressSection = () => {
             ) : (
               addresses.map((address) => (
                 <div className={styles.subItem} key={address.id}>
-                  <div>
-                    <strong>{address.name}</strong>
+                  <div className={styles.subItem__names}>
+                    <div>
+                      <strong>{address.name || "null"}</strong>
+                    </div>
+                    <div>{address.address || "null"}</div>
                   </div>
-                  <div>{address.address}</div>
                   <div
                     className={`${styles.item} ${styles.delete}`}
                     onClick={() => handleDeleteAddress(address.id)}
@@ -346,10 +348,15 @@ const AddressSection = () => {
                 </div>
               </div>
             ) : (
-              <MapComponent
-                addressData={addressData}
-                setAddressData={setAddressData}
-              />
+              <div className={styles.map}>
+                <MapComponent
+                  addressData={addressData}
+                  setAddressData={setAddressData}
+                />
+                <div>
+                  <input type="text" placeholder='Please, write default name for this location' />
+                </div>
+              </div>
             )}
           </div>
         </div>

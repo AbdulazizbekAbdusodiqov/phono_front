@@ -24,7 +24,7 @@ export const addAddress = async (address: AddAddress) => {
     console.log("address: ", address);
     const res = await instance.post(
       `/address/byUser/${address.user_id}`,
-      { address },
+      address, // ✅ to'g'ridan-to'g'ri yuboriladi
       {
         headers: {
           Authorization: `Bearer ${JSON.parse(
@@ -41,6 +41,7 @@ export const addAddress = async (address: AddAddress) => {
     toast.error(error.response?.data?.message || 'Манзил қўшишда хатолик');
   }
 };
+
 
 export const deleteAddress = async (id: number) => {
   try {

@@ -25,9 +25,17 @@
   }
   
   .subItem {
+    border: 1px solid black;
+    border-radius: 10px;
+    background-color: #ffff;
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
+
+    &__names{
+      display: flex;
+      flex-direction: column;
+    }
   }
   
   .delete {

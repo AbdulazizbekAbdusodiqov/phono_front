@@ -101,6 +101,8 @@ const AddressSection = () => {
       if (selectTypeLocation === SelectType.manual) {
         const { user_id, name, lat, long, address, region_id, district_id } =
           addressData;
+        
+        console.log("addressData: ", addressData);
 
         if (!name || !lat || !long || !address) {
           toast.error('Iltimos, xaritadan to‘liq manzil tanlang');
@@ -125,10 +127,10 @@ const AddressSection = () => {
             user_id: Number(user?.id) || 0,
             region_id: null,
             district_id: null,
-            name: '',
-            lat: null,
-            long: null,
-            address: '',
+            name: name,
+            lat: addressData.lat,
+            long: addressData.long,
+            address: addressData.address,
           });
           setShowForm(false);
           toast.success('Manzil saqlandi');
@@ -186,11 +188,11 @@ const AddressSection = () => {
     const confirmed = window.confirm('Ишончингиз комилми?');
     if (!confirmed) return;
 
-    const res = await deleteAddress(+id);
-    if (res!) {
+    const res = await deleteAddress(+id, user?.id);
+    if (res == false) {
       toast('something went wrong on deleting');
     }
-    if (res !== false) {
+    if (res) {
       setAddresses((prev) => prev.filter((item) => item.id !== id));
     } else {
       toast.error('Манзилни ўчиришда хатолик юз берди');
@@ -216,9 +218,9 @@ const AddressSection = () => {
                 <div className={styles.subItem} key={address.id}>
                   <div className={styles.subItem__names}>
                     <div>
-                      <strong>{address.name || "null"}</strong>
+                      <strong>{address.name || 'null'}</strong>
                     </div>
-                    <div>{address.address || "null"}</div>
+                    <div>{address.address || 'null'}</div>
                   </div>
                   <div
                     className={`${styles.item} ${styles.delete}`}
@@ -353,8 +355,16 @@ const AddressSection = () => {
                   addressData={addressData}
                   setAddressData={setAddressData}
                 />
-                <div>
-                  <input type="text" placeholder='Please, write default name for this location' />
+                <div className={styles.form__location__textForMap}>
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => {setAddressData({...addressData, name: e.target.value})
+                    setName(e.target.value)
+                    console.log(e.target.value)}}
+                    className={styles.input}
+                    placeholder="Например: Дом, Офис..."
+                  />
                 </div>
               </div>
             )}

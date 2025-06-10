@@ -61,6 +61,8 @@ const Settings: React.FC = () => {
   }, [isAuthenticated, router]);
 
   const handleExit = async (id: number | undefined) => {
+    const confirmed = window.confirm('Ишончингиз комилми?');
+    if (!confirmed) return;
     if (!id) {
       toast.error('User ID not found');
       return;

@@ -31,6 +31,7 @@
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
+    padding: 5px;
 
     &__names{
       display: flex;
@@ -202,6 +203,14 @@
         background-color: #f0f0f0;
         margin: 10px 0;
         margin-bottom: 16px;
+      }
+
+      &__textForMap {
+
+        &__input{
+          width: 100%;
+          font-size: 20px;
+        }
       }
     }
     &__price {

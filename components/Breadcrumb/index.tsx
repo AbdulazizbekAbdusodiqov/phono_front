@@ -4,7 +4,7 @@ import styles from "./Breadcrumb.module.scss";
 
 const rusNamesMap: Record<string, string> = {
   profile: "Профиль",
-  edit: "Мои объявления",
+  product: "Мои объявления",
   productdetails: "Объявления",
 };
 

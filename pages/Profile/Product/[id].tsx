@@ -1,10 +1,10 @@
-import { Edit } from "@/app";
+import { Product } from "@/app";
 import React from "react";
 
 const EditPage = () => {
   return (
     <>
-      <Edit />
+      <Product />
     </>
   );
 };

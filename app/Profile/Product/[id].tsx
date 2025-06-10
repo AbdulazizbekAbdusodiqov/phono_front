@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import styles from "./Edit.module.scss";
 import Image from "next/image";
 import Breadcrumb from "@/components/Breadcrumb";
-import EditProductModal from "@/components/EditProductModal/index";
 import {
   EditIcon,
   LeftNavIcon,
@@ -32,7 +31,7 @@ interface ProductData {
   images: string[];
 }
 
-const ProductDetails = () => {
+const Product = () => {
   const router = useRouter();
   const id = router.query.id;
   const likedProducts = JSON.parse(localStorage.getItem("favorites") || "[]");
@@ -107,30 +106,13 @@ const ProductDetails = () => {
     setIsEditModalOpen(true);
   };
 
-  const handleEditModalClose = () => {
+  const handleEditConfirm = () => {
     setIsEditModalOpen(false);
+    router.push(`/edit-product/${productData.id}`);
   };
 
-  const handleProductSave = async (updatedData: Partial<ProductData>) => {
-    try {
-      const response = await fetch(`/api/product/${productData!.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedData),
-      });
-
-      if (response.ok) {
-        const updated = await response.json();
-        setProductData(
-          (prev) => prev && { ...prev, ...mapBackendToProductData(updated) },
-        );
-        setIsEditModalOpen(false);
-      }
-    } catch (error) {
-      console.error("Error updating product:", error);
-    }
+  const handleEditCancel = () => {
+    setIsEditModalOpen(false);
   };
 
   const handlePromote = async () => {
@@ -138,7 +120,6 @@ const ProductDetails = () => {
       const response = await fetch(`/api/product/${productData.id}/promote`, {
         method: "POST",
       });
-
       if (response.ok) {
         alert("Объявление поднято!");
       }
@@ -184,7 +165,6 @@ const ProductDetails = () => {
                   />
                 ))}
               </div>
-
             </div>
             <div className={styles.thumbnails}>
               {productData.images.slice(1, 4).map((image, index) => (
@@ -200,7 +180,6 @@ const ProductDetails = () => {
               ))}
             </div>
           </div>
-
 
           <div className={styles.info}>
             <div className={styles.header}>
@@ -304,22 +283,26 @@ const ProductDetails = () => {
         </div>
 
         <div className={styles.description}>
-          <div></div>
           {activeTab === "description" && <p>{productData.description}</p>}
           {activeTab === "reviews" && (
             <p>Отзывы пользователей будут отображаться здесь.</p>
           )}
         </div>
-
-        <EditProductModal
-          isOpen={isEditModalOpen}
-          onClose={handleEditModalClose}
-          productData={productData}
-          onSave={handleProductSave}
-        />
       </div>
+
+      {isEditModalOpen && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modal}>
+            <p>Вы действительно хотите изменить это объявление?</p>
+            <div className={styles.modalButtons}>
+              <button onClick={handleEditConfirm}>Да</button>
+              <button onClick={handleEditCancel}>Нет</button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };
 
-export default ProductDetails;
+export default Product;

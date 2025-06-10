@@ -13,7 +13,6 @@ import { RootState } from "../../store/store";
 import { jwtDecode } from "jwt-decode";
 import { sign_OutUser } from "../../endpoints";
 
-
 const Settings: React.FC = () => {
   const router = useRouter();
   const { user, isAuthenticated } = useSelector(
@@ -23,18 +22,17 @@ const Settings: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-
     const checkAuth = () => {
       const token =
-        typeof window !== 'undefined'
-          ? localStorage.getItem('accessToken')
+        typeof window !== "undefined"
+          ? localStorage.getItem("accessToken")
           : null;
 
       if (!token || !isAuthenticated) {
         toast.info(
           "Tizim sizni xavfsizlik uchun chiqarib qo'ydi. Iltimos, qayta kiring.",
         );
-        router.replace('/login');
+        router.replace("/login");
         return;
       }
 
@@ -46,7 +44,7 @@ const Settings: React.FC = () => {
           toast.info(
             "Tizim sizni xavfsizlik uchun chiqarib qo'ydi. Iltimos, qayta kiring.",
           );
-          router.replace('/login');
+          router.replace("/login");
           return;
         }
       } catch (error) {
@@ -54,7 +52,7 @@ const Settings: React.FC = () => {
           "Tizim sizni xavfsizlik uchun chiqarib qo'ydi. Iltimos, qayta kiring.",
         );
 
-        router.replace('/login');
+        router.replace("/login");
         return;
       }
 
@@ -66,17 +64,17 @@ const Settings: React.FC = () => {
 
   const handleExit = async (id: number | undefined) => {
     if (!id) {
-      toast.error('User ID not found');
+      toast.error("User ID not found");
       return;
     }
 
     const result = await sign_OutUser(id);
 
     if (result) {
-      toast.success('Successfully signed out');
-      router.push('/login');
+      toast.success("Successfully signed out");
+      router.push("/login");
     } else {
-      toast.error('Failed to sign out');
+      toast.error("Failed to sign out");
     }
   };
 

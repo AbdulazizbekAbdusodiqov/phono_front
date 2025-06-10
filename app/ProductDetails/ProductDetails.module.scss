@@ -2,7 +2,7 @@
 @use "@/styles/fonts";
 
 .detailsPage {
-  max-width: 1200px;
+  max-width: 1230px;
   margin: 0 auto;
   padding: 2rem;
   min-height: 100vh;
@@ -48,7 +48,7 @@
 
         .navButton {
           font-size: 32px;
-          background-color: rgba(0, 0, 0, 0);
+          background-color: #999ca050;
           border: none;
           width: 40px;
           height: 40px;

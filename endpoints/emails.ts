@@ -24,7 +24,6 @@ export const getEmails = async (id: number | undefined) => {
 
 export const addEmail = async (id: number | undefined, email: string) => {
   try {
-
     console.log("my email: ", email);
     const res = await instance.post(
       `/email/byUser/${id}`,
@@ -32,12 +31,12 @@ export const addEmail = async (id: number | undefined, email: string) => {
       {
         headers: {
           Authorization: `Bearer ${JSON.parse(
-            localStorage.getItem('accessToken') || '',
+            localStorage.getItem("accessToken") || "",
           )}`,
         },
       },
     );
-    toast.success('Почта қўшилди');
+    toast.success("Почта қўшилди");
     return res.data;
   } catch (error: any) {
     console.error(error);
@@ -45,19 +44,21 @@ export const addEmail = async (id: number | undefined, email: string) => {
   }
 };
 
-export const deleteEmail = async (email_id: number, user_id: number | undefined) => {
+export const deleteEmail = async (
+  email_id: number,
+  user_id: number | undefined,
+) => {
   try {
-
-    console.log('email_id: ', email_id);
-    console.log('user_id: ', user_id);
+    console.log("email_id: ", email_id);
+    console.log("user_id: ", user_id);
     await instance.delete(`/email/${user_id}?emailId=${email_id}`, {
       headers: {
         Authorization: `Bearer ${JSON.parse(
-          localStorage.getItem('accessToken') || '',
+          localStorage.getItem("accessToken") || "",
         )}`,
       },
     });
-    toast.success('Почта ўчирилди');
+    toast.success("Почта ўчирилди");
   } catch (error: any) {
     console.error(error);
     toast.error(error.response?.data?.message || "Почта ўчиришда хатолик");

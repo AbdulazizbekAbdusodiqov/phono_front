@@ -120,19 +120,21 @@ export const getAllProducts = async () => {
 
 export const addProductImage = async (productId: number, image: File) => {
   try {
-    console.log("id: ",productId);
-    console.log(image);
+    console.log("productId: ", productId);
+    console.log("product image", image);
     
-    const res = await instance.post(`/product/image/${productId}`, image, {
+    const formData = new FormData();
+    formData.append('image', image); // The field name should match what your backend expects, typically 'image' or 'file'
+    
+    const res = await instance.post(`/product/image/${productId}`, formData, {
       headers: {
-        "Content-Type": "multipart/form-data",
+        'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${JSON.parse(localStorage.getItem("accessToken") || "")}`,
       },
     });
     return res.data;
-  } catch (error: any) {
-    console.error(error);
-    toast.error(error.response?.data?.message || "Something went wrong");
+  } catch (error) {
+    console.error("Error adding product image:", error);
     throw error;
   }
 };
@@ -152,7 +154,7 @@ export const deleteProductImage = async (imageId: number) => {
   }
 };
 
-export const updateProduct = async (id: number, data: UpdateProductProps) => {
+export const updateProduct = async (id: number, data: UpdateProductProps, addressData: AddressData) => {
   try {
     const res = await instance.put(`/product/${id}`, data, {
       headers: {

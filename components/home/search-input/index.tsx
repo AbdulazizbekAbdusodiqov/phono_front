@@ -10,13 +10,16 @@ interface SearchInputProps {
 const SearchInput: React.FC<SearchInputProps> = ({ onFilterClick }) => {
   const router = useRouter();
   const [query, setQuery] = useState(
-    () => router.query.search?.toString() || "",
+    () => router.query.search?.toString() || ""
   );
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
+    const newValue = e.target.value ?? "";
+
     setQuery(newValue);
-    doSearch(newValue);
+
+    if (!newValue.trim()) {
+      doSearch("");
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

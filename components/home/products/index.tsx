@@ -41,14 +41,14 @@ const ProductSide = () => {
         query: { ...router.query, page: newPage },
       },
       undefined,
-      { shallow: true },
+      { shallow: true }
     );
   };
 
   if (isLoading) {
     return (
       <div className={style.products_grid}>
-        {Array.from({ length: 4 }).map((_, i) => (
+        {Array.from({ length: 10 }).map((_, i) => (
           <ProductSkeleton key={i} />
         ))}
       </div>

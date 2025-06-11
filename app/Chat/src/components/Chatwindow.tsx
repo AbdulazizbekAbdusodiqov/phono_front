@@ -27,7 +27,7 @@ import { LEAVE_CHATROOM } from "../graphql/mutations/LeaveChatroom";
 import { USER_STARTED_TYPING_MUTATION } from "../graphql/mutations/UserStartedTypingMutation";
 import { USER_STOPPED_TYPING_MUTATION } from "../graphql/mutations/UserStoppedTypingMutation";
 import { useUserStore } from "../stores/userStore";
-import styles from "./ChatWindow.module.scss";
+import styles from "./Chatwindow.module.scss";
 
 const ChatWindow: React.FC = () => {
   const router = useRouter();

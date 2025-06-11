@@ -3,7 +3,7 @@
 import instance from "./instance";
 import { toast } from "react-toastify";
 import { AddressData } from "../types/userData";
-import { Address, AddressRes, CreateProductProps } from "../types";
+import { Address, AddressRes, CreateProductProps, UpdateProductProps } from "../types";
 
 interface FindAddressDto {
   region_id?: number;
@@ -115,6 +115,55 @@ export const getAllProducts = async () => {
   } catch (error: any) {
     console.error(error);
     toast.warning(`${error.response?.data?.message || "Something went wrong"}`);
+  }
+};
+
+export const addProductImage = async (productId: number, image: File) => {
+  try {
+    console.log("id: ",productId);
+    console.log(image);
+    
+    const res = await instance.post(`/product/image/${productId}`, image, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem("accessToken") || "")}`,
+      },
+    });
+    return res.data;
+  } catch (error: any) {
+    console.error(error);
+    toast.error(error.response?.data?.message || "Something went wrong");
+    throw error;
+  }
+};
+
+export const deleteProductImage = async (imageId: number) => {
+  try {
+    const res = await instance.delete(`/product/image/${imageId}`, {
+      headers: {
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem("accessToken") || "")}`,
+      },
+    });
+    return res.data;
+  } catch (error: any) {
+    console.error(error);
+    toast.error(error.response?.data?.message || "Something went wrong");
+    throw error;
+  }
+};
+
+export const updateProduct = async (id: number, data: UpdateProductProps) => {
+  try {
+    const res = await instance.put(`/product/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem("accessToken") || "")}`,
+      },
+    });
+    return res.data;
+  } catch (error: any) {
+    console.error(error);
+    toast.error(error.response?.data?.message || "Something went wrong");
+    throw error;
   }
 };
 

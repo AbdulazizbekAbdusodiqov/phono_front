@@ -14,7 +14,6 @@ import { useRouter } from "next/router";
 import { useFavorites } from "../../hooks/useFavorites";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import Link from "next/link";
-import { getPhones } from "@/endpoints/phones";
 import ProductCard from "@/components/home/product-card";
 import { getAllProducts } from "@/endpoints";
 import { toast } from "react-toastify";
@@ -85,12 +84,7 @@ const ProductDetails = () => {
       const mapped = mapBackendToProductData(productData2);
       setProductData(mapped);
       setCurrentImageIndex(0);
-
-      getPhones(productData2.user_id).then((phones) => {
-        if (phones?.length > 0) {
-          setPhoneNumber(phones[0].phone_number);
-        }
-      });
+      setPhoneNumber(productData2.phone_number);
     }
   }, [productData2]);
 

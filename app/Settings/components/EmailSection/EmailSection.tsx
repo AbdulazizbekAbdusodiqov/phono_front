@@ -33,7 +33,7 @@ const EmailSection = () => {
     setLoading(true);
     const data = await getEmails(userId);
     console.log("emails:  :", userId);
-    console.log('emails:  :', data);
+    console.log("emails:  :", data);
     if (data && Array.isArray(data)) {
       setEmails(data);
       console.log("emails: ", data);

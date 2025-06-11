@@ -124,41 +124,46 @@ const CreateProduct = () => {
         productData.other_model = "";
       }
 
-      if(!productData.brand_id && selectType === SelectType.default && !productData.model_id){
-        toast.info("Please select a brand and model")
-      }
-      else if(!productData.brand_id && selectType === SelectType.manual && !productData.other_model){
-        toast.info("Please enter a model")
-      }
-      else if(productData.year == ""){
-        toast.info("Please select a year")
-      }
-      else if(!productData.ram){
-        toast.info("Please select a ram")
-      }
-      else if(!productData.storage){
-        toast.info("Please select a storage")
-      }
-      else if(!images.length){
-        toast.info("Please wait while the images are being uploaded")
-      }
-      else if(!productData.description){
-        toast.info("Please enter a description")
-      }
-      else if(!addressData.region_id && selectTypeLocation === SelectType.default && !addressData.district_id){
-        toast.info("Please select a region and district")
-      }
-      else if(!addressData.lat && selectTypeLocation === SelectType.manual && !addressData.long){
-        toast.info("Please enter a latitude and longitude")
-      }
-      else if(!productData.price){
-        toast.info("Please enter a price")
-      }
-      else if(!productData.color_id){
-        toast.info("Please select a color")
-      }
-      else if(!productData.phone_number){
-        toast.info("Please enter a phone number")
+      if (
+        !productData.brand_id &&
+        selectType === SelectType.default &&
+        !productData.model_id
+      ) {
+        toast.info("Please select a brand and model");
+      } else if (
+        !productData.brand_id &&
+        selectType === SelectType.manual &&
+        !productData.other_model
+      ) {
+        toast.info("Please enter a model");
+      } else if (productData.year == "") {
+        toast.info("Please select a year");
+      } else if (!productData.ram) {
+        toast.info("Please select a ram");
+      } else if (!productData.storage) {
+        toast.info("Please select a storage");
+      } else if (!images.length) {
+        toast.info("Please wait while the images are being uploaded");
+      } else if (!productData.description) {
+        toast.info("Please enter a description");
+      } else if (
+        !addressData.region_id &&
+        selectTypeLocation === SelectType.default &&
+        !addressData.district_id
+      ) {
+        toast.info("Please select a region and district");
+      } else if (
+        !addressData.lat &&
+        selectTypeLocation === SelectType.manual &&
+        !addressData.long
+      ) {
+        toast.info("Please enter a latitude and longitude");
+      } else if (!productData.price) {
+        toast.info("Please enter a price");
+      } else if (!productData.color_id) {
+        toast.info("Please select a color");
+      } else if (!productData.phone_number) {
+        toast.info("Please enter a phone number");
       }
 
       const response = await createProduct({
@@ -734,29 +739,28 @@ const CreateProduct = () => {
                   }
                 >
                   <div
-                    className={`${style.color_box} ${productData.color_id === +item.id
-                      ? style.selected_color
-                      : ""
-                      }`}
+                    className={`${style.color_box} ${
+                      productData.color_id === +item.id
+                        ? style.selected_color
+                        : ""
+                    }`}
                     style={{
                       backgroundColor: item.code || item.name,
                     }}
                   >
-                    {
-                      productData.color_id === +item.id
-                        ? (<>
-                          <IoMdCheckmarkCircleOutline style={{
+                    {productData.color_id === +item.id ? (
+                      <>
+                        <IoMdCheckmarkCircleOutline
+                          style={{
                             position: "absolute",
                             top: "3px",
                             right: "3px",
-                            color: "#A5DD9B"
-                          }} />
-                        </>
-                        )
-                        : null
-                    }
+                            color: "#A5DD9B",
+                          }}
+                        />
+                      </>
+                    ) : null}
                   </div>
-
                 </div>
               ))}
             </div>

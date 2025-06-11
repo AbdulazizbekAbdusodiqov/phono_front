@@ -1,7 +1,7 @@
 import { Address } from "../types";
 import instance from "./instance";
 import { toast } from "react-toastify";
-import { AddAddress } from '../app/Settings/components/AddressSection/AddressSection';
+import { AddAddress } from "../app/Settings/components/AddressSection/AddressSection";
 
 export const getAddresses = async (id: number | undefined) => {
   try {

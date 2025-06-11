@@ -151,7 +151,6 @@ const CustomCalendar: React.FC<CustomCalendarProps> = ({
       );
     }
 
-    // Current month days
     for (let day = 1; day <= daysInMonth; day++) {
       const isSelected =
         selectedDay === day &&

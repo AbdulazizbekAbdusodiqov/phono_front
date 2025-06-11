@@ -142,7 +142,6 @@ const AddressSection = () => {
           toast.error("Manzil va nom bo‘sh bo‘lishi mumkin emas");
           return;
         }
-        
 
         const newAddress: AddAddress = {
           user_id: Number(user?.id) || 0,
@@ -167,7 +166,6 @@ const AddressSection = () => {
         };
 
         const added = await addAddress(cleanedAddress);
-        
 
         // const added = await addAddress(newAddress);
         if (added) {
@@ -291,7 +289,6 @@ const AddressSection = () => {
                         district_id: null, // Reset district when region changes
                       })
                     }
-
                   >
                     <option disabled value="">
                       Выберите регион

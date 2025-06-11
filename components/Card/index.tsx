@@ -26,7 +26,7 @@ const Card: React.FC<CardProps> = ({
   };
 
   return (
-    <Link href={`/Profile/Edit/${id}`} className={styles.card}>
+    <Link href={`/Profile/Product/${id}`} className={styles.card}>
       <img
         src={
           product_image && product_image.length > 0

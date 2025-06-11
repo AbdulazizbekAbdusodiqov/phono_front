@@ -1,14 +1,13 @@
 import React from "react";
 import styles from "./Favorites.module.scss";
 import Breadcrumb from "@/components/Breadcrumb";
-import Card from "@/components/Card";
 import { useFavorites } from "@/hooks/useFavorites";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
 import { useGetMe } from "@/hooks/auth";
 import { Product } from "../../types";
 import { HeartIcon } from "@/public/icons/profile";
-import Spinner from "@/components/Spinner";
+import ProductCard from "@/components/home/product-card";
 
 const Favorites = () => {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -17,7 +16,7 @@ const Favorites = () => {
 
   const productsList = me?.product ?? [];
   const favoriteProducts = productsList.filter((product: Product) =>
-    favorites.includes(product.id)
+    favorites.includes(product.id),
   );
 
   if (!me) {
@@ -26,9 +25,7 @@ const Favorites = () => {
         <Breadcrumb />
         <h1 className={styles.title}>Избранное</h1>
         <div className={styles.hrLine} />
-        <div className={styles.emptyState}>
-          <Spinner/>
-        </div>
+        <div className={styles.emptyState}></div>
       </div>
     );
   }
@@ -57,7 +54,7 @@ const Favorites = () => {
       <div className={styles.hrLine} />
       <div className={styles.cardGrid}>
         {favoriteProducts.map((product: Product) => (
-          <Card
+          <ProductCard
             key={product.id}
             product={product}
             isFavorite={favorites.includes(product.id)}

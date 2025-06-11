@@ -1,5 +1,11 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { getMe, loginUser, sendOtp, signUpUser, verifyOtp } from "../endpoints/user-auth";
+import {
+  getMe,
+  loginUser,
+  sendOtp,
+  signUpUser,
+  verifyOtp,
+} from "../endpoints/user-auth";
 
 export const useSendOtp = () =>
   useMutation({
@@ -37,6 +43,6 @@ export const useGetMe = (id: number) => {
   return useQuery({
     queryKey: ["user", id],
     queryFn: () => getMe(id),
-    enabled: !!id,           
+    enabled: !!id,
   });
 };

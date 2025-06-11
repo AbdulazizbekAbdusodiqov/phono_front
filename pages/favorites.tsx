@@ -1,10 +1,10 @@
-import Favorites from '@/app/Favorites';
-import React from 'react';
+import Favorites from "@/app/Favorites";
+import React from "react";
 
 const favoritesPage = () => {
   return (
     <>
-        <Favorites/>
+      <Favorites />
     </>
   );
 };

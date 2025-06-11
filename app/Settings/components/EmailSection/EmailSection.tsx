@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { RiDeleteBin5Line } from 'react-icons/ri';
-import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
-import Modal from '../../ui/Modal';
-import styles from './EmailSection.module.scss';
+import React, { useState, useEffect } from "react";
+import { RiDeleteBin5Line } from "react-icons/ri";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import Modal from "../../ui/Modal";
+import styles from "./EmailSection.module.scss";
 import {
   getEmails,
   addEmail as apiAddEmail,
@@ -12,6 +12,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../../store/store';
 import { toast } from 'react-toastify';
 import { MdGppBad, MdOutlineGppGood } from 'react-icons/md';
+
 
 type Email = {
   id: number;
@@ -24,7 +25,7 @@ const EmailSection = () => {
   const [emails, setEmails] = useState<Email[]>([]);
   const [open, setOpen] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const [newEmail, setNewEmail] = useState('');
+  const [newEmail, setNewEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const { user } = useSelector((state: RootState) => state.auth);
 
@@ -49,20 +50,21 @@ const EmailSection = () => {
     const added = await apiAddEmail(user?.id, newEmail.trim());
     if (added) {
       setEmails((prev) => [...prev, added]);
-      setNewEmail('');
+      setNewEmail("");
       setShowForm(false);
     }
   };
 
-  const deleteEmail = async (id: number) => {
-    const confirmed = window.confirm('Ишончингиз комилми?');
+  const deleteEmail = async (id: string) => {
+    const confirmed = window.confirm("Ишончингиз комилми?");
+
     if (!confirmed) return;
 
-    const res = await apiDeleteEmail(id, user?.id);
+    const res = await apiDeleteEmail(+id, user?.id);
     if (res!) {
-      toast('Ошибка при удалении');
+      toast("Ошибка при удалении");
     } else {
-      setEmails((prev) => prev.filter((email) => email.id !== id));
+      setEmails((prev) => prev.filter((email) => email.id !== +id));
     }
   };
 
@@ -89,7 +91,7 @@ const EmailSection = () => {
                   </div>
                   <div
                     className={`${styles.item} ${styles.delete}`}
-                    onClick={() => deleteEmail(email.id)}
+                    onClick={() => deleteEmail(email.id.toString())}
                   >
                     <RiDeleteBin5Line />
                   </div>

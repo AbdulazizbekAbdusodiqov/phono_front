@@ -1,46 +1,58 @@
-import { useState, useEffect } from "react"
-import styles from "./ProductDetails.module.scss"
-import Image from "next/image"
-import Breadcrumb from "@/components/Breadcrumb"
-import EditProductModal from "@/components/EditProductModal/index"
-import { EditIcon, FavoriteIcon, LeftNavIcon, LocationIcon, RightNavIcon, TopIcon } from "@/public/icons/profile"
-import { useAllProducts, useProductById } from "../../hooks/products.use"
-import { useRouter } from "next/router"
-import favorites from "../../pages/favorites"
-import { Product } from "../../types"
-import Card from "../../components/Card"
-import { useFavorites } from "../../hooks/useFavorites"
-import Spinner from "../../components/Spinner"
+import { useState, useEffect } from "react";
+import styles from "./ProductDetails.module.scss";
+import Image from "next/image";
+import Breadcrumb from "@/components/Breadcrumb";
+import {
+  LeftNavIcon,
+  LocationIcon,
+  MessageIcon,
+  PhoneIcon,
+  RightNavIcon,
+} from "@/public/icons/profile";
+import { useProductById } from "../../hooks/products.use";
+import { useRouter } from "next/router";
+import { useFavorites } from "../../hooks/useFavorites";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
+import Link from "next/link";
+import { getPhones } from "@/endpoints/phones";
+import ProductCard from "@/components/home/product-card";
+import { getAllProducts } from "@/endpoints";
+import { toast } from "react-toastify";
 
 interface ProductData {
-  id: number
-  title: string
-  price: string
-  location: string
-  condition: string
-  memory: string
-  year: string
-  color: string
-  hasDocuments: boolean
-  publishDate: string
-  views: number
-  description: string
-  isNegotiable: boolean
-  images: string[]
+  id: number;
+  title: string;
+  price: string;
+  location: string;
+  condition: string;
+  memory: string;
+  year: string;
+  color: string;
+  hasDocuments: boolean;
+  publishDate: string;
+  views: number;
+  description: string;
+  isNegotiable: boolean;
+  images: string[];
+  userId?: number;
 }
 
 const ProductDetails = () => {
-  const router = useRouter()
-  const id = router.query.id
+  const router = useRouter();
+  const id = Number(router.query.id);
+  const { data: productData2, isLoading } = useProductById(Number(id));
+  const [productData, setProductData] = useState<ProductData | null>(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [showPhone, setShowPhone] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const [activeTab, setActiveTab] = useState<"description" | "reviews">(
+    "description",
+  );
+  const { toggleFavorite, isFavorite } = useFavorites();
+  const [productsList, setProductsList] = useState<any[]>([]); // 🔥
 
-  const { data: productData2, isLoading } = useProductById(Number(id))
-
-  const [productData, setProductData] = useState<ProductData | null>(null)
-  const [activeTab, setActiveTab] = useState<"description" | "reviews">("description")
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
-
-  const { toggleFavorite, isFavorite } = useFavorites()
+  const likedProducts = JSON.parse(localStorage.getItem("favorites") || "[]");
+  const token = JSON.parse(localStorage.getItem("accessToken") || "null");
 
   const mapBackendToProductData = (backendData: any): ProductData => {
     return {
@@ -61,86 +73,69 @@ const ProductDetails = () => {
       views: backendData.view_count || 0,
       description: backendData.description || "",
       isNegotiable: backendData.negotiable || false,
-      images:
-        backendData.product_image?.map(
-          (img: any) => `${process.env.NEXT_PUBLIC_BASE_URL}/${img.url}`
-        ) || ["/placeholder.svg"],
-    }
-  }
+      images: backendData.product_image?.map(
+        (img: any) => `${process.env.NEXT_PUBLIC_BASE_URL}/${img.url}`,
+      ) || ["/placeholder.svg"],
+      userId: backendData.user_id,
+    };
+  };
+
 
   useEffect(() => {
     if (productData2) {
-      setProductData(mapBackendToProductData(productData2))
-      setCurrentImageIndex(0)
+      const mapped = mapBackendToProductData(productData2);
+      setProductData(mapped);
+      setCurrentImageIndex(0);
+
+      getPhones(productData2.user_id).then((phones) => {
+        if (phones?.length > 0) {
+          setPhoneNumber(phones[0].phone_number);
+        }
+      });
     }
-  }, [productData2])
+  }, [productData2]);
 
-  if (isLoading || !productData) {
-    return <Spinner />
-  }
+  useEffect(() => {
+    getAllProducts()
+      .then((products) => {
+        if (products) {
+          setProductsList(products);
+        }
+      })
+      .catch((error) => {
+        toast.error("Failed to fetch products");
+      });
+  }, []);
 
+  if (isLoading || !productData) return null;
 
   const handlePrevImage = () => {
     setCurrentImageIndex((prev) =>
-      prev === 0 ? productData.images.length - 1 : prev - 1
-    )
-  }
+      prev === 0 ? productData.images.length - 1 : prev - 1,
+    );
+  };
 
   const handleNextImage = () => {
     setCurrentImageIndex((prev) =>
-      prev === productData.images.length - 1 ? 0 : prev + 1
-    )
-  }
+      prev === productData.images.length - 1 ? 0 : prev + 1,
+    );
+  };
 
   const handleImageSelect = (index: number) => {
-    setCurrentImageIndex(index)
-  }
+    setCurrentImageIndex(index);
+  };
 
   const handleFavoriteToggle = () => {
-    toggleFavorite(productData.id)
-  }
+    toggleFavorite(productData.id);
+  };
 
-  const handleEditClick = () => {
-    setIsEditModalOpen(true)
-  }
+  const handlewriteClick = () => {
+    console.log("buyerga chatga otish logikasi yozladi ");
+  };
 
-  const handleEditModalClose = () => {
-    setIsEditModalOpen(false)
-  }
-
-  const handleProductSave = async (updatedData: Partial<ProductData>) => {
-    try {
-      const response = await fetch(`/api/product/${productData!.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedData),
-      })
-
-      if (response.ok) {
-        const updated = await response.json()
-        setProductData((prev) => prev && ({ ...prev, ...mapBackendToProductData(updated) }))
-        setIsEditModalOpen(false)
-      }
-    } catch (error) {
-      console.error("Error updating product:", error)
-    }
-  }
-
-  const handlePromote = async () => {
-    try {
-      const response = await fetch(`/api/product/${productData.id}/promote`, {
-        method: "POST",
-      })
-
-      if (response.ok) {
-        alert("Объявление поднято!")
-      }
-    } catch (error) {
-      console.error("Error promoting product:", error)
-    }
-  }
+  const handlePhone = async () => {
+    setShowPhone(true);
+  };
 
   return (
     <>
@@ -150,183 +145,186 @@ const ProductDetails = () => {
         </div>
 
         <div className={styles.container}>
-        <div className={styles.gallery}>
-          <div className={styles.mainImage}>
-            <Image
-              src={productData.images[currentImageIndex] || "/placeholder.svg"}
-              alt={productData.title}
-              width={500}
-              height={500}
-              className={styles.mainImg}
-            />
-            <div className={styles.imageControls}>
-              <button className={styles.navButton} onClick={handlePrevImage}>
-                <LeftNavIcon />
-              </button>
-              <button className={styles.navButton} onClick={handleNextImage}>
-                <RightNavIcon />
-              </button>
+          <div className={styles.gallery}>
+            <div className={styles.mainImage}>
+              <Image
+                src={
+                  productData.images[currentImageIndex] || "/placeholder.svg"
+                }
+                alt={productData.title}
+                width={500}
+                height={500}
+                className={styles.mainImg}
+              />
+              <div className={styles.imageControls}>
+                <button className={styles.navButton} onClick={handlePrevImage}>
+                  <LeftNavIcon />
+                </button>
+                <button className={styles.navButton} onClick={handleNextImage}>
+                  <RightNavIcon />
+                </button>
+              </div>
+              <div className={styles.indicators}>
+                {productData.images.map((_, index) => (
+                  <span
+                    key={index}
+                    className={index === currentImageIndex ? styles.active : ""}
+                    onClick={() => handleImageSelect(index)}
+                  />
+                ))}
+              </div>
+
             </div>
-            <div className={styles.indicators}>
-              {productData.images.map((_, index) => (
-                <span
+            <div className={styles.thumbnails}>
+              {productData.images.slice(1, 4).map((image, index) => (
+                <Image
                   key={index}
-                  className={index === currentImageIndex ? styles.active : ""}
-                  onClick={() => handleImageSelect(index)}
+                  src={image || "/placeholder.svg"}
+                  alt={`${productData.title} ${index + 1}`}
+                  width={100}
+                  height={100}
+                  className={styles.thumbnail}
+                  onClick={() => handleImageSelect(index + 1)}
                 />
               ))}
             </div>
           </div>
-          <div className={styles.thumbnails}>
-            {productData.images.slice(1, 4).map((image, index) => (
-              <Image
-                key={index}
-                src={image || "/placeholder.svg"}
-                alt={`${productData.title} ${index + 1}`}
-                width={100}
-                height={100}
-                className={styles.thumbnail}
-                onClick={() => handleImageSelect(index + 1)}
+
+          <div className={styles.info}>
+            <div className={styles.header}>
+              <h1>{productData.title}</h1>
+              <button
+                className={`${styles.favoriteBtn} ${
+                  isFavorite(productData.id) ? styles.favorited : ""
+                }`}
+                onClick={handleFavoriteToggle}
+              >
+                <div className={styles.like}>
+                  {likedProducts.includes(Number(id)) ? (
+                    <FaHeart color="#FF4E64" />
+                  ) : (
+                    <FaRegHeart color="#999CA0" />
+                  )}
+                </div>
+              </button>
+            </div>
+
+            <div className={styles.price}>
+              {productData.price}
+              {productData.isNegotiable && (
+                <span className={styles.negotiable}>Торг есть</span>
+              )}
+            </div>
+
+            <div className={styles.location}>
+              <LocationIcon /> {productData.location}
+            </div>
+
+            <div className={styles.actions}>
+              <button className={styles.write} onClick={handlewriteClick}>
+                <Link
+                  href={token ? "/message" : "/login"}
+                  className={styles.LinkWrite}
+                >
+                  <MessageIcon /> Написать
+                </Link>
+              </button>
+              <button className={styles.phone} onClick={handlePhone}>
+                <PhoneIcon />
+                {showPhone
+                  ? phoneNumber || "Номер недоступен"
+                  : "Показать номер"}
+              </button>
+            </div>
+
+            <ul className={styles.specs}>
+              <li>
+                <span className={styles.label}>Состояние</span>
+                <span className={`${styles.value} ${styles.valueOne}`}>
+                  {productData.condition}
+                </span>
+              </li>
+              <li>
+                <span className={styles.label}>Память</span>
+                <span className={styles.value}>{productData.memory}</span>
+              </li>
+              <li>
+                <span className={styles.label}>Год выпуска</span>
+                <span className={styles.value}>{productData.year}</span>
+              </li>
+              <li>
+                <span className={styles.label}>Цвет</span>
+                <span className={styles.value}>
+                  <span
+                    className={styles.dot}
+                    style={{
+                      backgroundColor: `${
+                        productData2.color.code || productData2.color.name
+                      }`,
+                    }}
+                  ></span>{" "}
+                  {productData.color}
+                </span>
+              </li>
+              <li>
+                <span className={styles.label}>Коробка с документами</span>
+                <span className={styles.value}>
+                  {productData.hasDocuments ? "Есть" : "Нет"}
+                </span>
+              </li>
+              <li>
+                <span className={styles.label}>Размещено</span>
+                <span className={styles.value}>{productData.publishDate}</span>
+              </li>
+              <li>
+                <span className={styles.label}>Просмотров</span>
+                <span className={styles.value}>{productData.views}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div className={styles.tabs}>
+          <span
+            className={activeTab === "description" ? styles.activeTab : ""}
+            onClick={() => setActiveTab("description")}
+          >
+            Описание
+          </span>
+          <span
+            className={activeTab === "reviews" ? styles.activeTab : ""}
+            onClick={() => setActiveTab("reviews")}
+          >
+            Отзывы (0)
+          </span>
+        </div>
+
+        <div className={styles.description}>
+          <div>
+            <div></div>
+          </div>
+          {activeTab === "description" && <p>{productData.description}</p>}
+          {activeTab === "reviews" && (
+            <p>Отзывы пользователей будут отображаться здесь.</p>
+          )}
+        </div>
+
+        <h2 className={styles.title}>Вам может понравиться</h2>
+        <div className={styles.cardGrid}>
+          {productsList
+            .filter((p) => p.id !== productData?.id)
+            .map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                isFavorite={likedProducts.includes(product.id)}
+                onToggleFavorite={toggleFavorite}
               />
             ))}
-          </div>
-        </div>
-
-        <div className={styles.info}>
-          <div className={styles.header}>
-            <h1>{productData.title}</h1>
-            <button
-              className={`${styles.favoriteBtn} ${
-                isFavorite(productData.id) ? styles.favorited : ""
-              }`}
-              onClick={handleFavoriteToggle}
-            >
-              <FavoriteIcon />
-            </button>
-          </div>
-
-          <div className={styles.price}>
-            {productData.price}
-            {productData.isNegotiable && <span className={styles.negotiable}>Торг есть</span>}
-          </div>
-
-          <div className={styles.location}>
-            <LocationIcon /> {productData.location}
-          </div>
-
-          <div className={styles.actions}>
-            <button className={styles.edit} onClick={handleEditClick}>
-              <EditIcon /> Изменить
-            </button>
-            <button className={styles.promote} onClick={handlePromote}>
-              <TopIcon /> Поднять
-            </button>
-          </div>
-
-          <ul className={styles.specs}>
-            <li>
-              <span className={styles.label}>Состояние</span>
-              <span className={`${styles.value} ${styles.valueOne}`}>{productData.condition}</span>
-            </li>
-            <li>
-              <span className={styles.label}>Память</span>
-              <span className={styles.value}>{productData.memory}</span>
-            </li>
-            <li>
-              <span className={styles.label}>Год выпуска</span>
-              <span className={styles.value}>{productData.year}</span>
-            </li>
-            <li>
-              <span className={styles.label}>Цвет</span>
-              <span className={styles.value}>
-                <span className={styles.blueDot}></span> {productData.color}
-              </span>
-            </li>
-            <li>
-              <span className={styles.label}>Коробка с документами</span>
-              <span className={styles.value}>{productData.hasDocuments ? "Есть" : "Нет"}</span>
-            </li>
-            <li>
-              <span className={styles.label}>Размещено</span>
-              <span className={styles.value}>{productData.publishDate}</span>
-            </li>
-            <li>
-              <span className={styles.label}>Просмотров</span>
-              <span className={styles.value}>{productData.views}</span>
-            </li>
-          </ul>
         </div>
       </div>
-
-      <div className={styles.tabs}>
-        <span
-          className={activeTab === "description" ? styles.activeTab : ""}
-          onClick={() => setActiveTab("description")}
-        >
-          Описание
-        </span>
-        <span
-          className={activeTab === "reviews" ? styles.activeTab : ""}
-          onClick={() => setActiveTab("reviews")}
-        >
-          Отзывы (0)
-        </span>
-      </div>
-
-      <div className={styles.description}>
-      <div>
-        <div>
-      {productData && (
-        <Card
-          key={productData.id}
-          product={{
-            ...productData,
-            storage: parseInt(productData.memory.split(' ')[0]) || 0, // Extract storage from memory string
-            ram: parseInt(productData.memory.split(' ')[3]) || 0, // Extract RAM from memory string
-            brand_id: 0, // You'll need to get this from your API
-            color_id: 0, // You'll need to get this from your API
-            currency_id: 1, // Default currency ID
-            slug: productData.title.toLowerCase().replace(/\s+/g, '-'),
-            is_top: false,
-            is_checked: 1, // Assuming 1 means APPROVED
-            is_active: true,
-            is_deleted: false,
-            view_count: productData.views,
-            like_count: 0,
-            brand: { id: 0, name: productData.title.split(' ')[0] || 'Unknown' },
-            color: { id: 0, name: productData.color, code: '' }, // Map color string to color object
-            currency: { id: 1, name: 'UZS' },
-            product_image: productData.images.map((img, index) => ({
-              id: index,
-              product_id: productData.id,
-              url: img.replace(/^.*\//, '') // Extract filename from URL
-            })),
-            condition: productData.condition === 'Новый',
-            negotiable: productData.isNegotiable,
-            has_document: productData.hasDocuments,
-            phone_number: '', // You might want to add this to your ProductData
-            price: parseFloat(productData.price) || 0
-          }}
-          isFavorite={isFavorite(productData.id)}
-          onToggleFavorite={toggleFavorite}
-        />
-      )}
-    </div>
-    </div>
-        {activeTab === "description" && <p>{productData.description}</p>}
-        {activeTab === "reviews" && <p>Отзывы пользователей будут отображаться здесь.</p>}
-      </div>
-
-      <EditProductModal
-        isOpen={isEditModalOpen}
-        onClose={handleEditModalClose}
-        productData={productData}
-        onSave={handleProductSave}
-      />
-    </div>
-    
     </>
-  )
-}
+  );
+};
 
-export default ProductDetails
+export default ProductDetails;

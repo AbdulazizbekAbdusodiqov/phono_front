@@ -1,31 +1,36 @@
-import type React from "react"
-import { useState } from "react"
-import { CloseIcon } from "@/public/icons/profile"
-import styles from "./EditProductModal.module.scss"
+import type React from "react";
+import { useState } from "react";
+import { CloseIcon } from "@/public/icons/profile";
+import styles from "./EditProductModal.module.scss";
 
 interface ProductData {
-  id: number
-  title: string
-  price: string
-  location: string
-  condition: string
-  memory: string
-  year: string
-  color: string
-  hasDocuments: boolean
-  description: string
-  isNegotiable: boolean
-  images: string[]
+  id: number;
+  title: string;
+  price: string;
+  location: string;
+  condition: string;
+  memory: string;
+  year: string;
+  color: string;
+  hasDocuments: boolean;
+  description: string;
+  isNegotiable: boolean;
+  images: string[];
 }
 
 interface EditProductModalProps {
-  isOpen: boolean
-  onClose: () => void
-  productData: ProductData
-  onSave: (data: Partial<ProductData>) => void
+  isOpen: boolean;
+  onClose: () => void;
+  productData: ProductData;
+  onSave: (data: Partial<ProductData>) => void;
 }
 
-const EditProductModal: React.FC<EditProductModalProps> = ({ isOpen, onClose, productData, onSave }) => {
+const EditProductModal: React.FC<EditProductModalProps> = ({
+  isOpen,
+  onClose,
+  productData,
+  onSave,
+}) => {
   const [formData, setFormData] = useState({
     title: productData.title,
     price: productData.price.replace(" UZS", ""),
@@ -36,24 +41,24 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ isOpen, onClose, pr
     hasDocuments: productData.hasDocuments,
     description: productData.description,
     isNegotiable: productData.isNegotiable,
-  })
+  });
 
   const handleInputChange = (field: string, value: string | boolean) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
-    }))
-  }
+    }));
+  };
 
   const handleSave = () => {
     const updatedData = {
       ...formData,
       price: formData.price + " UZS",
-    }
-    onSave(updatedData)
-  }
+    };
+    onSave(updatedData);
+  };
 
-  if (!isOpen) return null
+  if (!isOpen) return null;
 
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
@@ -139,7 +144,9 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ isOpen, onClose, pr
               <input
                 type="checkbox"
                 checked={formData.hasDocuments}
-                onChange={(e) => handleInputChange("hasDocuments", e.target.checked)}
+                onChange={(e) =>
+                  handleInputChange("hasDocuments", e.target.checked)
+                }
               />
               Коробка с документами
             </label>
@@ -150,7 +157,9 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ isOpen, onClose, pr
               <input
                 type="checkbox"
                 checked={formData.isNegotiable}
-                onChange={(e) => handleInputChange("isNegotiable", e.target.checked)}
+                onChange={(e) =>
+                  handleInputChange("isNegotiable", e.target.checked)
+                }
               />
               Торг уместен
             </label>
@@ -177,7 +186,7 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ isOpen, onClose, pr
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default EditProductModal
+export default EditProductModal;

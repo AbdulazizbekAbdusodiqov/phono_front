@@ -10,8 +10,13 @@ interface CardProps {
   onToggleFavorite: (id: number) => void;
 }
 
-const ProductCard: React.FC<CardProps> = ({ product, isFavorite, onToggleFavorite }) => {
-  const { id, product_image, title, condition, storage, price, negotiable } = product;
+const ProductCard: React.FC<CardProps> = ({
+  product,
+  isFavorite,
+  onToggleFavorite,
+}) => {
+  const { id, product_image, title, condition, storage, price, negotiable } =
+    product;
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -25,7 +30,7 @@ const ProductCard: React.FC<CardProps> = ({ product, isFavorite, onToggleFavorit
         src={
           product_image && product_image.length > 0
             ? `${process.env.NEXT_PUBLIC_BASE_URL}/${product_image[0].url}`
-            : "/placeholder.svg"
+            : "mobile_phone_image.jpg"
         }
         alt={title}
         className={styles.image}
@@ -34,7 +39,11 @@ const ProductCard: React.FC<CardProps> = ({ product, isFavorite, onToggleFavorit
         <div className={styles.title}>
           <h3>{title}</h3>
           <div className={styles.like} onClick={handleFavoriteClick}>
-            {isFavorite ? <FaHeart color="#FF4E64" /> : <FaRegHeart color="#999CA0" />}
+            {isFavorite ? (
+              <FaHeart color="#FF4E64" />
+            ) : (
+              <FaRegHeart color="#999CA0" />
+            )}
           </div>
         </div>
 

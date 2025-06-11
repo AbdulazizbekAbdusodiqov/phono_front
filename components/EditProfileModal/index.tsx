@@ -24,13 +24,12 @@ interface EditProfileModalProps {
     birth_date?: string;
     profile_img?: string;
   };
-  onSave?: (data:{
+  onSave?: (data: {
     first_name: string;
     last_name: string;
     birth_date: string;
     profile_img: string;
   }) => void;
-  
 }
 const EditProfileModal: React.FC<EditProfileModalProps> = ({
   isOpen,
@@ -53,7 +52,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
       last_name: initialData.last_name || "",
       birth_date: initialData.birth_date || "",
     },
-   onSubmit: async (values) => {
+    onSubmit: async (values) => {
       try {
         const formData = new FormData();
 
@@ -70,16 +69,15 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
         }
 
         if (values.birth_date) {
-          formData.append("birth_date", values.birth_date);          
+          formData.append("birth_date", values.birth_date);
         } else {
           formData.append("birth_date", "");
         }
 
         if (selectedFile) {
           formData.append("image", selectedFile);
-
         }
-      
+
         const updatedUser = await updateUserMutation.mutateAsync(formData);
 
         if (onSave) {
@@ -94,15 +92,14 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
               : "",
           });
         }
-      
-       setSelectedFile(null);
+
+        setSelectedFile(null);
         onClose();
-        refetch()
+        refetch();
       } catch (error) {
         console.error("Ошибка при сохранении профиля:", error);
       }
-}
-
+    },
   });
 
   const handleAvatarUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -250,7 +247,6 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
             >
               Сохранить
             </button>
-            
           </div>
         </form>
       </div>

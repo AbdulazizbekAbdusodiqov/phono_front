@@ -34,13 +34,15 @@ const Profile = () => {
   const productsList = me?.product ?? [];
 
   const favoriteProducts = productsList.filter((product: Product) =>
-    favorites.includes(product.id)
+    favorites.includes(product.id),
   );
-  
+
   const userProfile = {
     first_name: me ? `${me.first_name} ${me.last_name}` : "",
     balance: me?.balance ? `${me.balance} сум` : "0 сум",
-    profile_img: `${process.env.NEXT_PUBLIC_BASE_URL}/uploads/${me?.profile_img}` || "/img/profile/Avatar.svg",
+    profile_img:
+      `${process.env.NEXT_PUBLIC_BASE_URL}/uploads/${me?.profile_img}` ||
+      "/img/profile/Avatar.svg",
     name: me?.first_name || "",
     last_name: me?.last_name || "",
     birth_date: me?.birth_date || "1999-03-16",
@@ -63,7 +65,7 @@ const Profile = () => {
 
   const toggleFavorite = (id: number) => {
     setFavorites((prev) =>
-      prev.includes(id) ? prev.filter((favId) => favId !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((favId) => favId !== id) : [...prev, id],
     );
   };
 
@@ -75,14 +77,15 @@ const Profile = () => {
 
       <div className={styles.userInfo}>
         <img
-          src={userProfile.profile_img || "/placeholder.svg"}
+          src={userProfile.profile_img || "mobile_phone_image.jpg"}
           alt="Avatar"
           className={styles.avatar}
         />
         <div>
           <h2>{userProfile.first_name}</h2>
           <p>
-            Баланс: <span className={styles.balance}>{userProfile.balance}</span>
+            Баланс:{" "}
+            <span className={styles.balance}>{userProfile.balance}</span>
           </p>
         </div>
         <button className={styles.editButton} onClick={openModal}>

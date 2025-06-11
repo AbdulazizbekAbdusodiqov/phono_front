@@ -12,7 +12,6 @@ const getToken = (): string => {
   }
 };
 
-
 export const getUserPhoneNumbers = async (id: number | string) => {
   try {
     const res = await instance.get(`/phone-number/byUser/${id}`, {
@@ -21,7 +20,9 @@ export const getUserPhoneNumbers = async (id: number | string) => {
     return res.data;
   } catch (error: any) {
     console.error(error);
-    toast.error(error.response?.data?.message || "Ошибка получения номеров телефона");
+    toast.error(
+      error.response?.data?.message || "Ошибка получения номеров телефона",
+    );
     throw error;
   }
 };

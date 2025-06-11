@@ -3,16 +3,14 @@ import { useEffect, useState } from "react";
 import style from "./product.module.scss";
 import { useProducts } from "../../../hooks/products.use";
 import ProductSkeleton from "../product-card/product-card.skelton";
-import Card from "@/components/Card";
 import { useFavorites } from "../../../hooks/useFavorites";
 import ProductCard from "../product-card";
-import Spinner from "@/components/Spinner";
 
 const ProductSide = () => {
   const router = useRouter();
   const [page, setPage] = useState(1);
   const [filters, setFilters] = useState<Record<string, string>>({});
-  
+
   const { toggleFavorite, isFavorite } = useFavorites();
 
   useEffect(() => {
@@ -29,7 +27,6 @@ const ProductSide = () => {
     if (query.othermodel) filterParams.othermodel = query.othermodel as string;
     if (query.condition) filterParams.condition = query.condition as string;
     if (query["is-top"]) filterParams["is-top"] = query["is-top"] as string;
-    
 
     setPage(pageFromUrl);
     setFilters(filterParams);
@@ -44,14 +41,13 @@ const ProductSide = () => {
         query: { ...router.query, page: newPage },
       },
       undefined,
-      { shallow: true }
+      { shallow: true },
     );
   };
 
   if (isLoading) {
     return (
       <div className={style.products_grid}>
-        <Spinner />
         {Array.from({ length: 4 }).map((_, i) => (
           <ProductSkeleton key={i} />
         ))}
@@ -74,8 +70,8 @@ const ProductSide = () => {
           <ProductCard
             key={product.id}
             product={product}
-            isFavorite={isFavorite(product.id)} 
-            onToggleFavorite={toggleFavorite}   
+            isFavorite={isFavorite(product.id)}
+            onToggleFavorite={toggleFavorite}
           />
         ))}
       </div>

@@ -50,37 +50,42 @@ const UserLoginPage = () => {
     }
   };
 
-   return (
-  <div className={style.sign_up}>
-    <div className={style.form_wrapper}>
-      <h3 className={style.title}>Вход в аккаунт</h3>
-      <form onSubmit={handleSubmit} className={style.form}>
-        <input
-          type="tel"
-          placeholder="+998991871615"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          className={`${style.input} ${!isPhoneValid && phone ? style.invalid : ""}`}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Пароль"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className={style.input}
-          required
-        />
-        <button type="submit" className={style.button} disabled={loading}>
-          {loading ? <span className={style.loading_spinner} /> : "Войти"}
-        </button>
-      </form>
-      <p className={style.link_text}>
-        Нет аккаунта? <a href="/sign-up" className={style.link}>Зарегистрируйтесь</a>
-      </p>
+  return (
+    <div className={style.sign_up}>
+      <div className={style.form_wrapper}>
+        <h3 className={style.title}>Вход в аккаунт</h3>
+        <form onSubmit={handleSubmit} className={style.form}>
+          <input
+            type="tel"
+            placeholder="+998991871615"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            className={`${style.input} ${
+              !isPhoneValid && phone ? style.invalid : ""
+            }`}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Пароль"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className={style.input}
+            required
+          />
+          <button type="submit" className={style.button} disabled={loading}>
+            {loading ? <span className={style.loading_spinner} /> : "Войти"}
+          </button>
+        </form>
+        <p className={style.link_text}>
+          Нет аккаунта?{" "}
+          <a href="/sign-up" className={style.link}>
+            Зарегистрируйтесь
+          </a>
+        </p>
+      </div>
     </div>
-  </div>
-);
+  );
 };
 
 export default UserLoginPage;

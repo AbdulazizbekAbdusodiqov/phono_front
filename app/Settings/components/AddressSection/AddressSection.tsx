@@ -1,29 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import { RiDeleteBin5Line } from 'react-icons/ri';
-import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
-import Modal from '../../ui/Modal';
-import styles from './AddressSection.module.scss';
+import React, { useState, useEffect } from "react";
+import { RiDeleteBin5Line } from "react-icons/ri";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import Modal from "../../ui/Modal";
+import styles from "./AddressSection.module.scss";
 import {
   getAddresses,
   addAddress,
   deleteAddress,
-} from '../../../../endpoints/addresses';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../../store/store';
-import { toast } from 'react-toastify';
-import { AddressData } from '../../../../types/userData';
-import MapComponent from '../../../CreateProduct/components/MapComponent';
-import { useGetRegionById, useGetRegions } from '../../../../hooks/user';
-import { useRouter } from 'next/router';
+} from "../../../../endpoints/addresses";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../store/store";
+import { toast } from "react-toastify";
+import { AddressData } from "../../../../types/userData";
+import MapComponent from "../../../CreateProduct/components/MapComponent";
+import { useGetRegionById, useGetRegions } from "../../../../hooks/user";
+import { useRouter } from "next/router";
 
 type Address = {
   user_id: number;
   name: string;
   id: number;
   lat: string;
-  long: string
+  long: string;
   address: string;
-  is_main: boolean
+  is_main: boolean;
   region_id: number | undefined;
   district_id: number | undefined;
 };
@@ -40,8 +40,8 @@ export type AddAddress = {
 };
 
 enum SelectType {
-  default = 'default',
-  manual = 'manual',
+  default = "default",
+  manual = "manual",
 }
 
 interface Region {
@@ -60,10 +60,10 @@ const AddressSection = () => {
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [open, setOpen] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const [newAddress, setNewAddress] = useState('');
+  const [newAddress, setNewAddress] = useState("");
   const [loading, setLoading] = useState(false);
-  const [name, setName] = useState('');
-  const [fullAddress, setFullAddress] = useState('');
+  const [name, setName] = useState("");
+  const [fullAddress, setFullAddress] = useState("");
   const [selectType, setSelectType] = useState<SelectType>(SelectType.default);
   const [selectTypeLocation, setSelectTypeLocation] = useState<SelectType>(
     SelectType.default,
@@ -76,10 +76,10 @@ const AddressSection = () => {
     user_id: Number(user?.id) || 0,
     region_id: null,
     district_id: null,
-    name: '',
+    name: "",
     lat: null,
     long: null,
-    address: '',
+    address: "",
   });
   const { data: oneRegion } = useGetRegionById(addressData.region_id || 0);
   const { data: regions } = useGetRegions();
@@ -105,7 +105,7 @@ const AddressSection = () => {
         console.log("addressData: ", addressData);
 
         if (!name || !lat || !long || !address) {
-          toast.error('Iltimos, xaritadan to‘liq manzil tanlang');
+          toast.error("Iltimos, xaritadan to‘liq manzil tanlang");
           return;
         }
 
@@ -117,7 +117,7 @@ const AddressSection = () => {
           is_main: false,
           address,
           region_id: undefined,
-          district_id: undefined
+          district_id: undefined,
         };
 
         const added = await addAddress(newAddress);
@@ -131,14 +131,15 @@ const AddressSection = () => {
             lat: addressData.lat,
             long: addressData.long,
             address: addressData.address,
+
           });
           setShowForm(false);
-          toast.success('Manzil saqlandi');
-          router.push('/Profile');
+          toast.success("Manzil saqlandi");
+          router.push("/Profile");
         }
       } else if (selectTypeLocation === SelectType.default) {
         if (!name.trim() || !fullAddress.trim()) {
-          toast.error('Manzil va nom bo‘sh bo‘lishi mumkin emas');
+          toast.error("Manzil va nom bo‘sh bo‘lishi mumkin emas");
           return;
         }
         
@@ -146,8 +147,8 @@ const AddressSection = () => {
         const newAddress: AddAddress = {
           user_id: Number(user?.id) || 0,
           name: name.trim(),
-          lat: '',
-          long: '',
+          lat: "",
+          long: "",
           is_main: false,
           region_id: addressData.region_id || undefined,
           district_id: addressData.district_id || undefined,
@@ -171,21 +172,21 @@ const AddressSection = () => {
         // const added = await addAddress(newAddress);
         if (added) {
           setAddresses((prev) => [...prev, added]);
-          setName('');
-          setFullAddress('');
+          setName("");
+          setFullAddress("");
           setShowForm(false);
-          toast.success('Manzil qo‘shildi');
-          router.push('/Profile');
+          toast.success("Manzil qo‘shildi");
+          router.push("/Profile");
         }
       }
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Xatolik yuz berdi');
+      toast.error(error.response?.data?.message || "Xatolik yuz berdi");
     }
   };
-  
 
-  const handleDeleteAddress = async (id: number) => {
-    const confirmed = window.confirm('Ишончингиз комилми?');
+  const handleDeleteAddress = async (id: string) => {
+    const confirmed = window.confirm("Ишончингиз комилми?");
+
     if (!confirmed) return;
 
     const res = await deleteAddress(+id, user?.id);
@@ -193,9 +194,10 @@ const AddressSection = () => {
       toast('something went wrong on deleting');
     }
     if (res) {
-      setAddresses((prev) => prev.filter((item) => item.id !== id));
+      setAddresses((prev) => prev.filter((item) => +item.id !== +id));
+
     } else {
-      toast.error('Манзилни ўчиришда хатолик юз берди');
+      toast.error("Манзилни ўчиришда хатолик юз берди");
     }
   };
 
@@ -224,7 +226,7 @@ const AddressSection = () => {
                   </div>
                   <div
                     className={`${styles.item} ${styles.delete}`}
-                    onClick={() => handleDeleteAddress(address.id)}
+                    onClick={() => handleDeleteAddress(address.id.toString())}
                   >
                     <RiDeleteBin5Line />
                   </div>
@@ -250,10 +252,10 @@ const AddressSection = () => {
                 type="button"
                 className={
                   styles.select_button +
-                  ' ' +
+                  " " +
                   (selectTypeLocation === SelectType.default
                     ? styles.active
-                    : '')
+                    : "")
                 }
                 onClick={() => setSelectTypeLocation(SelectType.default)}
               >
@@ -263,10 +265,10 @@ const AddressSection = () => {
                 type="button"
                 className={
                   styles.select_button +
-                  ' ' +
+                  " " +
                   (selectTypeLocation === SelectType.manual
                     ? styles.active
-                    : '')
+                    : "")
                 }
                 onClick={() => setSelectTypeLocation(SelectType.manual)}
               >
@@ -281,15 +283,15 @@ const AddressSection = () => {
                   <p className={styles.select_label}>Выбрать регион</p>
                   <select
                     className={styles.select}
-                    value={addressData.region_id || ''}
-                    onChange={(e) => {
-                      const value = +e.target.value;
-                      setAddressData((prev) => ({
-                        ...prev,
-                        region_id: value,
-                        district_id: null, // reset district
-                      }));
-                    }}
+                    value={addressData.region_id || ""}
+                    onChange={(e) =>
+                      setAddressData({
+                        ...addressData,
+                        region_id: +e.target.value,
+                        district_id: null, // Reset district when region changes
+                      })
+                    }
+
                   >
                     <option disabled value="">
                       Выберите регион
@@ -306,7 +308,7 @@ const AddressSection = () => {
                   <p className={styles.select_label}>Выбрать город или район</p>
                   <select
                     className={styles.select}
-                    value={addressData.district_id || ''}
+                    value={addressData.district_id || ""}
                     onChange={(e) =>
                       setAddressData((prev) => ({
                         ...prev,

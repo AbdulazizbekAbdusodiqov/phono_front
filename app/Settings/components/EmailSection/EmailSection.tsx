@@ -1,33 +1,42 @@
-import React, { useState, useEffect } from 'react';
-import { RiDeleteBin5Line } from 'react-icons/ri';
-import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
-import Modal from '../../ui/Modal';
-import styles from './EmailSection.module.scss';
+import React, { useState, useEffect } from "react";
+import { RiDeleteBin5Line } from "react-icons/ri";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import Modal from "../../ui/Modal";
+import styles from "./EmailSection.module.scss";
 import {
   getEmails,
   addEmail as apiAddEmail,
   deleteEmail as apiDeleteEmail,
-} from '../../../../endpoints/emails'; // import qiling
+} from '../../../../endpoints/emails';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../store/store';
+import { toast } from 'react-toastify';
+import { MdGppBad, MdOutlineGppGood } from 'react-icons/md';
+
+
+type Email = {
+  id: number;
+  user_id: number;
+  email: string;
+  is_verified: boolean
+};
 
 const EmailSection = () => {
-  const [emails, setEmails] = useState<string[]>([]);
+  const [emails, setEmails] = useState<Email[]>([]);
   const [open, setOpen] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const [newEmail, setNewEmail] = useState('');
+  const [newEmail, setNewEmail] = useState("");
   const [loading, setLoading] = useState(false);
-  const { user, isAuthenticated } = useSelector(
-    (state: RootState) => state.auth,
-  );
-  console.log('user_id: ', user);
+  const { user } = useSelector((state: RootState) => state.auth);
 
-  // Serverdan email ro'yxatini olish
-  const fetchEmails = async (id: number | undefined) => {
+  const fetchEmails = async (userId: number | undefined) => {
     setLoading(true);
-    const data = await getEmails(id);
+    const data = await getEmails(userId);
+    console.log("emails:  :", userId);
+    console.log("emails:  :", data);
     if (data && Array.isArray(data)) {
       setEmails(data);
+      console.log("emails: ", data);
     }
     setLoading(false);
   };
@@ -36,55 +45,27 @@ const EmailSection = () => {
     fetchEmails(user?.id);
   }, [user?.id]);
 
-  // Email qo'shish
   const addEmail = async () => {
     if (!newEmail.trim()) return;
-
-    setLoading(true);
-    const addedEmail = await apiAddEmail(newEmail.trim());
-    setLoading(false);
-
-    if (addedEmail) {
-      // serverdan qaytgan yangi email ro'yxatini qaytarishiga qarab o'zgartiring,
-      // yoki faqat yangi emailni qo'shish mumkin:
-      setEmails((prev) => [...prev, addedEmail.email || newEmail.trim()]);
-      setNewEmail('');
+    const added = await apiAddEmail(user?.id, newEmail.trim());
+    if (added) {
+      setEmails((prev) => [...prev, added]);
+      setNewEmail("");
       setShowForm(false);
     }
   };
 
-  // Email o'chirish
-  const deleteEmail = async (index: number) => {
-    const emailToDelete = emails[index];
-    if (!emailToDelete) return;
+  const deleteEmail = async (id: string) => {
+    const confirmed = window.confirm("Ишончингиз комилми?");
 
-    setLoading(true);
+    if (!confirmed) return;
 
-    // Agar serverdan emailni id bilan o'chirish kutilsa,
-    // sizga email id sini olish va o'sha bilan o'chirish kerak bo'ladi.
-    // Hozirgi misolda faqat index bilan ishlayapmiz,
-    // shuning uchun serverdagi id lar bilan ishlash uchun emails ni id bilan o'zgartiring.
-
-    // Misol uchun, emails massivida id va email obyekti bo'lsa:
-    // const { id } = emails[index];
-    // await apiDeleteEmail(id);
-
-    // Lekin sizda faqat stringlar bor, shuning uchun bu yerni moslashtiring.
-
-    // Agar emails massivida id yo'q bo'lsa, bu funksiya ishlamasligi mumkin.
-
-    // Shu sababli, emails ni quyidagicha saqlash tavsiya qilinadi:
-    // [{ id: string, email: string }, ...]
-    // va keyin shu id bilan o'chirish.
-
-    // Hozirgi kodni server bilan ishlash uchun shunday qiling:
-
-    const id = emailToDelete; // Agar id va email bir xil bo'lsa
-
-    await apiDeleteEmail(+id, user?.id);
-
-    setEmails((prev) => prev.filter((_, i) => i !== index));
-    setLoading(false);
+    const res = await apiDeleteEmail(+id, user?.id);
+    if (res!) {
+      toast("Ошибка при удалении");
+    } else {
+      setEmails((prev) => prev.filter((email) => email.id !== +id));
+    }
   };
 
   return (
@@ -99,20 +80,24 @@ const EmailSection = () => {
 
         {open && (
           <div className={styles.subsection}>
-            {loading && <div>Loading...</div>}
-
-            {emails.map((email, i) => (
-              <div className={styles.subItem} key={i}>
-                <div>{email}</div>
-                <div
-                  className={`${styles.item} ${styles.delete}`}
-                  onClick={() => deleteEmail(i)}
-                >
-                  <RiDeleteBin5Line />
+            {loading ? (
+              <div className={styles.loader}>Юкланмоқда...</div>
+            ) : (
+              emails.map((email) => (
+                <div className={styles.subItem} key={email.id}>
+                  <div>
+                    {email.email}
+                    {email.is_verified ? <MdOutlineGppGood /> : <MdGppBad />}
+                  </div>
+                  <div
+                    className={`${styles.item} ${styles.delete}`}
+                    onClick={() => deleteEmail(email.id.toString())}
+                  >
+                    <RiDeleteBin5Line />
+                  </div>
                 </div>
-              </div>
-            ))}
-
+              ))
+            )}
             <div className={styles.addButton} onClick={() => setShowForm(true)}>
               + Добавить почту
             </div>
@@ -129,7 +114,7 @@ const EmailSection = () => {
           placeholder="Введите email"
           className={styles.input}
         />
-        <button onClick={addEmail} className={styles.button} disabled={loading}>
+        <button onClick={addEmail} className={styles.button}>
           Сохранить
         </button>
       </Modal>

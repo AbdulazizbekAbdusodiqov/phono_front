@@ -128,7 +128,10 @@ const UserSignUpForm = ({ onNext }: { onNext: () => void }) => {
           )}
         </button>
         <p className={style.link_text}>
-          Уже есть аккаунт? <a href="/login" className={style.link}>Войти</a>
+          Уже есть аккаунт?{" "}
+          <a href="/login" className={style.link}>
+            Войти
+          </a>
         </p>
       </div>
     </div>

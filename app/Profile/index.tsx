@@ -23,7 +23,6 @@ const Profile = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<TabType>("Объявления");
 
-  // Local favorite ids managed here
   const [favorites, setFavorites] = useState<number[]>(() => {
     if (typeof window !== "undefined") {
       return JSON.parse(localStorage.getItem("favorites") || "[]");
@@ -36,18 +35,19 @@ const Profile = () => {
 
   const productsList = me?.product ?? [];
 
-  // Filtrlash favorites ga qarab
   const favoriteProducts = productsList.filter((product: Product) =>
-    favorites.includes(product.id)
+    favorites.includes(product.id),
   );
 
   const userProfile = {
-    username: me ? `${me.first_name} ${me.last_name}` : "Имя пользователя",
+    first_name: me ? `${me.first_name} ${me.last_name}` : "",
     balance: me?.balance ? `${me.balance} сум` : "0 сум",
-    avatar: me?.profile_img || "/img/profile/Avatar.svg",
+    profile_img:
+      `${process.env.NEXT_PUBLIC_BASE_URL}/uploads/${me?.profile_img}` ||
+      "/img/profile/Avatar.svg",
     name: me?.first_name || "",
-    familyName: me?.last_name || "",
-    birthday: me?.birth_date || "1999-03-16",
+    last_name: me?.last_name || "",
+    birth_date: me?.birth_date || "1999-03-16",
   };
 
 
@@ -60,19 +60,17 @@ const Profile = () => {
   const closeModal = () => setIsModalOpen(false);
 
   const handleSaveProfile = (data: {
-    name: string;
-    familyName: string;
-    birthday: string;
-    avatar: string;
+    first_name: string;
+    last_name: string;
+    birth_date: string;
+    profile_img: string;
   }) => {
-    console.log("Profile data to be saved:", data);
-    // Bu yerda API chaqiruv yoki state update qo'yiladi
+    console.log("");
   };
 
-  // Favorite toggle funksiyasi
   const toggleFavorite = (id: number) => {
     setFavorites((prev) =>
-      prev.includes(id) ? prev.filter((favId) => favId !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((favId) => favId !== id) : [...prev, id],
     );
   };
 
@@ -84,14 +82,15 @@ const Profile = () => {
 
       <div className={styles.userInfo}>
         <img
-          src={userProfile.avatar || "/placeholder.svg"}
+          src={userProfile.profile_img || "mobile_phone_image.jpg"}
           alt="Avatar"
           className={styles.avatar}
         />
         <div>
-          <h2>{userProfile.username}</h2>
+          <h2>{userProfile.first_name}</h2>
           <p>
-            Баланс: <span className={styles.balance}>{userProfile.balance}</span>
+            Баланс:{" "}
+            <span className={styles.balance}>{userProfile.balance}</span>
           </p>
         </div>
         <button className={styles.editButton} onClick={openModal}>
@@ -177,10 +176,10 @@ const Profile = () => {
         onClose={closeModal}
         userId={Number(user?.id)}
         initialData={{
-          name: userProfile.name,
-          familyName: userProfile.familyName,
-          birthday: userProfile.birthday,
-          avatar: userProfile.avatar,
+          first_name: userProfile.first_name,
+          last_name: userProfile.last_name,
+          birth_date: userProfile.birth_date,
+          profile_img: userProfile.profile_img,
         }}
         onSave={handleSaveProfile}
       />

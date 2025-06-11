@@ -1,75 +1,66 @@
-import style from "./product.module.scss";
-import Image from "next/image";
+import React from "react";
 import Link from "next/link";
-import { FaRegHeart } from "react-icons/fa6";
+import styles from "./product.module.scss";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { Product } from "../../../types";
 
-const ProductCard = ({ product }: { product?: any }) => {
-  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "";
+interface CardProps {
+  product: Product;
+  isFavorite: boolean;
+  onToggleFavorite: (id: number) => void;
+}
 
-  if (!product) return null;
+const ProductCard: React.FC<CardProps> = ({
+  product,
+  isFavorite,
+  onToggleFavorite,
+}) => {
+  const { id, product_image, title, condition, storage, price, negotiable } =
+    product;
 
-  const {
-    id,
-    title,
-    price,
-    currency,
-    condition,
-    storage,
-    product_image,
-    like_count,
-    negotiable,
-  } = product;
+  const handleFavoriteClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onToggleFavorite(id);
+  };
 
   return (
-    <Link href={`/product-details/${id}`} className={style.product_link}>
-      <div className={style.product_card_wrapper}>
-        <div className={style.card_img}>
-          {product_image && product_image.length > 0 ? (
-            <Image
-              src={`${BASE_URL}/${product_image[0]?.url}`}
-              alt={title || "Product image"}
-              width={400}
-              height={300}
-              className={style.product_image}
-            />
-          ) : (
-            <div className={style.no_image}>No image available</div>
-          )}
-        </div>
-        <div className={style.card_content}>
-          <div className={style.title_row}>
-            <h3 className={style.title}>{title}</h3>
-            <button
-              className={`${style.heart_btn} ${
-                like_count > 0 ? style.active : ""
-              }`}
-              onClick={(e) => e.preventDefault()} // prevent link navigation
-            >
-              <FaRegHeart size={20} />
-            </button>
-          </div>
-
-          <div className={style.specs_row}>
-            <div className={style.spec_item}>
-              <span className={style.spec_label}>Состояние:</span>
-              <span className={style.spec_value_blue}>
-                {condition ? "Новый" : "Б/у"}
-              </span>
-            </div>
-            <div className={style.spec_item}>
-              <span className={style.spec_label}>Память:</span>
-              <span className={style.spec_value}>{storage} GB</span>
-            </div>
-          </div>
-
-          <div className={style.price_row}>
-            <span className={style.price}>
-              {price} {currency?.name || "UZS"}
-            </span>
-            {negotiable && (
-              <span className={style.negotiable_tag}>Торг есть</span>
+    <Link href={`/productdetails/${id}`} className={styles.card}>
+      <img
+        src={
+          product_image && product_image.length > 0
+            ? `${process.env.NEXT_PUBLIC_BASE_URL}/${product_image[0].url}`
+            : "mobile_phone_image.jpg"
+        }
+        alt={title}
+        className={styles.image}
+      />
+      <div className={styles.info}>
+        <div className={styles.title}>
+          <h3>{title}</h3>
+          <div className={styles.like} onClick={handleFavoriteClick}>
+            {isFavorite ? (
+              <FaHeart color="#FF4E64" />
+            ) : (
+              <FaRegHeart color="#999CA0" />
             )}
           </div>
+        </div>
+
+        <p className={styles.wrapper}>
+          <b>Состояние:</b>{" "}
+          <span className={styles.condition}>
+            {condition ? "Новый" : "Б/у"}
+          </span>
+        </p>
+
+        <p className={styles.wrapper}>
+          <b>Память:</b> <span className={styles.memory}>{storage}</span>
+        </p>
+
+        <div className={styles.footer}>
+          <span className={styles.price}>{price}</span>
+          {negotiable && <span className={styles.badge}>Торг есть</span>}
         </div>
       </div>
     </Link>

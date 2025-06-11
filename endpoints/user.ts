@@ -2,18 +2,27 @@ import { toast } from "react-toastify";
 import instance from "./instance";
 import { AddressData } from "../types/userData";
 
-const getToken = () => JSON.parse(localStorage.getItem("accessToken") || '""');
+const getToken = (): string => {
+  try {
+    const token = localStorage.getItem("accessToken");
+    return token ? JSON.parse(token) : "";
+  } catch (e) {
+    console.error("Failed to parse token", e);
+    return "";
+  }
+};
 
 export const getUserPhoneNumbers = async (id: number | string) => {
   try {
     const res = await instance.get(`/phone-number/byUser/${id}`, {
       headers: { Authorization: `Bearer ${getToken()}` },
     });
-    console.log(res.data);
     return res.data;
   } catch (error: any) {
     console.error(error);
-    toast.error(error.response?.data?.message || "Ошибка получения номеров телефона");
+    toast.error(
+      error.response?.data?.message || "Ошибка получения номеров телефона",
+    );
     throw error;
   }
 };
@@ -23,7 +32,6 @@ export const getRegions = async () => {
     const res = await instance.get(`/region`, {
       headers: { Authorization: `Bearer ${getToken()}` },
     });
-    console.log(res.data);
     return res.data;
   } catch (error: any) {
     console.error(error);
@@ -37,7 +45,6 @@ export const getRegionById = async (id: number) => {
     const res = await instance.get(`/region/${id}`, {
       headers: { Authorization: `Bearer ${getToken()}` },
     });
-    console.log(res.data);
     return res.data;
   } catch (error: any) {
     console.error(error);
@@ -51,7 +58,6 @@ export const getDistricts = async () => {
     const res = await instance.get(`/district`, {
       headers: { Authorization: `Bearer ${getToken()}` },
     });
-    console.log(res.data);
     return res.data;
   } catch (error: any) {
     console.error(error);
@@ -65,7 +71,6 @@ export const createAddress = async (data: AddressData) => {
     const res = await instance.post(`/address`, data, {
       headers: { Authorization: `Bearer ${getToken()}` },
     });
-    console.log(res.data);
     return res.data;
   } catch (error: any) {
     console.error(error);
@@ -79,7 +84,6 @@ export const getAddresses = async () => {
     const res = await instance.get(`/address`, {
       headers: { Authorization: `Bearer ${getToken()}` },
     });
-    console.log(res.data);
     return res.data;
   } catch (error: any) {
     console.error(error);
@@ -87,17 +91,23 @@ export const getAddresses = async () => {
     throw error;
   }
 };
-
-export const updateUser = async (id: number, data: any) => {
+export const updateUser = async (id: number, data: FormData) => {
   try {
-    const res = await instance.put(`/user/${id}`, data, {
-      headers: { Authorization: `Bearer ${getToken()}` },
+    console.log("FormData ichidagi qiymatlar:");
+    for (const pair of data.entries()) {
+      console.log(`${pair[0]}: ${pair[1]}`);
+    }
+
+    const response = await instance.put(`/user/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+        "Content-Type": "multipart/form-data",
+      },
     });
-    console.log(res.data);
-    return res.data;
-  } catch (error: any) {
-    console.error(error);
-    toast.error(error.response?.data?.message || "Ошибка обновления пользователя");
+
+    return response.data;
+  } catch (error) {
+    console.error("Ошибка при обновлении пользователя", error);
     throw error;
   }
 };

@@ -1,10 +1,10 @@
-import ProductDetails from "@/app/Profile/Edit";
+import { Product } from "@/app";
 import React from "react";
 
 const EditPage = () => {
   return (
     <>
-      <ProductDetails />
+      <Product />
     </>
   );
 };

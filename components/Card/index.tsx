@@ -10,8 +10,14 @@ interface CardProps {
   onToggleFavorite: (id: number) => void;
 }
 
-const Card: React.FC<CardProps> = ({ product, isFavorite, onToggleFavorite }) => {
-  const { id, product_image, title, condition, storage, price, negotiable } = product;
+const Card: React.FC<CardProps> = ({
+  product,
+  isFavorite,
+  onToggleFavorite,
+}) => {
+  const { id, product_image, title, condition, storage, price, negotiable } =
+    product;
+  console.log(product_image);
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -20,12 +26,12 @@ const Card: React.FC<CardProps> = ({ product, isFavorite, onToggleFavorite }) =>
   };
 
   return (
-    <Link href={`/Profile/Edit`} className={styles.card}>
+    <Link href={`/Profile/Product/${id}`} className={styles.card}>
       <img
         src={
           product_image && product_image.length > 0
             ? `${process.env.NEXT_PUBLIC_BASE_URL}/${product_image[0].url}`
-            : "/placeholder.svg"
+            : "mobile_phone_image.jpg"
         }
         alt={title}
         className={styles.image}
@@ -34,15 +40,25 @@ const Card: React.FC<CardProps> = ({ product, isFavorite, onToggleFavorite }) =>
         <div className={styles.title}>
           <h3>{title}</h3>
           <div className={styles.like} onClick={handleFavoriteClick}>
-            {isFavorite ? <FaHeart color="#FF4E64" /> : <FaRegHeart color="#999CA0" />}
+            {isFavorite ? (
+              <FaHeart color="#FF4E64" />
+            ) : (
+              <FaRegHeart color="#999CA0" />
+            )}
           </div>
         </div>
+
         <p className={styles.wrapper}>
-          <b>Состояние:</b> <span className={styles.condition}>{condition}</span>
+          <b>Состояние:</b>{" "}
+          <span className={styles.condition}>
+            {condition ? "Новый" : "Б/у"}
+          </span>
         </p>
+
         <p className={styles.wrapper}>
           <b>Память:</b> <span className={styles.memory}>{storage}</span>
         </p>
+
         <div className={styles.footer}>
           <span className={styles.price}>{price}</span>
           {negotiable && <span className={styles.badge}>Торг есть</span>}

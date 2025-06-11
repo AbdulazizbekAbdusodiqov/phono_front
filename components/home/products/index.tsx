@@ -1,16 +1,17 @@
-// components/home/products/index.tsx
-
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import style from "./product.module.scss";
 import { useProducts } from "../../../hooks/products.use";
 import ProductSkeleton from "../product-card/product-card.skelton";
+import { useFavorites } from "../../../hooks/useFavorites";
 import ProductCard from "../product-card";
 
 const ProductSide = () => {
   const router = useRouter();
   const [page, setPage] = useState(1);
   const [filters, setFilters] = useState<Record<string, string>>({});
+
+  const { toggleFavorite, isFavorite } = useFavorites();
 
   useEffect(() => {
     const query = router.query;
@@ -33,7 +34,7 @@ const ProductSide = () => {
 
   const { data: products, isLoading } = useProducts(page, filters);
 
-  const handlePageChange = (newPage: number):any => {
+  const handlePageChange = (newPage: number) => {
     router.push(
       {
         pathname: router.pathname,
@@ -47,7 +48,7 @@ const ProductSide = () => {
   if (isLoading) {
     return (
       <div className={style.products_grid}>
-        {Array.from({ length: 4 }).map((_, i) => (
+        {Array.from({ length: 10 }).map((_, i) => (
           <ProductSkeleton key={i} />
         ))}
       </div>
@@ -66,11 +67,15 @@ const ProductSide = () => {
     <>
       <div className={style.products_grid}>
         {products?.data?.map((product: any) => (
-          <ProductCard key={product.id} product={product} />
+          <ProductCard
+            key={product.id}
+            product={product}
+            isFavorite={isFavorite(product.id)}
+            onToggleFavorite={toggleFavorite}
+          />
         ))}
       </div>
 
-      {/* Pagination */}
       {products?.meta?.lastPage > 1 && (
         <div className={style.pagination}>
           <button

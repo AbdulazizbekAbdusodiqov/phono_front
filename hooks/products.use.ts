@@ -39,9 +39,9 @@ export const useAddProductImage = () => {
   });
 };
 
-export const useDeleteProductImage = (imageId: number) => {
+export const useDeleteProductImage = ( productId: number,imageId: number,) => {
   return useMutation({
-    mutationFn: () => deleteProductImage(imageId),
+    mutationFn: () => deleteProductImage(productId,imageId),
   });
 };
 

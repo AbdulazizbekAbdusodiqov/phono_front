@@ -46,6 +46,29 @@
   margin-bottom: 64px;
 }
 
+.category_header {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.view_all_button {
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  width: 100px;
+  border: none;
+  padding: 12px 8px;
+  border-radius: 12px;
+  background-color: #4e46b4;
+  color: #fff;
+  cursor: pointer;
+}
+
+.hide_view_all {
+  display: none;
+}
+
 @media (max-width: 768px) {
   .home_input_wrapper {
     flex-direction: column;

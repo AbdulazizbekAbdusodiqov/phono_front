@@ -18,6 +18,8 @@ import type { RootState } from "../../../store/store"
 import MapComponent from "../../../app/CreateProduct/components/MapComponent"
 import SuccessCreateModel from "../../../app/CreateProduct/components/SuccessCreateModel"
 import { useAddProductImage, useEditProduct } from "@/hooks/products.use"
+import { AiOutlineLoading3Quarters, AiOutlineDelete } from "react-icons/ai"
+import { deleteProductImage } from "@/endpoints/product"
 
 enum SelectType {
   default = "default",
@@ -232,6 +234,26 @@ const EditProduct = () => {
   }, [productData.brand_id, productData.model_id, productData.other_model, selectType, brands, oneBrand])
 
   // All function definitions
+  const handleDeleteImage = async (imageUrl: string, index: number) => {
+    try {
+      // Find the image ID from productData2
+      const imageToDelete = productData2?.product_image?.find(
+        (img: any) => img.url === imageUrl || img.image_url === imageUrl
+      )
+      
+      if (imageToDelete?.id) {
+        console.log(imageToDelete);
+        await deleteProductImage(imageToDelete.product_id,imageToDelete.id)
+        // Remove the image from the UI
+        setExistingImages(prev => prev.filter((_, i) => i !== index))
+        toast.success("Rasm o'chirildi")
+      }
+    } catch (error) {
+      console.error("Error deleting image:", error)
+      toast.error("Rasmni o'chirishda xatolik yuz berdi")
+    }
+  }
+
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const filesArray = Array.from(e.target.files)
@@ -335,7 +357,7 @@ editProduct(
         }
         console.log("response: ", response)
         toast.success("Product updated successfully")
-        router.push(`/product/${id}`)
+        router.push(`/productdetails/${id}`)
       }
     }
   )
@@ -535,7 +557,14 @@ editProduct(
                 {existingImages.map((imageUrl, index) => (
                   <div key={`existing-${index}`} className={`${style.image_preview} ${style.photo_box}`}>
                     <img src={process.env.NEXT_PUBLIC_BASE_URL+"/"+ imageUrl || "/placeholder.svg"} alt={`Existing ${index + 1}`} />
-                    <button type="button" className={style.remove_image_btn} onClick={() => removeExistingImage(index)}>
+                    <button 
+                      type="button" 
+                      className={style.remove_image_btn} 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteImage(imageUrl, index);
+                      }}
+                    >
                       ×
                     </button>
                   </div>
@@ -836,7 +865,13 @@ editProduct(
           <div className={style.form__submit_buttons}>
             <a href="">Предпросмотр</a>
             <button type="button" onClick={handleClickPublishing}>
-              Сохранить изменения
+              {
+                isLoading ? (
+                  <AiOutlineLoading3Quarters />
+                ) : (
+                  "Сохранить изменения"
+                )
+              }
             </button>
           </div>
         </form>

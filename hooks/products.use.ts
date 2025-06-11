@@ -1,5 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
-import { getAllProducts, getProductById, getProducts } from "../endpoints";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { addProductImage, deleteProductImage, getAllProducts, getProductById, getProducts, updateProduct } from "../endpoints";
+import type { CreateProductProps, UpdateProductProps } from "../types";
 
 export const useProducts = (
   page: number,
@@ -27,5 +28,25 @@ export const useAllProducts = () => {
   return useQuery({
     queryKey: ["products"],
     queryFn: () => getAllProducts(),
+  });
+};
+
+export const useAddProductImage = () => {
+  return useMutation({
+    mutationFn: ({ productId, image }: { productId: number; image: File }) => 
+      addProductImage(productId, image),
+  });
+};
+
+export const useDeleteProductImage = (imageId: number) => {
+  return useMutation({
+    mutationFn: () => deleteProductImage(imageId),
+  });
+};
+
+export const useEditProduct = () => {
+  return useMutation({
+    mutationFn: ([id, data]: [number, UpdateProductProps]) => 
+      updateProduct(id, data),
   });
 };

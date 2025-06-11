@@ -5,6 +5,8 @@ import { useRouter } from "next/router";
 import { ToastContainer } from "react-toastify";
 import MainLayout from "../layout";
 import { ReduxProvider } from "../store/provider";
+import { ApolloProvider } from "@apollo/client";
+import { client } from "@/apolloClient";
 
 export default function App({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient();
@@ -15,16 +17,18 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ReduxProvider>
-        {shouldShowLayout ? (
-          <MainLayout>
-            <Component {...pageProps} />
-          </MainLayout>
-        ) : (
-          <Component {...pageProps} />
-        )}
-        <ToastContainer />
-      </ReduxProvider>
+      <ApolloProvider client={client}>
+        <ReduxProvider>
+            {shouldShowLayout ? (
+              <MainLayout>
+                <Component {...pageProps} />
+              </MainLayout>
+            ) : (
+              <Component {...pageProps} />
+            )}
+            <ToastContainer />
+        </ReduxProvider>
+      </ApolloProvider>
     </QueryClientProvider>
   );
 }

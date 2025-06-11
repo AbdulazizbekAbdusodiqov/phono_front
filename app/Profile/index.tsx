@@ -9,6 +9,8 @@ import { useSelector } from "react-redux";
 import { useGetMe } from "@/hooks/auth";
 import Settings from "../Settings";
 import { Product } from "../../types";
+import Chat from "../Chat";
+
 
 type TabType =
   | "Объявления"
@@ -47,6 +49,9 @@ const Profile = () => {
     last_name: me?.last_name || "",
     birth_date: me?.birth_date || "1999-03-16",
   };
+
+
+  // LocalStorage bilan sinxronizatsiya qilish
   useEffect(() => {
     localStorage.setItem("favorites", JSON.stringify(favorites));
   }, [favorites]);
@@ -106,7 +111,9 @@ const Profile = () => {
           <span
             key={tab}
             className={activeTab === tab ? styles.active : ""}
-            onClick={() => setActiveTab(tab as TabType)}
+            onClick={() => {
+              setActiveTab(tab as TabType)
+            }}
           >
             {tab}
           </span>
@@ -157,6 +164,11 @@ const Profile = () => {
             />
           ))}
         </div>
+      )}
+      {activeTab === "Сообщения" && (
+        <>
+          <Chat/>
+        </>
       )}
 
       <EditProfileModal

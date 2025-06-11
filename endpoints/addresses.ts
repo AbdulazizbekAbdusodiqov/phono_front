@@ -24,7 +24,7 @@ export const addAddress = async (address: AddAddress) => {
     console.log("address: ", address);
     const res = await instance.post(
       `/address/byUser/${address.user_id}`,
-      { address },
+      address, // ✅ to'g'ridan-to'g'ri yuboriladi
       {
         headers: {
           Authorization: `Bearer ${JSON.parse(
@@ -42,10 +42,18 @@ export const addAddress = async (address: AddAddress) => {
   }
 };
 
-export const deleteAddress = async (id: number) => {
+
+export const deleteAddress = async (id: number, user_id: number | undefined) => {
   try {
-    await instance.delete(`/address/${id}`);
-    toast.success("Манзил ўчирилди");
+    await instance.delete(`/address/${user_id}?addressId=${id}`, {
+      headers: {
+        Authorization: `Bearer ${JSON.parse(
+          localStorage.getItem('accessToken') || '',
+        )}`,
+      },
+    });
+    toast.success('Манзил ўчирилди');
+
     return true;
   } catch (error: any) {
     console.error(error);

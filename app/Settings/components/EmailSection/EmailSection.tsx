@@ -7,15 +7,18 @@ import {
   getEmails,
   addEmail as apiAddEmail,
   deleteEmail as apiDeleteEmail,
-} from "../../../../endpoints/emails";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../../store/store";
-import { toast } from "react-toastify";
+} from '../../../../endpoints/emails';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../store/store';
+import { toast } from 'react-toastify';
+import { MdGppBad, MdOutlineGppGood } from 'react-icons/md';
+
 
 type Email = {
   id: number;
   user_id: number;
   email: string;
+  is_verified: boolean
 };
 
 const EmailSection = () => {
@@ -82,7 +85,10 @@ const EmailSection = () => {
             ) : (
               emails.map((email) => (
                 <div className={styles.subItem} key={email.id}>
-                  <div>{email.email}</div>
+                  <div>
+                    {email.email}
+                    {email.is_verified ? <MdOutlineGppGood /> : <MdGppBad />}
+                  </div>
                   <div
                     className={`${styles.item} ${styles.delete}`}
                     onClick={() => deleteEmail(email.id.toString())}

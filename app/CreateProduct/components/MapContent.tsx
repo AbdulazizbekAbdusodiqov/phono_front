@@ -234,10 +234,6 @@ export default function MapContent({
               onChange={(e) => {
                 const newName = e.target.value;
                 setLocationName(newName);
-                setAddressData((prev:AddressData) => ({
-                  ...prev,
-                  name: newName
-                }));
               }}
             />
           </div> */}

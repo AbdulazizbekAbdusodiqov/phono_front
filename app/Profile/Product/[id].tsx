@@ -108,7 +108,7 @@ const Product = () => {
 
   const handleEditConfirm = () => {
     setIsEditModalOpen(false);
-    router.push(`/edit-product/${productData.id}`);
+    router.push(`/Profile/Edit/${productData.id}`);
   };
 
   const handleEditCancel = () => {

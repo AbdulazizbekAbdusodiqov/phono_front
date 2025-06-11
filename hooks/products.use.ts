@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { addProductImage, deleteProductImage, getAllProducts, getProductById, getProducts, updateProduct } from "../endpoints";
 import type { CreateProductProps, UpdateProductProps } from "../types";
+import { AddressData } from "../types/userData";
 
 export const useProducts = (
   page: number,
@@ -46,7 +47,7 @@ export const useDeleteProductImage = (imageId: number) => {
 
 export const useEditProduct = () => {
   return useMutation({
-    mutationFn: ([id, data]: [number, UpdateProductProps]) => 
-      updateProduct(id, data),
+    mutationFn: ([id, data, addressData]: [number, UpdateProductProps, AddressData]) => 
+      updateProduct(id, data, addressData),
   });
 };

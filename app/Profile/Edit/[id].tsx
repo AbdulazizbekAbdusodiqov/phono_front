@@ -324,7 +324,8 @@ editProduct(
       {
         ...productData
         // Only include properties that are in UpdateProductProps
-      }
+      },
+      addressData
     ],
     {
       onSuccess: (response) => {
@@ -533,7 +534,7 @@ editProduct(
                 {/* Existing Images */}
                 {existingImages.map((imageUrl, index) => (
                   <div key={`existing-${index}`} className={`${style.image_preview} ${style.photo_box}`}>
-                    <img src={imageUrl || "/placeholder.svg"} alt={`Existing ${index + 1}`} />
+                    <img src={process.env.NEXT_PUBLIC_BASE_URL+"/"+ imageUrl || "/placeholder.svg"} alt={`Existing ${index + 1}`} />
                     <button type="button" className={style.remove_image_btn} onClick={() => removeExistingImage(index)}>
                       ×
                     </button>

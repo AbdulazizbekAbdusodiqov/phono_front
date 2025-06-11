@@ -1,7 +1,7 @@
 "use client"
 
-import type React from "react"
-import { useState, useRef } from "react"
+import React, { useState, useRef } from "react"
+import { useUpdateUser } from "@/hooks/user"
 import { ArrowRightIcon, AvatarIcon, CloseIcon, DateIcon, UploadIcon } from "@/public/icons/profile"
 import CustomCalendar from "./CustomCalendar"
 import styles from "./EditProfileModal.module.scss"
@@ -9,13 +9,14 @@ import styles from "./EditProfileModal.module.scss"
 interface EditProfileModalProps {
   isOpen: boolean
   onClose: () => void
+  userId: number
   initialData?: {
     name?: string
     familyName?: string
     birthday?: string
     avatar?: string
   }
-  onSave?: (data: {
+  onSave: (data: {
     name: string
     familyName: string
     birthday: string
@@ -23,7 +24,12 @@ interface EditProfileModalProps {
   }) => void
 }
 
-const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onClose, initialData = {}, onSave }) => {
+const EditProfileModal: React.FC<EditProfileModalProps> = ({
+  isOpen,
+  onClose,
+  userId,
+  initialData = {},
+}) => {
   const [formData, setFormData] = useState({
     name: initialData.name || "",
     familyName: initialData.familyName || "",
@@ -34,11 +40,10 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onClose, in
   const [showCalendar, setShowCalendar] = useState(false)
   const dateInputRef = useRef<HTMLInputElement>(null)
 
+  const updateUser = useUpdateUser(userId)
+
   const handleInputChange = (field: string, value: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }))
+    setFormData((prev) => ({ ...prev, [field]: value }))
   }
 
   const handleAvatarUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,10 +52,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onClose, in
       const reader = new FileReader()
       reader.onload = (e) => {
         const result = e.target?.result as string
-        setFormData((prev) => ({
-          ...prev,
-          avatar: result,
-        }))
+        setFormData((prev) => ({ ...prev, avatar: result }))
       }
       reader.readAsDataURL(file)
     }
@@ -61,10 +63,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onClose, in
   }
 
   const handleDateSelect = (date: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      birthday: date,
-    }))
+    setFormData((prev) => ({ ...prev, birthday: date }))
     setShowCalendar(false)
   }
 
@@ -81,10 +80,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onClose, in
   }
 
   const handleSave = () => {
-    if (onSave) {
-      onSave(formData)
-    }
-    onClose()
+    updateUser.mutate(formData)
   }
 
   if (!isOpen) return null
@@ -103,7 +99,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onClose, in
           <div className={styles.avatarSection}>
             <div className={styles.avatarContainer}>
               {formData.avatar ? (
-                <img src={formData.avatar || "/img/profile/Avatar.png"} alt="Avatar" className={styles.avatar} />
+                <img src={formData.avatar} alt="Avatar" className={styles.avatar} />
               ) : (
                 <div className={styles.avatarPlaceholder}>
                   <AvatarIcon />

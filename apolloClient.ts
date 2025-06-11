@@ -1,119 +1,118 @@
 import {
   ApolloClient,
   InMemoryCache,
-  NormalizedCacheObject,
-  gql,
-  Observable,
   ApolloLink,
+  Observable,
+  HttpLink,
   split,
-} from "@apollo/client"
-import { WebSocketLink } from "@apollo/client/link/ws"
-import { createUploadLink } from "apollo-upload-client"
-import { getMainDefinition } from "@apollo/client/utilities"
-import { loadErrorMessages, loadDevMessages } from "@apollo/client/dev"
-import { setUser } from "@/store/chatUser/chatUserSlice"
-import { store } from "@/store/store"
-import { onError } from "@apollo/client/link/error"
+} from "@apollo/client";
+import { WebSocketLink } from "@apollo/client/link/ws";
+import { getMainDefinition } from "@apollo/client/utilities";
+import { onError } from "@apollo/client/link/error";
+import { loadErrorMessages, loadDevMessages } from "@apollo/client/dev";
+import { setUser } from "@/store/chatUser/chatUserSlice";
+import { store } from "@/store/store";
+import { getLocalStorage } from "./utils/local-storege";
+import { createUploadLink } from "apollo-upload-client";
 
-loadErrorMessages()
-loadDevMessages()
+loadErrorMessages();
+loadDevMessages();
 
-async function refreshToken(client: ApolloClient<NormalizedCacheObject>) {
-  try {
-    // const { data } = await client.mutate({
-    //   mutation: gql`
-    //     mutation RefreshToken {
-    //       refreshToken
-    //     }
-    //   `,
-    // })
-    // const newAccessToken = data?.refreshToken
-    const newAccessToken = getAccessToken()
-    console.log("Apollo client log", getAccessToken())
-    if (!newAccessToken) {
-      throw new Error("New access token not received.")
-    }
-    return `Bearer ${newAccessToken}`
-  } catch (err) {
-    throw new Error("Error getting new access token.")
-  }
-}
-let retryCount = 0
-const maxRetry = 3
+const authLink = new ApolloLink((operation, forward) => {
+  const token = getLocalStorage("accessToken");
+  operation.setContext(({ headers = {} }) => ({
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : "",
+    },
+  }));
+  return forward(operation);
+});
 
-function getAccessToken(): string | null {
-  if (typeof window !== "undefined") {
-    return localStorage.getItem("accessToken")
-  }
-  return null
+// Token refresh logic (mocked – customize if needed)
+async function refreshToken(): Promise<string> {
+  const newAccessToken = getLocalStorage("accessToken");
+  if (!newAccessToken) throw new Error("No access token found.");
+  return `Bearer ${newAccessToken}`;
 }
 
-const wsLink = new WebSocketLink({
-  uri: `ws://localhost:3001/graphql`,
-  options: {
-    reconnect: true,
-    connectionParams: () => ({
-      Authorization: `Bearer ${getAccessToken()}`,
-    }),
-  },
-})
+let retryCount = 0;
+const maxRetry = 3;
+
+// Error handler for token expiration
 const errorLink = onError(({ graphQLErrors, operation, forward }) => {
-  for (const err of graphQLErrors!) {
-    if (err.extensions?.code === "UNAUTHENTICATED" && retryCount < maxRetry) {
-      retryCount++
-      return new Observable((observer) => {
-        refreshToken(client)
-          .then((token) => {
-            operation.setContext((previousContext: any) => ({
-              headers: {
-                ...previousContext.headers,
-                authorization: token,
-              },
-            }))
-            const forward$ = forward(operation)
-            forward$.subscribe(observer)
-          })
-          .catch((error) => observer.error(error))
-      })
-    }
+  if (graphQLErrors) {
+    for (const err of graphQLErrors) {
+      if (err.extensions?.code === "UNAUTHENTICATED" && retryCount < maxRetry) {
+        retryCount++;
+        return new Observable((observer) => {
+          refreshToken()
+            .then((token) => {
+              operation.setContext(({ headers = {} }) => ({
+                headers: {
+                  ...headers,
+                  authorization: token,
+                },
+              }));
+              forward(operation).subscribe(observer);
+            })
+            .catch((error) => observer.error(error));
+        });
+      }
 
-    if (err.message === "Refresh token not found") {
-      console.log("refresh token not found!")
-      store.dispatch(
-        setUser(
-          { 
+      if (err.message === "Refresh token not found") {
+        console.warn("Refresh token missing – logging user out");
+        store.dispatch(
+          setUser({
             id: undefined,
             profile_img: null,
-            first_name: ''
-          }
-        )
-      )
+            first_name: "",
+          })
+        );
+      }
     }
   }
-})
+});
 
-const uploadLink = createUploadLink({
+// HTTP Link for regular queries/mutations (file uploads included)
+const httpLink = new HttpLink({
   uri: "http://localhost:3001/graphql",
   credentials: "include",
-  headers: {
-    "apollo-require-preflight": "true",
-    "authorization": `Bearer ${getAccessToken()}`,
-  },
-})
-const link = split(
-  // Split based on operation type
-  ({ query }) => {
-    const definition = getMainDefinition(query)
-    return (
-      definition.kind === "OperationDefinition" &&
-      definition.operation === "subscription"
+});
+
+const uploadLink = createUploadLink({
+  uri: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT, // e.g. '/api/graphql'
+  credentials: 'include',
+});
+
+// WebSocket link for subscriptions
+const wsLink = typeof window !== "undefined"
+  ? new WebSocketLink({
+      uri: `ws://localhost:3001/graphql`,
+      options: {
+        reconnect: true,
+        connectionParams: () => ({
+          Authorization: `Bearer ${getLocalStorage("accessToken")}`,
+        }),
+      },
+    })
+  : null;
+
+// Split based on operation type (subscriptions vs. everything else)
+const splitLink = typeof window !== "undefined" && wsLink
+  ? split(
+      ({ query }) => {
+        const def = getMainDefinition(query);
+        return def.kind === "OperationDefinition" && def.operation === "subscription";
+      },
+      wsLink,
+      ApolloLink.from([authLink, errorLink, httpLink, uploadLink])  // Using httpLink here
     )
-  },
-  wsLink,
-  ApolloLink.from([errorLink, uploadLink])
-)
+  : ApolloLink.from([authLink, errorLink, httpLink, uploadLink]);
+
+// Final Apollo Client instance
 export const client = new ApolloClient({
-  cache: new InMemoryCache({}),
+  cache: new InMemoryCache(),
+  link: splitLink,
   credentials: "include",
-  link: link,
-})
+});

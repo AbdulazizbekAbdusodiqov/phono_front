@@ -1,9 +1,9 @@
 import instance from './instance';
 import { toast } from 'react-toastify';
 
-export const getEmails = async () => {
+export const getEmails = async (id: number | undefined) => {
   try {
-    const res = await instance.get('/email');
+    const res = await instance.get(`/email/byUser/${id}`);
     return res.data;
   } catch (error: any) {
     console.error(error);
@@ -22,9 +22,9 @@ export const addEmail = async (email: string) => {
   }
 };
 
-export const deleteEmail = async (id: string) => {
+export const deleteEmail = async (id: number, user_id: number | undefined) => {
   try {
-    await instance.delete(`/email/${id}`);
+    await instance.delete(`/email/${user_id}`);
     toast.success('Почта ўчирилди');
   } catch (error: any) {
     console.error(error);

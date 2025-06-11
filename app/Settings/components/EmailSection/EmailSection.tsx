@@ -7,7 +7,9 @@ import {
   getEmails,
   addEmail as apiAddEmail,
   deleteEmail as apiDeleteEmail,
-} from '../../../../api/emails'; // import qiling
+} from '../../../../endpoints/emails'; // import qiling
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../store/store';
 
 const EmailSection = () => {
   const [emails, setEmails] = useState<string[]>([]);
@@ -15,11 +17,15 @@ const EmailSection = () => {
   const [showForm, setShowForm] = useState(false);
   const [newEmail, setNewEmail] = useState('');
   const [loading, setLoading] = useState(false);
+  const { user, isAuthenticated } = useSelector(
+    (state: RootState) => state.auth,
+  );
+  console.log('user_id: ', user);
 
   // Serverdan email ro'yxatini olish
-  const fetchEmails = async () => {
+  const fetchEmails = async (id: number | undefined) => {
     setLoading(true);
-    const data = await getEmails();
+    const data = await getEmails(id);
     if (data && Array.isArray(data)) {
       setEmails(data);
     }
@@ -27,8 +33,8 @@ const EmailSection = () => {
   };
 
   useEffect(() => {
-    fetchEmails();
-  }, []);
+    fetchEmails(user?.id);
+  }, [user?.id]);
 
   // Email qo'shish
   const addEmail = async () => {
@@ -75,7 +81,7 @@ const EmailSection = () => {
 
     const id = emailToDelete; // Agar id va email bir xil bo'lsa
 
-    await apiDeleteEmail(id);
+    await apiDeleteEmail(+id, user?.id);
 
     setEmails((prev) => prev.filter((_, i) => i !== index));
     setLoading(false);

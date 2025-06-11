@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { User } from '../../gql/graphql'
+// store/chatUser/chatUserSlice.ts
+import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 interface UserState {
   id: number | undefined
@@ -10,32 +10,38 @@ interface UserState {
 const initialState: UserState = {
   id: undefined,
   profile_img: null,
-  first_name: '',
+  first_name: "",
 }
 
-const userSlice = createSlice({
-  name: 'user',
+const chatUserSlice = createSlice({
+  name: "chatUser",
   initialState,
   reducers: {
-    updateProfileImage: (state, action: PayloadAction<string>) => {
+    setUser(state, action: PayloadAction<UserState>) {
+      const { id, profile_img, first_name } = action.payload
+      state.id = id
+      state.profile_img = profile_img
+      state.first_name = first_name
+    },
+    updateProfileImage(state, action: PayloadAction<string>) {
       state.profile_img = action.payload
     },
-    updateUsername: (state, action: PayloadAction<string>) => {
+    updateUsername(state, action: PayloadAction<string>) {
       state.first_name = action.payload
     },
-    setUser: (state, action: PayloadAction<User>) => {
-      const user = action.payload
-      state.id = user.id || undefined
-      state.profile_img = user.profile_img ? user.profile_img : null
-      state.first_name = user.first_name
+    clearUser(state) {
+      state.id = undefined
+      state.profile_img = null
+      state.first_name = ""
     },
   },
 })
 
 export const {
+  setUser,
   updateProfileImage,
   updateUsername,
-  setUser,
-} = userSlice.actions
+  clearUser,
+} = chatUserSlice.actions
 
-export default userSlice.reducer
+export default chatUserSlice.reducer

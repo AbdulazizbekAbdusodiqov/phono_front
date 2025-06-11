@@ -19,14 +19,14 @@ export default function App({ Component, pageProps }: AppProps) {
     <QueryClientProvider client={queryClient}>
       <ApolloProvider client={client}>
         <ReduxProvider>
-          {shouldShowLayout ? (
-            <MainLayout>
+            {shouldShowLayout ? (
+              <MainLayout>
+                <Component {...pageProps} />
+              </MainLayout>
+            ) : (
               <Component {...pageProps} />
-            </MainLayout>
-          ) : (
-            <Component {...pageProps} />
-          )}
-          <ToastContainer />
+            )}
+            <ToastContainer />
         </ReduxProvider>
       </ApolloProvider>
     </QueryClientProvider>

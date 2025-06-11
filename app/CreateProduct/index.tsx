@@ -21,7 +21,7 @@ import {
   useUserPhoneNumbers,
 } from '../../hooks/user';
 import { AddressData } from '../../types/userData';
-import { createProduct } from '../../api/product';
+import { createProduct } from '../../endpoints/product';
 
 enum SelectType {
   default = 'default',

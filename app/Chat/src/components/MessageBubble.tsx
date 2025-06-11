@@ -1,5 +1,5 @@
 import React from "react"
-import { Message } from "@/gql/graphql"
+import { Message } from "../gql/graphql"
 import {
   Avatar,
   Flex,

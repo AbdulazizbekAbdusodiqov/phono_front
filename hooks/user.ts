@@ -6,7 +6,7 @@ import {
   getDistricts,
   getRegionById,
   updateUser,
-} from "../api/user";
+} from "../endpoints/user";
 import { AddressData } from "../types/userData";
 import { toast } from "react-toastify";
 

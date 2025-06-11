@@ -3,8 +3,10 @@ import { RiDeleteBin5Line } from 'react-icons/ri';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import Modal from '../../ui/Modal';
 import styles from './PhoneSection.module.scss';
-import { getPhones, addPhone, deletePhone } from '../../../../api/phones';
+import { getPhones, addPhone, deletePhone } from '../../../../endpoints/phones';
 import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../store/store';
 
 type Phone = {
   _id: string;
@@ -17,22 +19,26 @@ const PhoneSection = () => {
   const [showForm, setShowForm] = useState(false);
   const [newPhone, setNewPhone] = useState('');
   const [loading, setLoading] = useState(false);
+  const { user, isAuthenticated } = useSelector(
+    (state: RootState) => state.auth,
+  );
 
-  const fetchPhones = async () => {
+
+  const fetchPhones = async (id: number | undefined) => {
     setLoading(true);
-    const data = await getPhones();
+    const data = await getPhones(id);
     if (data) setPhones(data);
     setLoading(false);
   };
 
   useEffect(() => {
-    fetchPhones();
-  }, []);
+    fetchPhones(user?.id);
+  }, [user?.id]);
 
   const handleAddPhone = async () => {
     if (!newPhone.trim()) return;
 
-    const added = await addPhone(newPhone.trim());
+    const added = await addPhone(newPhone.trim(), user?.id);
     if (added) {
       setPhones((prev) => [...prev, added]);
       setNewPhone('');
@@ -44,7 +50,7 @@ const PhoneSection = () => {
     const confirmed = window.confirm('Ишончингиз комилми?');
     if (!confirmed) return;
 
-    const res = await deletePhone(id);
+    const res = await deletePhone(+id);
     if(res!){
       toast("something went wrong on deleting")
     }

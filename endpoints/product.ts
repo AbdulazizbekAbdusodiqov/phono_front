@@ -139,9 +139,11 @@ export const addProductImage = async (productId: number, image: File) => {
   }
 };
 
-export const deleteProductImage = async (imageId: number) => {
+export const deleteProductImage = async (productId: number, imageId: number) => {
   try {
-    const res = await instance.delete(`/product/image/${imageId}`, {
+    console.log(productId, imageId);
+    
+    const res = await instance.delete(`/product/${productId}/image/${imageId}`, {
       headers: {
         Authorization: `Bearer ${JSON.parse(localStorage.getItem("accessToken") || "")}`,
       },
@@ -156,9 +158,31 @@ export const deleteProductImage = async (imageId: number) => {
 
 export const updateProduct = async (id: number, data: UpdateProductProps, addressData: AddressData) => {
   try {
-    const res = await instance.put(`/product/${id}`, data, {
+    const token = JSON.parse(localStorage.getItem("accessToken") || "");
+    const findAddressDto: FindAddressDto = {
+      region_id: addressData.region_id || undefined,
+      district_id: addressData.district_id || undefined,
+      long: addressData.long || undefined,
+      lat: addressData.lat || undefined,
+    };
+    for (const key in findAddressDto) {
+      if (!findAddressDto[key as keyof FindAddressDto]) {
+        delete findAddressDto[key as keyof FindAddressDto];
+      }
+    }
+    const address = await instance.post<AddressRes>(
+      `/address/getByUser/${data.user_id}`,
+      findAddressDto,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    //@ts-ignore
+    const res = await instance.put(`/product/${id}`, {...data, address_id: address.data?.id}, {
       headers: {
-        Authorization: `Bearer ${JSON.parse(localStorage.getItem("accessToken") || "")}`,
+        Authorization: `Bearer ${token}`,
       },
     });
     return res.data;

@@ -2,30 +2,36 @@ import React from "react";
 import styles from "./Favorites.module.scss";
 import Breadcrumb from "@/components/Breadcrumb";
 import { useFavorites } from "@/hooks/useFavorites";
-import { useSelector } from "react-redux";
-import type { RootState } from "@/store/store";
-import { useGetMe } from "@/hooks/auth";
 import { Product } from "../../types";
 import { HeartIcon } from "@/public/icons/profile";
 import ProductCard from "@/components/home/product-card";
+import { useAllProducts } from "@/hooks/products.use";
 
 const Favorites = () => {
-  const { user } = useSelector((state: RootState) => state.auth);
-  const { data: me } = useGetMe(Number(user?.id));
   const { favorites, toggleFavorite } = useFavorites();
+  const { data: products = [], isLoading, isError } = useAllProducts(); 
 
-  const productsList = me?.product ?? [];
-  const favoriteProducts = productsList.filter((product: Product) =>
-    favorites.includes(product.id),
+  const favoriteProducts = products.filter((product: Product) =>
+    favorites.includes(product.id)
   );
 
-  if (!me) {
+  if (isLoading) {
     return (
       <div className={`${styles.favorites} ${styles.container}`}>
         <Breadcrumb />
         <h1 className={styles.title}>Избранное</h1>
         <div className={styles.hrLine} />
-        <div className={styles.emptyState}></div>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className={`${styles.favorites} ${styles.container}`}>
+        <Breadcrumb />
+        <h1 className={styles.title}>Избранное</h1>
+        <div className={styles.hrLine} />
+        <p>Произошла ошибка при загрузке товаров.</p>
       </div>
     );
   }

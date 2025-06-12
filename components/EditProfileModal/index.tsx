@@ -31,6 +31,7 @@ interface EditProfileModalProps {
     profile_img: string;
   }) => void;
 }
+
 const EditProfileModal: React.FC<EditProfileModalProps> = ({
   isOpen,
   onClose,
@@ -47,32 +48,18 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
   const updateUserMutation = useUpdateUser(userId);
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
-      first_name: initialData.first_name || "",
-      last_name: initialData.last_name || "",
-      birth_date: initialData.birth_date || "",
+      first_name: initialData.first_name || me?.first_name || "",
+      last_name: initialData.last_name || me?.last_name || "",
+      birth_date: initialData.birth_date || me?.birth_date || "",
     },
     onSubmit: async (values) => {
       try {
         const formData = new FormData();
-
-        if (values.first_name.trim()) {
-          formData.append("first_name", values.first_name.trim());
-        } else {
-          formData.append("first_name", "");
-        }
-
-        if (values.last_name.trim()) {
-          formData.append("last_name", values.last_name.trim());
-        } else {
-          formData.append("last_name", "");
-        }
-
-        if (values.birth_date) {
-          formData.append("birth_date", values.birth_date);
-        } else {
-          formData.append("birth_date", "");
-        }
+        formData.append("first_name", values.first_name.trim());
+        formData.append("last_name", values.last_name.trim());        
+        formData.append("birth_date", values.birth_date);
 
         if (selectedFile) {
           formData.append("image", selectedFile);
@@ -84,7 +71,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
           onSave({
             first_name: values.first_name,
             last_name: values.last_name,
-            birth_date: values.birth_date,
+            birth_date: String(values.birth_date),
             profile_img: selectedFile
               ? URL.createObjectURL(selectedFile)
               : updatedUser?.profile_img

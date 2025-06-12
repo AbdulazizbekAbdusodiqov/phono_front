@@ -113,7 +113,7 @@ const RoomList: React.FC = () => {
                 <div className={styles.avatarWrapper}>
                   {avatarUrl ? (
                     <Image
-                      src={avatarUrl}
+                      src={`${process.env.NEXT_PUBLIC_BASE_URL}/uploads/${avatarUrl}`}
                       alt={displayName}
                       width={40}
                       height={40}

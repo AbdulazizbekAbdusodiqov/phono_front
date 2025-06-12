@@ -22,6 +22,7 @@ import { CREATE_CHATROOM } from "@/app/Chat/src/graphql/mutations/CreateChatroom
 import { ADD_USERS_TO_CHATROOM } from "@/app/Chat/src/graphql/mutations/AddUsersToChatroom";
 import {
   AddUsersToChatroomMutation,
+  Chatroom,
   CreateChatroomMutation,
 } from "@/app/Chat/src/gql/graphql";
 
@@ -63,6 +64,8 @@ const ProductDetails = () => {
 
   const [createChatroom] = useMutation<CreateChatroomMutation>(CREATE_CHATROOM);
   const [addUsersToChatroom] = useMutation<AddUsersToChatroomMutation>(ADD_USERS_TO_CHATROOM);
+  const [chatroomData, setchatroomData] = useState<any>({});
+  const [newlyCreatedChatroom, setNewlyCreatedChatroom] = useState<Chatroom | null>(null)
 
 
   const mapBackendToProductData = (backendData: any): ProductData => {
@@ -96,6 +99,7 @@ const ProductDetails = () => {
       const mapped = mapBackendToProductData(productData2);
       setProductData(mapped);
       setCurrentImageIndex(0);
+      setchatroomData(productData2)
       setPhoneNumber(productData2.phone_number);
     }
   }, [productData2]);
@@ -142,33 +146,36 @@ const ProductDetails = () => {
 
     try {
       // 1. Create the chatroom with product owner's name
-      const chatroomName = productData2.user?.first_name || "Chat";
-      const createChatroomResult = await createChatroom({
-        variables: {
-          name: chatroomName,
-        },
-      });
+      if (chatroomData?.user) {
+        const chatroomName = chatroomData.user?.first_name || "Chat";
+        const createChatroomResult = await createChatroom({
+          variables: {
+            name: chatroomName,
+          },
+          onCompleted: (data) => {
+            setNewlyCreatedChatroom(data.createChatroom)
+          },
+        })
+        const chatroomId = parseInt(createChatroomResult.data?.createChatroom?.id || "0");
+        if (!chatroomId) throw new Error("Chatroom creation failed");
 
-      const chatroomId = parseInt(createChatroomResult.data?.createChatroom?.id || "0");
-      if (!chatroomId) throw new Error("Chatroom creation failed");
+        if (!chatroomData.user?.id) throw new Error("User IDs missing");
+        await addUsersToChatroom({
+          variables: {
+            chatroomId: chatroomId,
+            userIds: [chatroomData.user?.id],
+          },
+          onCompleted: () => {
+            setNewlyCreatedChatroom(null)
+            router.push({
+              pathname: "/Profile",
+              query: { tab: "Messages", chatroom: chatroomId },
+            });
+          },
+        })
 
-      // 2. Add current user and product owner to chatroom
-      const ownerId = productData.userId;
-      const currentUserId = JSON.parse(localStorage.getItem("userId") || "null");
+      }
 
-      if (!ownerId || !currentUserId) throw new Error("User IDs missing");
-
-      await addUsersToChatroom({
-        variables: {
-          chatroomId: chatroomId,
-          userIds: [ownerId, currentUserId],
-        },
-      });
-
-      router.push({
-        pathname: "/Profile",
-        query: { tab: "Messages", chatroom: chatroomId },
-      });
     } catch (err) {
       toast.error("Не удалось создать чат");
       console.error(err);
@@ -263,7 +270,7 @@ const ProductDetails = () => {
 
             <div className={styles.actions}>
               <button className={styles.write} onClick={handlewriteClick}>
-                  <MessageIcon /> Написать
+                <MessageIcon /> Написать
               </button>
               <button className={styles.phone} onClick={handlePhone}>
                 <PhoneIcon />

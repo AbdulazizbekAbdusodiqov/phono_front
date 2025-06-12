@@ -76,7 +76,7 @@ const Navbar = () => {
         <div className={`${style.right} ${isMenuOpen ? style.showMenu : ""}`}>
           <div className={style.navigations}>
             <Link
-              href={token && isAuthenticated ? "/message" : "/login"}
+              href={{ pathname: '/Profile', query: { tab: 'Messages' } }}
               onClick={closeMenu}
             >
               <div className={style.navItem}>

@@ -17,6 +17,14 @@ import Link from "next/link";
 import ProductCard from "@/components/home/product-card";
 import { getAllProducts } from "@/endpoints";
 import { toast } from "react-toastify";
+import { useMutation } from "@apollo/client";
+import { CREATE_CHATROOM } from "@/app/Chat/src/graphql/mutations/CreateChatroom";
+import { ADD_USERS_TO_CHATROOM } from "@/app/Chat/src/graphql/mutations/AddUsersToChatroom";
+import {
+  AddUsersToChatroomMutation,
+  CreateChatroomMutation,
+} from "@/app/Chat/src/gql/graphql";
+
 
 interface ProductData {
   id: number;
@@ -52,6 +60,10 @@ const ProductDetails = () => {
 
   const likedProducts = JSON.parse(localStorage.getItem("favorites") || "[]");
   const token = JSON.parse(localStorage.getItem("accessToken") || "null");
+
+  const [createChatroom] = useMutation<CreateChatroomMutation>(CREATE_CHATROOM);
+  const [addUsersToChatroom] = useMutation<AddUsersToChatroomMutation>(ADD_USERS_TO_CHATROOM);
+
 
   const mapBackendToProductData = (backendData: any): ProductData => {
     return {
@@ -122,9 +134,47 @@ const ProductDetails = () => {
     toggleFavorite(productData.id);
   };
 
-  const handlewriteClick = () => {
-    console.log("buyerga chatga otish logikasi yozladi ");
+  const handlewriteClick = async () => {
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+
+    try {
+      // 1. Create the chatroom with product owner's name
+      const chatroomName = productData2.user?.first_name || "Chat";
+      const createChatroomResult = await createChatroom({
+        variables: {
+          name: chatroomName,
+        },
+      });
+
+      const chatroomId = parseInt(createChatroomResult.data?.createChatroom?.id || "0");
+      if (!chatroomId) throw new Error("Chatroom creation failed");
+
+      // 2. Add current user and product owner to chatroom
+      const ownerId = productData.userId;
+      const currentUserId = JSON.parse(localStorage.getItem("userId") || "null");
+
+      if (!ownerId || !currentUserId) throw new Error("User IDs missing");
+
+      await addUsersToChatroom({
+        variables: {
+          chatroomId: chatroomId,
+          userIds: [ownerId, currentUserId],
+        },
+      });
+
+      router.push({
+        pathname: "/Profile",
+        query: { tab: "Messages", chatroom: chatroomId },
+      });
+    } catch (err) {
+      toast.error("Не удалось создать чат");
+      console.error(err);
+    }
   };
+
 
   const handlePhone = async () => {
     setShowPhone(true);
@@ -186,9 +236,8 @@ const ProductDetails = () => {
             <div className={styles.header}>
               <h1>{productData.title}</h1>
               <button
-                className={`${styles.favoriteBtn} ${
-                  isFavorite(productData.id) ? styles.favorited : ""
-                }`}
+                className={`${styles.favoriteBtn} ${isFavorite(productData.id) ? styles.favorited : ""
+                  }`}
                 onClick={handleFavoriteToggle}
               >
                 <div className={styles.like}>
@@ -214,12 +263,7 @@ const ProductDetails = () => {
 
             <div className={styles.actions}>
               <button className={styles.write} onClick={handlewriteClick}>
-                <Link
-                  href={token ? "/message" : "/login"}
-                  className={styles.LinkWrite}
-                >
                   <MessageIcon /> Написать
-                </Link>
               </button>
               <button className={styles.phone} onClick={handlePhone}>
                 <PhoneIcon />
@@ -250,9 +294,8 @@ const ProductDetails = () => {
                   <span
                     className={styles.dot}
                     style={{
-                      backgroundColor: `${
-                        productData2.color.code || productData2.color.name
-                      }`,
+                      backgroundColor: `${productData2.color.code || productData2.color.name
+                        }`,
                     }}
                   ></span>{" "}
                   {productData.color}

@@ -74,67 +74,72 @@ const RoomList: React.FC = () => {
   }
 
   return (
-    <ul className={styles.roomList}>
-      {validChatrooms.map((chat) => {
-        const chatId = chat.id!;
-        const isActive = activeRoomId === chatId;
+    <div className={styles.roomWindow}>
+      <div className={styles.header}>
+        <div className={styles.title}>Чаты</div>
+      </div>
+      <ul className={styles.roomList}>
+        {validChatrooms.map((chat) => {
+          const chatId = chat.id!;
+          const isActive = activeRoomId === chatId;
 
-        // Determine the other user(s) in this chatroom
-        const otherUsers = (chat.users || []).filter(
-          (u) => u?.id != null && u.id !== userId
-        );
-        const otherUser = otherUsers[0] || null;
-        const displayName = otherUser?.first_name || chat.name || 'Unknown';
-        const avatarUrl = otherUser?.profile_img || null;
+          // Determine the other user(s) in this chatroom
+          const otherUsers = (chat.users || []).filter(
+            (u) => u?.id != null && u.id !== userId
+          );
+          const otherUser = otherUsers[0] || null;
+          const displayName = otherUser?.first_name || chat.name || 'Unknown';
+          const avatarUrl = otherUser?.profile_img || null;
 
-        // Get last message by sorting by createdAt
-        const messages = chat.messages || [];
-        let lastMessage = null;
-        if (messages.length > 0) {
-          lastMessage = [...messages]
-            .filter((m) => m?.createdAt)
-            .sort((a, b) => new Date(b!.createdAt as string).getTime() - new Date(a!.createdAt as string).getTime())[0];
-        }
-        const subtitle = lastMessage?.content || '';
-        const timestamp = lastMessage?.createdAt
-          ? new Date(lastMessage.createdAt as string).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-          : '';
+          // Get last message by sorting by createdAt
+          const messages = chat.messages || [];
+          let lastMessage = null;
+          if (messages.length > 0) {
+            lastMessage = [...messages]
+              .filter((m) => m?.createdAt)
+              .sort((a, b) => new Date(b!.createdAt as string).getTime() - new Date(a!.createdAt as string).getTime())[0];
+          }
+          const subtitle = lastMessage?.content || '';
+          const timestamp = lastMessage?.createdAt
+            ? new Date(lastMessage.createdAt as string).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            : '';
 
-        return (
-          <li
-            key={chatId}
-            className={`${styles.roomItem} ${isActive ? styles.active : ''}`}
-          >
-            <Link href={{ pathname: '/Profile', query: { chatroom: chatId } }} className={styles.linkWrapper}>
-              <div className={styles.avatarWrapper}>
-                {avatarUrl ? (
-                  <Image
-                    src={avatarUrl}
-                    alt={displayName}
-                    width={40}
-                    height={40}
-                    className={styles.avatar}
-                  />
-                ) : (
-                  <div className={styles.avatarPlaceholder} />
-                )}
-              </div>
-              <div className={styles.info}>
-                <div className={styles.name}>{displayName}</div>
-                <div className={styles.lastMessage}>{subtitle}</div>
-              </div>
-              <div className={styles.timestamp}>{timestamp}</div>
-            </Link>
-            <button
-              className={styles.deleteButton}
-              onClick={() => handleDelete(chatId)}
+          return (
+            <li
+              key={chatId}
+              className={`${styles.roomItem} ${isActive ? styles.active : ''}`}
             >
-              ×
-            </button>
-          </li>
-        );
-      })}
-    </ul>
+              <Link href={{ pathname: '/Profile', query: {tab: "Messages", chatroom: chatId } }} className={styles.linkWrapper}>
+                <div className={styles.avatarWrapper}>
+                  {avatarUrl ? (
+                    <Image
+                      src={avatarUrl}
+                      alt={displayName}
+                      width={40}
+                      height={40}
+                      className={styles.avatar}
+                    />
+                  ) : (
+                    <div className={styles.avatarPlaceholder} />
+                  )}
+                </div>
+                <div className={styles.info}>
+                  <div className={styles.name}>{displayName}</div>
+                  <div className={styles.lastMessage}>{subtitle}</div>
+                </div>
+                <div className={styles.timestamp}>{timestamp}</div>
+              </Link>
+              <button
+                className={styles.deleteButton}
+                onClick={() => handleDelete(chatId)}
+              >
+                ×
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
   );
 };
 

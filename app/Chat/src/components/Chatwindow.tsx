@@ -239,28 +239,28 @@ const ChatWindow: React.FC = () => {
       <div className={styles.header}>
         <div className={styles.liveUsers}>
           {liveUsers.map((u) => (
-  u.id !== userId && (
-    <div key={u.id} className={styles.liveUser}>
-      {u.profile_img ? (
-        <>
-          <Image src={u.profile_img} alt={u.first_name} width={24} height={24} className={styles.liveAvatar} />
-          <div>
-            <div className={styles.liveUserName}>{u.first_name}</div>
-            <p>last online: {u.last_online}</p>
-          </div>
-        </>
-      ) : (
-        <>
-          <div className={styles.avatarPlaceholder} />
-          <div>
-            <div className={styles.liveUserName}>{u.first_name}</div>
-            <p>last online: {u.last_online}</p>
-          </div>
-        </>
-      )}
-    </div>
-  )
-))}
+            u.id !== userId && (
+              <div key={u.id} className={styles.liveUser}>
+                {u.profile_img ? (
+                  <>
+                    <Image src={`${process.env.NEXT_PUBLIC_BASE_URL}/uploads/${u.profile_img}`} alt={u.first_name} width={24} height={24} className={styles.liveAvatar} />
+                    <div>
+                      <div className={styles.liveUserName}>{u.first_name}</div>
+                      <p>last online: {u.last_online}</p>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className={styles.avatarPlaceholder} />
+                    <div>
+                      <div className={styles.liveUserName}>{u.first_name}</div>
+                      <p>last online: {u.last_online}</p>
+                    </div>
+                  </>
+                )}
+              </div>
+            )
+          ))}
 
         </div>
       </div>
@@ -278,7 +278,7 @@ const ChatWindow: React.FC = () => {
               {!isOwn && (
                 <div className={styles.avatarWrapper}>
                   {msg.user?.profile_img ? (
-                    <Image src={msg.user.profile_img} alt={msg.user.first_name} width={32} height={32} className={styles.avatar} />
+                    <Image src={`${process.env.NEXT_PUBLIC_BASE_URL}/uploads/${msg.user.profile_img}`} alt={msg.user.first_name} width={32} height={32} className={styles.avatar} />
                   ) : (
                     <div className={styles.avatarPlaceholder} />
                   )}
@@ -288,7 +288,7 @@ const ChatWindow: React.FC = () => {
                 {msg.content && <div className={styles.text}>{msg.content}</div>}
                 {msg.imageUrl && (
                   <div className={styles.imageWrapper}>
-                    <Image src={'http://localhost:3001/' + msg.imageUrl} alt="attachment" width={200} height={200} className={styles.imageMsg} />
+                    <Image src={'http://api.phone-tech.uz/images/' + msg.imageUrl} alt="attachment" width={200} height={200} className={styles.imageMsg} />
                   </div>
                 )}
                 <div className={styles.messageMeta}>
@@ -303,7 +303,7 @@ const ChatWindow: React.FC = () => {
               {isOwn && (
                 <div className={styles.avatarWrapperOwn}>
                   {userAvatar ? (
-                    <Image src={userAvatar} alt={userName} width={32} height={32} className={styles.avatar} />
+                    <Image src={`${process.env.NEXT_PUBLIC_BASE_URL}/uploads/${userAvatar}`} alt={userName} width={32} height={32} className={styles.avatar} />
                   ) : (
                     <div className={styles.avatarPlaceholder} />
                   )}
@@ -328,7 +328,7 @@ const ChatWindow: React.FC = () => {
         </div>
         {previewUrl && (
           <div className={styles.preview}>
-            <Image src={previewUrl} alt="preview" width={80} height={80} className={styles.previewImg} />
+            <Image src={`${process.env.NEXT_PUBLIC_BASE_URL}/${previewUrl}`} alt="preview" width={80} height={80} className={styles.previewImg} />
             <button className={styles.removePreview} onClick={() => setSelectedFile(null)}>×</button>
           </div>
         )}

@@ -16,9 +16,8 @@ import Link from "next/link";
 
 type TabType =
   | "Объявления"
-  | "messages"
+  | "Сообщения"
   | "Избранное"
-  | "Контактные данные"
   | "Настройки";
 
 const Profile = () => {
@@ -54,11 +53,9 @@ const Profile = () => {
       "/img/profile/Avatar.svg",
     name: me?.first_name || "",
     last_name: me?.last_name || "",
-    birth_date: me?.birth_date || "1999-03-16",
+    birth_date: me?.birth_date || "2004-12-31",
   };
-
-
-  // LocalStorage bilan sinxronizatsiya qilish
+  
   useEffect(() => {
     localStorage.setItem("favorites", JSON.stringify(favorites));
   }, [favorites]);
@@ -110,9 +107,8 @@ const Profile = () => {
       <div className={styles.tabs}>
         {[
           "Объявления",
-          "Messages",
+          "Сообщения",
           "Избранное",
-          "Контактные данные",  
           "Настройки",
         ].map((tab) => (
           <div 
@@ -158,7 +154,7 @@ const Profile = () => {
         )
       ) : router.query.tab === "Настройки" ? (
         <Settings />
-      ) :  (router.query.tab === "Messages") ? (
+      ) :  (router.query.tab === "Сообщения") ? (
         <>
           <Chat/>
         </>

@@ -217,6 +217,7 @@ const ChatWindow: React.FC = () => {
       });
       setMessageContent("");
       setSelectedFile(null);
+      scrollToBottom()
     } catch (e) {
       console.error("Send message error:", e);
     }
@@ -236,17 +237,31 @@ const ChatWindow: React.FC = () => {
     <div className={styles.chatWindow}>
       {/* Header showing live users */}
       <div className={styles.header}>
-        <div className={styles.title}>Чат #{chatroomId}</div>
         <div className={styles.liveUsers}>
           {liveUsers.map((u) => (
-            <div key={u.id} className={styles.liveUser}>
-              {u.profile_img ? (
-                <Image src={u.profile_img} alt={u.first_name} width={24} height={24} className={styles.liveAvatar} />
-              ) : (
-                <div className={styles.liveAvatarPlaceholder} />
-              )}
-            </div>
-          ))}
+  u.id !== userId && (
+    <div key={u.id} className={styles.liveUser}>
+      {u.profile_img ? (
+        <>
+          <Image src={u.profile_img} alt={u.first_name} width={24} height={24} className={styles.liveAvatar} />
+          <div>
+            <div className={styles.liveUserName}>{u.first_name}</div>
+            <p>last online: {u.last_online}</p>
+          </div>
+        </>
+      ) : (
+        <>
+          <div className={styles.avatarPlaceholder} />
+          <div>
+            <div className={styles.liveUserName}>{u.first_name}</div>
+            <p>last online: {u.last_online}</p>
+          </div>
+        </>
+      )}
+    </div>
+  )
+))}
+
         </div>
       </div>
 

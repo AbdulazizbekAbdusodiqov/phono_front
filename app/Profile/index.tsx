@@ -10,25 +10,32 @@ import { useGetMe } from "@/hooks/auth";
 import Settings from "../Settings";
 import { Product } from "../../types";
 import Chat from "../Chat";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 
 type TabType =
   | "Объявления"
-  | "Сообщения"
+  | "messages"
   | "Избранное"
   | "Контактные данные"
   | "Настройки";
 
 const Profile = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<TabType>("Объявления");
-
   const [favorites, setFavorites] = useState<number[]>(() => {
     if (typeof window !== "undefined") {
       return JSON.parse(localStorage.getItem("favorites") || "[]");
     }
     return [];
   });
+  const router = useRouter();
+  const handleClick = (tab: TabType) => {
+    router.push({
+      pathname: '/Profile',
+      query: { tab }
+    });
+  };
 
   const { user } = useSelector((state: RootState) => state.auth);
   const { data: me } = useGetMe(Number(user?.id));
@@ -103,20 +110,18 @@ const Profile = () => {
       <div className={styles.tabs}>
         {[
           "Объявления",
-          "Сообщения",
+          "Messages",
           "Избранное",
-          "Контактные данные",
+          "Контактные данные",  
           "Настройки",
         ].map((tab) => (
-          <span
+          <div 
+            onClick={()=> handleClick(tab as TabType)}
             key={tab}
-            className={activeTab === tab ? styles.active : ""}
-            onClick={() => {
-              setActiveTab(tab as TabType)
-            }}
+            className={router.query.tab === tab ? styles.active : styles.tab}
           >
             {tab}
-          </span>
+          </div>
         ))}
       </div>
 
@@ -130,7 +135,7 @@ const Profile = () => {
         <button className={styles.searchButton}>Поиск</button>
       </div>
 
-      {activeTab === "Избранное" ? (
+      {router.query.tab === "Избранное" ? (
         favoriteProducts.length === 0 ? (
           <div className={styles.emptyState}>
             <div className={styles.emptyIcon}>
@@ -151,9 +156,14 @@ const Profile = () => {
             ))}
           </div>
         )
-      ) : activeTab === "Настройки" ? (
+      ) : router.query.tab === "Настройки" ? (
         <Settings />
-      ) : (
+      ) :  (router.query.tab === "Messages") ? (
+        <>
+          <Chat/>
+        </>
+      ) : 
+      (
         <div className={styles.cardGrid}>
           {productsList.map((product: Product) => (
             <Card
@@ -164,12 +174,8 @@ const Profile = () => {
             />
           ))}
         </div>
-      )}
-      {activeTab === "Сообщения" && (
-        <>
-          <Chat/>
-        </>
-      )}
+      ) 
+      }
 
       <EditProfileModal
         isOpen={isModalOpen}

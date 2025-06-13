@@ -109,7 +109,7 @@ const RoomList: React.FC = () => {
               key={chatId}
               className={`${styles.roomItem} ${isActive ? styles.active : ''}`}
             >
-              <Link href={{ pathname: '/Profile', query: {tab: "Messages", chatroom: chatId } }} className={styles.linkWrapper}>
+              <Link href={{ pathname: '/Profile', query: {tab: "Сообщения", chatroom: chatId } }} className={styles.linkWrapper}>
                 <div className={styles.avatarWrapper}>
                   {avatarUrl ? (
                     <Image

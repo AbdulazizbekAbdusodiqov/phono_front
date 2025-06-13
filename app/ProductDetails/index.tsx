@@ -169,7 +169,7 @@ const ProductDetails = () => {
             setNewlyCreatedChatroom(null)
             router.push({
               pathname: "/Profile",
-              query: { tab: "Messages", chatroom: chatroomId },
+              query: { tab: "Сооющения", chatroom: chatroomId },
             });
           },
         })

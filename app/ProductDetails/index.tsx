@@ -65,8 +65,6 @@ const ProductDetails = () => {
   const [createChatroom] = useMutation<CreateChatroomMutation>(CREATE_CHATROOM);
   const [addUsersToChatroom] = useMutation<AddUsersToChatroomMutation>(ADD_USERS_TO_CHATROOM);
   const [chatroomData, setchatroomData] = useState<any>({});
-  const [newlyCreatedChatroom, setNewlyCreatedChatroom] = useState<Chatroom | null>(null)
-
 
   const mapBackendToProductData = (backendData: any): ProductData => {
     return {
@@ -145,7 +143,6 @@ const ProductDetails = () => {
     }
 
     try {
-      // 1. Create the chatroom with product owner's name
       if (chatroomData?.user) {
         const chatroomName = `${chatroomData.user?.id}` || "Chat";
         const createChatroomResult = await createChatroom({
@@ -154,7 +151,6 @@ const ProductDetails = () => {
             userId: parseInt(chatroomData.user?.id)
           },
           onCompleted: (data) => {
-            setNewlyCreatedChatroom(data.createChatroom)
           },
         })
         const chatroomId = parseInt(createChatroomResult.data?.createChatroom?.id || "0");
@@ -172,7 +168,6 @@ const ProductDetails = () => {
               userIds: [chatroomData.user?.id],
             },
             onCompleted: () => {
-              setNewlyCreatedChatroom(null)
               router.push({
                 pathname: "/Profile",
                 query: { tab: "Сообщения", chatroom: chatroomId },

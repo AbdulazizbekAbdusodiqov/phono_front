@@ -6,6 +6,7 @@ import {
   HttpLink,
   split,
 } from "@apollo/client";
+import { setContext } from '@apollo/client/link/context';
 import { WebSocketLink } from "@apollo/client/link/ws";
 import { getMainDefinition } from "@apollo/client/utilities";
 import { onError } from "@apollo/client/link/error";
@@ -63,6 +64,17 @@ const errorLink = onError(({ graphQLErrors, operation, forward }) => {
   }
 });
 
+const authLink = setContext((_, { headers }) => {
+  const token = getLocalStorage("accessToken");
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : "",
+      "apollo-require-preflight": "true",
+    },
+  };
+});
+
 const uploadLink = createUploadLink({
   uri: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT,
   credentials: 'include',
@@ -85,17 +97,18 @@ const wsLink = typeof window !== "undefined"
     })
   : null;
 
-// Split based on operation type (subscriptions vs. everything else)
-const splitLink = typeof window !== "undefined" && wsLink
-  ? split(
-      ({ query }) => {
-        const def = getMainDefinition(query);
-        return def.kind === "OperationDefinition" && def.operation === "subscription";
-      },
-      wsLink,
-      ApolloLink.from([errorLink, uploadLink])  // Using httpLink here
-    )
-  : ApolloLink.from([errorLink, uploadLink]);
+const httpLink = ApolloLink.from([errorLink, authLink, uploadLink]);
+const splitLink =
+  typeof window !== "undefined" && wsLink
+    ? split(
+        ({ query }) => {
+          const def = getMainDefinition(query);
+          return def.kind === "OperationDefinition" && def.operation === "subscription";
+        },
+        wsLink,
+        httpLink
+      )
+    : httpLink;
 
 // Final Apollo Client instance
 export const client = new ApolloClient({

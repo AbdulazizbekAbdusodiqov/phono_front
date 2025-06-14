@@ -26,6 +26,11 @@ import { ENTER_CHATROOM } from "../graphql/mutations/EnterChatroom";
 import { LEAVE_CHATROOM } from "../graphql/mutations/LeaveChatroom";
 import { USER_STARTED_TYPING_MUTATION } from "../graphql/mutations/UserStartedTypingMutation";
 import { USER_STOPPED_TYPING_MUTATION } from "../graphql/mutations/UserStoppedTypingMutation";
+import { DELETE_MESSAGE } from "../graphql/mutations/DeleteMessage";
+import { DeleteMessageMutation } from "../gql/graphql";
+import { MESSAGE_DELETED } from "../graphql/subscriptions/MessageDeleted";
+import { MessageDeletedSubscription } from "../gql/graphql";
+
 import { useUserStore } from "../stores/userStore";
 import styles from "./Chatwindow.module.scss";
 
@@ -44,6 +49,22 @@ const ChatWindow: React.FC = () => {
   const [typingUsers, setTypingUsers] = useState<User[]>([]);
   const typingTimeoutsRef = useRef<{ [key: number]: NodeJS.Timeout }>({});
   const [liveUsers, setLiveUsers] = useState<User[]>([]);
+  const [deleteMessage] = useMutation<DeleteMessageMutation>(DELETE_MESSAGE);
+  const { data: deletedData } = useSubscription<MessageDeletedSubscription>(
+    MESSAGE_DELETED,
+    { skip: !chatroomId, variables: { chatroomId } }
+  );
+
+  useEffect(() => {
+    if (deletedData?.messageDeleted?.id) {
+      const deletedId = deletedData.messageDeleted.id;
+      setMessages((prev) => prev.filter((m) => {
+        console.log(m.id)
+        if(m.id !== deletedId)
+          return m.id
+      }));
+    }
+  }, [deletedData]);
 
   const scrollAreaRef = useRef<HTMLDivElement | null>(null);
 
@@ -223,6 +244,30 @@ const ChatWindow: React.FC = () => {
     }
   };
 
+  const handleDelete = async (messageId: string) => {
+    const messageIdNum = parseInt(messageId, 10);
+    if (isNaN(messageIdNum)) return;
+
+    await deleteMessage({
+      variables: { chatroomId: chatroomId!, messageId: messageIdNum },
+      update: (cache) => {
+        cache.modify({
+          fields: {
+            getMessagesForChatroom(existingRefs = [], { readField }) {
+              // compare string-to-string
+              return existingRefs.filter(
+                (ref: any) => readField("id", ref) !== messageId
+              );
+            },
+          },
+        });
+      },
+    });
+  };
+
+
+
+
   const onInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setMessageContent(e.target.value);
     handleUserStartedTyping();
@@ -307,6 +352,13 @@ const ChatWindow: React.FC = () => {
                   ) : (
                     <div className={styles.avatarPlaceholder} />
                   )}
+                  <button
+                    className={styles.deleteButton}
+                    onClick={() => msg.id && handleDelete(msg.id)}
+                    aria-label="Delete message"
+                  >
+                    🗑️
+                  </button>
                 </div>
               )}
             </div>

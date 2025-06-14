@@ -288,7 +288,7 @@ const ChatWindow: React.FC = () => {
                 {msg.content && <div className={styles.text}>{msg.content}</div>}
                 {msg.imageUrl && (
                   <div className={styles.imageWrapper}>
-                    <Image src={`${process.env.NEXT_PUBLIC_BASE_URL}/images/${msg.imageUrl}`} alt="attachment" width={200} height={200} className={styles.imageMsg} />
+                    <Image src={`${process.env.NEXT_PUBLIC_BASE_URL}${msg.imageUrl}`} alt="attachment" width={200} height={200} className={styles.imageMsg} />
                   </div>
                 )}
                 <div className={styles.messageMeta}>
@@ -328,7 +328,7 @@ const ChatWindow: React.FC = () => {
         </div>
         {previewUrl && (
           <div className={styles.preview}>
-            <Image src={`${process.env.NEXT_PUBLIC_BASE_URL}/${previewUrl}`} alt="preview" width={80} height={80} className={styles.previewImg} />
+            <Image src={previewUrl} alt="preview" width={80} height={80} className={styles.previewImg} />
             <button className={styles.removePreview} onClick={() => setSelectedFile(null)}>×</button>
           </div>
         )}

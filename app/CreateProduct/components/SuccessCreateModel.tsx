@@ -17,7 +17,7 @@ const SuccessCreateModel = forwardRef<HTMLDivElement, SuccessCreateModelProps>(
 
     const handleClickOk = () => {
       setIsOpen(false);
-      router.push(`/Profile`);
+      router.push(`/Profile?tab=Объявления`);
     };
 
     useEffect(() => {

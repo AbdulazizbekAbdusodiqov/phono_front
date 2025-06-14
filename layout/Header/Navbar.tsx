@@ -13,6 +13,7 @@ import {
 import { useSelector } from "react-redux";
 import type { RootState } from "../../store/store";
 import { getLocalStorage } from "../../utils/local-storege";
+import { DropDown } from "./components";
 
 const Navbar = () => {
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
@@ -96,13 +97,18 @@ const Navbar = () => {
             </Link>
 
             <Link
-              href={token && isAuthenticated ? "/Profile" : "/login"}
+              href={token && isAuthenticated ? isMenuOpen ? "/Profile?tab=Объявления" : "" : "/login"}
               onClick={closeMenu}
             >
               <div className={style.navItem}>
-                <FaRegUser size={18} />
-                <span>Ваш профиль</span>
-                <FaChevronDown size={12} />
+                {!isMenuOpen ?
+                  <DropDown />
+                  :
+                  <>
+                    <FaRegUser size={18} />
+                    <span>Ваш профиль</span>
+                  </>
+                }
               </div>
             </Link>
           </div>

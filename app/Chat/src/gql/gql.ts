@@ -11,10 +11,31 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * 3. It does not support dead code elimination, so it will add unused operations.
  *
  * Therefore it is highly recommended to use the babel or swc plugin for production.
+ * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
-const documents = {
+type Documents = {
+    "\n  mutation AddUsersToChatroom($chatroomId: Float!, $userIds: [Float!]!) {\n    addUsersToChatroom(chatroomId: $chatroomId, userIds: $userIds) {\n      name\n      id\n    }\n  }\n": typeof types.AddUsersToChatroomDocument,
+    "\n  mutation CreateChatroom($name: String!, $userId: Int!) {\n    createChatroom(name: $name, id: $userId) {\n      name\n      id\n    }\n  }\n": typeof types.CreateChatroomDocument,
+    "\n  mutation DeleteChatroom($chatroomId: Float!) {\n    deleteChatroom(chatroomId: $chatroomId)\n  }\n": typeof types.DeleteChatroomDocument,
+    "\n  mutation EnterChatroom($chatroomId: Float!) {\n    enterChatroom(chatroomId: $chatroomId)\n  }\n": typeof types.EnterChatroomDocument,
+    "\n  mutation LeaveChatroom($chatroomId: Float!) {\n    leaveChatroom(chatroomId: $chatroomId)\n  }\n": typeof types.LeaveChatroomDocument,
+    "\n  mutation SendMessage($chatroomId: Float!, $content: String!, $image: Upload) {\n    sendMessage(chatroomId: $chatroomId, content: $content, image: $image) {\n      id\n      content\n      imageUrl\n      user {\n        id\n        first_name\n      }\n    }\n  }\n": typeof types.SendMessageDocument,
+    "\n  mutation updateProfile($first_name: String!, $file: Upload) {\n    updateProfile(first_name: $first_name, file: $file) {\n      id\n      first_name\n      profile_img\n    }\n  }\n": typeof types.UpdateProfileDocument,
+    "\n  mutation UserStartedTypingMutation($chatroomId: Float!) {\n    userStartedTypingMutation(chatroomId: $chatroomId) {\n      id\n      first_name\n    }\n  }\n": typeof types.UserStartedTypingMutationDocument,
+    "\n  mutation UserStoppedTypingMutation($chatroomId: Float!) {\n    userStoppedTypingMutation(chatroomId: $chatroomId) {\n      id\n      first_name\n    }\n  }\n": typeof types.UserStoppedTypingMutationDocument,
+    "\n  query GetChatroomsForUser {\n    getChatroomsForUser {\n      id\n      name\n      messages {\n        id\n        content\n        createdAt\n        user {\n          id\n          first_name\n        }\n      }\n      users {\n        profile_img\n        id\n        first_name\n      }\n    }\n  }\n": typeof types.GetChatroomsForUserDocument,
+    "\n  query GetMessagesForChatroom($chatroomId: Float!) {\n    getMessagesForChatroom(chatroomId: $chatroomId) {\n      id\n      content\n      imageUrl\n      createdAt\n      user {\n        id\n        first_name\n        profile_img\n      }\n      chatroom {\n        id\n        name\n        users {\n          id\n          first_name\n          profile_img\n        }\n      }\n    }\n  }\n": typeof types.GetMessagesForChatroomDocument,
+    "\n  query GetUser {\n    getUser {\n        id\n        first_name\n        profile_img\n    }\n  }\n": typeof types.GetUserDocument,
+    "\n  query GetUsersOfChatroom($chatroomId: Float!) {\n    getUsersOfChatroom(chatroomId: $chatroomId) {\n      id\n      first_name\n      profile_img\n    }\n  }\n": typeof types.GetUsersOfChatroomDocument,
+    "\n  query SearchUsers($first_name: String!) {\n    searchUsers(first_name: $first_name) {\n      id\n      first_name\n    }\n  }\n": typeof types.SearchUsersDocument,
+    "\n  subscription LiveUsersInChatroom($chatroomId: Float!) {\n    liveUsersInChatroom(chatroomId: $chatroomId) {\n      id\n      first_name\n      profile_img\n    }\n  }\n": typeof types.LiveUsersInChatroomDocument,
+    "\n  subscription NewMessage($chatroomId: Float!) {\n    newMessage(chatroomId: $chatroomId) {\n      id\n      content\n      imageUrl\n      createdAt\n      user {\n        id\n        first_name\n        profile_img\n      }\n    }\n  }\n": typeof types.NewMessageDocument,
+    "\n  subscription UserStartedTyping($chatroomId: Float!, $userId: Float!) {\n    userStartedTyping(chatroomId: $chatroomId, userId: $userId) {\n      id\n      first_name\n      profile_img\n    }\n  }\n": typeof types.UserStartedTypingDocument,
+    "\n  subscription UserStoppedTyping($chatroomId: Float!, $userId: Float!) {\n    userStoppedTyping(chatroomId: $chatroomId, userId: $userId) {\n      id\n      first_name\n      profile_img\n    }\n  }\n": typeof types.UserStoppedTypingDocument,
+};
+const documents: Documents = {
     "\n  mutation AddUsersToChatroom($chatroomId: Float!, $userIds: [Float!]!) {\n    addUsersToChatroom(chatroomId: $chatroomId, userIds: $userIds) {\n      name\n      id\n    }\n  }\n": types.AddUsersToChatroomDocument,
-    "\n  mutation CreateChatroom($name: String!) {\n    createChatroom(name: $name) {\n      name\n      id\n    }\n  }\n": types.CreateChatroomDocument,
+    "\n  mutation CreateChatroom($name: String!, $userId: Int!) {\n    createChatroom(name: $name, id: $userId) {\n      name\n      id\n    }\n  }\n": types.CreateChatroomDocument,
     "\n  mutation DeleteChatroom($chatroomId: Float!) {\n    deleteChatroom(chatroomId: $chatroomId)\n  }\n": types.DeleteChatroomDocument,
     "\n  mutation EnterChatroom($chatroomId: Float!) {\n    enterChatroom(chatroomId: $chatroomId)\n  }\n": types.EnterChatroomDocument,
     "\n  mutation LeaveChatroom($chatroomId: Float!) {\n    leaveChatroom(chatroomId: $chatroomId)\n  }\n": types.LeaveChatroomDocument,
@@ -54,7 +75,7 @@ export function graphql(source: "\n  mutation AddUsersToChatroom($chatroomId: Fl
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  mutation CreateChatroom($name: String!) {\n    createChatroom(name: $name) {\n      name\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation CreateChatroom($name: String!) {\n    createChatroom(name: $name) {\n      name\n      id\n    }\n  }\n"];
+export function graphql(source: "\n  mutation CreateChatroom($name: String!, $userId: Int!) {\n    createChatroom(name: $name, id: $userId) {\n      name\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation CreateChatroom($name: String!, $userId: Int!) {\n    createChatroom(name: $name, id: $userId) {\n      name\n      id\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

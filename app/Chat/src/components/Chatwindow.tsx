@@ -288,7 +288,7 @@ const ChatWindow: React.FC = () => {
                 {msg.content && <div className={styles.text}>{msg.content}</div>}
                 {msg.imageUrl && (
                   <div className={styles.imageWrapper}>
-                    <Image src={'http://api.phone-tech.uz/images/' + msg.imageUrl} alt="attachment" width={200} height={200} className={styles.imageMsg} />
+                    <Image src={`${process.env.NEXT_PUBLIC_BASE_URL}/images/${msg.imageUrl}`} alt="attachment" width={200} height={200} className={styles.imageMsg} />
                   </div>
                 )}
                 <div className={styles.messageMeta}>

@@ -57,7 +57,7 @@ const MessageBubble: React.FC<MessageProps> = ({ message, currentUserId }) => {
               width={"250"}
               height={"250"}
               fit="cover"
-              src={"http://api.phone-tech.uz/" + message.imageUrl}
+              src={process.env.NEXT_PUBLIC_BASE_URL + message.imageUrl}
               alt="Uploaded content"
             />
           )}

@@ -76,7 +76,7 @@ const Navbar = () => {
         <div className={`${style.right} ${isMenuOpen ? style.showMenu : ""}`}>
           <div className={style.navigations}>
             <Link
-              href={{ pathname: '/Profile', query: { tab: 'Messages' } }}
+              href={{ pathname: '/Profile', query: { tab: 'сообщегия' } }}
               onClick={closeMenu}
             >
               <div className={style.navItem}>

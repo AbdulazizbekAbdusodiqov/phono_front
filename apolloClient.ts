@@ -18,17 +18,6 @@ import { createUploadLink } from "apollo-upload-client";
 loadErrorMessages();
 loadDevMessages();
 
-const authLink = new ApolloLink((operation, forward) => {
-  const token = getLocalStorage("accessToken");
-  operation.setContext(({ headers = {} }) => ({
-    headers: {
-      ...headers,
-      authorization: token ? `Bearer ${token}` : "",
-    },
-  }));
-  return forward(operation);
-});
-
 // Token refresh logic (mocked – customize if needed)
 async function refreshToken(): Promise<string> {
   const newAccessToken = getLocalStorage("accessToken");
@@ -74,15 +63,13 @@ const errorLink = onError(({ graphQLErrors, operation, forward }) => {
   }
 });
 
-// HTTP Link for regular queries/mutations (file uploads included)
-const httpLink = new HttpLink({
-  uri: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || "http://localhost:3001/graphql",
-  credentials: "include",
-});
-
 const uploadLink = createUploadLink({
-  uri: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT, // e.g. '/api/graphql'
+  uri: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT,
   credentials: 'include',
+  headers: {
+    "apollo-require-preflight": "true",
+    "authorization": `Bearer ${getLocalStorage("accessToken")}`,
+  },
 });
 
 // WebSocket link for subscriptions
@@ -106,9 +93,9 @@ const splitLink = typeof window !== "undefined" && wsLink
         return def.kind === "OperationDefinition" && def.operation === "subscription";
       },
       wsLink,
-      ApolloLink.from([authLink, errorLink, httpLink, uploadLink])  // Using httpLink here
+      ApolloLink.from([errorLink, uploadLink])  // Using httpLink here
     )
-  : ApolloLink.from([authLink, errorLink, httpLink, uploadLink]);
+  : ApolloLink.from([errorLink, uploadLink]);
 
 // Final Apollo Client instance
 export const client = new ApolloClient({

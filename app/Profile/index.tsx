@@ -11,14 +11,8 @@ import Settings from "../Settings";
 import { Product } from "../../types";
 import Chat from "../Chat";
 import { useRouter } from "next/router";
-import Link from "next/link";
 
-
-type TabType =
-  | "Объявления"
-  | "Сообщения"
-  | "Избранное"
-  | "Настройки";
+type TabType = "Объявления" | "Сообщения" | "Избранное" | "Настройки";
 
 const Profile = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -28,6 +22,7 @@ const Profile = () => {
     }
     return [];
   });
+
   const router = useRouter();
   const handleClick = (tab: TabType) => {
     router.push({
@@ -38,7 +33,6 @@ const Profile = () => {
 
   const { user } = useSelector((state: RootState) => state.auth);
   const { data: me } = useGetMe(Number(user?.id));
-
   const productsList = me?.product ?? [];
 
   const favoriteProducts = productsList.filter((product: Product) =>
@@ -55,7 +49,7 @@ const Profile = () => {
     last_name: me?.last_name || "",
     birth_date: me?.birth_date || "2004-12-31",
   };
-  
+
   useEffect(() => {
     localStorage.setItem("favorites", JSON.stringify(favorites));
   }, [favorites]);
@@ -105,14 +99,9 @@ const Profile = () => {
       </div>
 
       <div className={styles.tabs}>
-        {[
-          "Объявления",
-          "Сообщения",
-          "Избранное",
-          "Настройки",
-        ].map((tab) => (
-          <div 
-            onClick={()=> handleClick(tab as TabType)}
+        {["Объявления", "Сообщения", "Избранное", "Настройки"].map((tab) => (
+          <div
+            onClick={() => handleClick(tab as TabType)}
             key={tab}
             className={router.query.tab === tab ? styles.active : styles.tab}
           >
@@ -123,13 +112,15 @@ const Profile = () => {
 
       <div className={styles.hrLine} />
 
-      <div className={styles.search}>
-        <div className={styles.searchInput}>
-          <SearchIcon />
-          <input type="text" placeholder="Type e.g Slots games" />
+      {router.query.tab !== "Сообщения" && router.query.tab !== "Настройки" && (
+        <div className={styles.search}>
+          <div className={styles.searchInput}>
+            <SearchIcon />
+            <input type="text" placeholder="Type e.g Slots games" />
+          </div>
+          <button className={styles.searchButton}>Поиск</button>
         </div>
-        <button className={styles.searchButton}>Поиск</button>
-      </div>
+      )}
 
       {router.query.tab === "Избранное" ? (
         favoriteProducts.length === 0 ? (
@@ -154,12 +145,9 @@ const Profile = () => {
         )
       ) : router.query.tab === "Настройки" ? (
         <Settings />
-      ) :  (router.query.tab === "Сообщения") ? (
-        <>
-          <Chat/>
-        </>
-      ) : 
-      (
+      ) : router.query.tab === "Сообщения" ? (
+        <Chat />
+      ) : (
         <div className={styles.cardGrid}>
           {productsList.map((product: Product) => (
             <Card
@@ -170,8 +158,7 @@ const Profile = () => {
             />
           ))}
         </div>
-      ) 
-      }
+      )}
 
       <EditProfileModal
         isOpen={isModalOpen}

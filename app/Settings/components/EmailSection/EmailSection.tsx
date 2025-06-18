@@ -83,20 +83,40 @@ const EmailSection = () => {
             {loading ? (
               <div className={styles.loader}>Юкланмоқда...</div>
             ) : (
-              emails.map((email) => (
-                <div className={styles.subItem} key={email.id}>
-                  <div>
-                    {email.email}
-                    {email.is_verified ? <MdOutlineGppGood /> : <MdGppBad />}
-                  </div>
-                  <div
-                    className={`${styles.item} ${styles.delete}`}
-                    onClick={() => deleteEmail(email.id.toString())}
-                  >
-                    <RiDeleteBin5Line />
-                  </div>
-                </div>
-              ))
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Active</th>
+                    <th>Delete</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {emails.map((email, index) => (
+                    <tr key={email.id}>
+                      <th>{index + 1}</th>
+                      <th>{email.email}</th>
+                      <th>
+                        {email.is_verified ? (
+                          <MdOutlineGppGood />
+                        ) : (
+                          <MdGppBad />
+                        )}
+                      </th>
+                      <th>
+                        <div
+                          className={`${styles.items} ${styles.delete}`}
+                          onClick={() => deleteEmail(email.id.toString())}
+                          style={{ cursor: 'pointer' }}
+                        >
+                          <RiDeleteBin5Line />
+                        </div>
+                      </th>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             )}
             <div className={styles.addButton} onClick={() => setShowForm(true)}>
               + Добавить почту

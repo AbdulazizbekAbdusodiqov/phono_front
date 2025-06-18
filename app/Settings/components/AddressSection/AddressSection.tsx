@@ -218,9 +218,9 @@ const AddressSection = () => {
                 <div className={styles.subItem} key={address.id}>
                   <div className={styles.subItem__names}>
                     <div>
-                      <strong>{address.name || 'null'}</strong>
+                      <strong>Name: {address.name || 'null'}</strong>
                     </div>
-                    <div>{address.address || 'null'}</div>
+                    <div>Address: {address.address || 'null'}</div>
                   </div>
                   <div
                     className={`${styles.item} ${styles.delete}`}

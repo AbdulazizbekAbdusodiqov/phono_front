@@ -17,7 +17,6 @@ const Card: React.FC<CardProps> = ({
 }) => {
   const { id, product_image, title, condition, storage, price, negotiable } =
     product;
-  console.log(product_image);
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.preventDefault();

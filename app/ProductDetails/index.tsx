@@ -65,8 +65,6 @@ const ProductDetails = () => {
   const [createChatroom] = useMutation<CreateChatroomMutation>(CREATE_CHATROOM);
   const [addUsersToChatroom] = useMutation<AddUsersToChatroomMutation>(ADD_USERS_TO_CHATROOM);
   const [chatroomData, setchatroomData] = useState<any>({});
-  const [newlyCreatedChatroom, setNewlyCreatedChatroom] = useState<Chatroom | null>(null)
-
 
   const mapBackendToProductData = (backendData: any): ProductData => {
     return {
@@ -145,34 +143,38 @@ const ProductDetails = () => {
     }
 
     try {
-      // 1. Create the chatroom with product owner's name
       if (chatroomData?.user) {
-        const chatroomName = chatroomData.user?.first_name || "Chat";
+        const chatroomName = `${chatroomData.user?.id}` || "Chat";
         const createChatroomResult = await createChatroom({
           variables: {
             name: chatroomName,
+            userId: parseInt(chatroomData.user?.id)
           },
           onCompleted: (data) => {
-            setNewlyCreatedChatroom(data.createChatroom)
           },
         })
         const chatroomId = parseInt(createChatroomResult.data?.createChatroom?.id || "0");
-        if (!chatroomId) throw new Error("Chatroom creation failed");
-
-        if (!chatroomData.user?.id) throw new Error("User IDs missing");
-        await addUsersToChatroom({
-          variables: {
-            chatroomId: chatroomId,
-            userIds: [chatroomData.user?.id],
-          },
-          onCompleted: () => {
-            setNewlyCreatedChatroom(null)
-            router.push({
-              pathname: "/Profile",
-              query: { tab: "Messages", chatroom: chatroomId },
-            });
-          },
-        })
+        if (chatroomId) {
+          router.push({
+            pathname: "/Profile",
+            query: { tab: "Сообщения", chatroom: chatroomId },
+          });
+        }
+        else {
+          if (!chatroomData.user?.id) throw new Error("User IDs missing");
+          await addUsersToChatroom({
+            variables: {
+              chatroomId: chatroomId,
+              userIds: [chatroomData.user?.id],
+            },
+            onCompleted: () => {
+              router.push({
+                pathname: "/Profile",
+                query: { tab: "Сообщения", chatroom: chatroomId },
+              });
+            },
+          })
+        }
 
       }
 

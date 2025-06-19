@@ -118,8 +118,10 @@ const EmailSection = () => {
                 </tbody>
               </table>
             )}
-            <div className={styles.addButton} onClick={() => setShowForm(true)}>
-              + Добавить почту
+            <div className={styles.addButtonLine}>
+              <div className={styles.addButton} onClick={() => setShowForm(true)}>
+                + Добавить почту
+              </div>
             </div>
           </div>
         )}

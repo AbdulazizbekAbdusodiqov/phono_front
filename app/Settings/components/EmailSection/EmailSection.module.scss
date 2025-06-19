@@ -34,8 +34,18 @@
   cursor: pointer;
 }
 
+.addButtonLine {
+  text-align: center;
+}
+
 .addButton {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
   margin-top: 10px;
+  border-radius: 10px;
+  border: 1px solid blue;
   color: #007bff;
   cursor: pointer;
 }

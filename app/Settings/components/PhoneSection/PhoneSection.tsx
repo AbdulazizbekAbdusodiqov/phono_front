@@ -103,8 +103,13 @@ const PhoneSection = () => {
                 </tbody>
               </table>
             )}
-            <div className={styles.addButton} onClick={() => setShowForm(true)}>
-              + Добавить номер телефона
+            <div className={styles.addButtonLine}>
+              <div
+                className={styles.addButton}
+                onClick={() => setShowForm(true)}
+              >
+                <div>+ Добавить номер телефона</div>
+              </div>
             </div>
           </div>
         )}

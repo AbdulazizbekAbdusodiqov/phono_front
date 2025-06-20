@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { RiDeleteBin5Line } from "react-icons/ri";
-import { FaChevronDown, FaChevronUp } from "react-icons/fa";
-import Modal from "../../ui/Modal";
-import styles from "./PhoneSection.module.scss";
-import { getPhones, addPhone, deletePhone } from "../../../../endpoints/phones";
-import { toast } from "react-toastify";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../../store/store";
+import React, { useState, useEffect } from 'react';
+import { RiDeleteBin5Line } from 'react-icons/ri';
+import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import Modal from '../../ui/Modal';
+import styles from './PhoneSection.module.scss';
+import { getPhones, addPhone, deletePhone } from '../../../../endpoints/phones';
+import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../store/store';
 
 type Phone = {
   id: number;
@@ -18,7 +18,7 @@ const PhoneSection = () => {
   const [phones, setPhones] = useState<Phone[]>([]);
   const [open, setOpen] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const [newPhone, setNewPhone] = useState("");
+  const [newPhone, setNewPhone] = useState('');
   const [loading, setLoading] = useState(false);
   const { user, isAuthenticated } = useSelector(
     (state: RootState) => state.auth,
@@ -27,8 +27,9 @@ const PhoneSection = () => {
   const fetchPhones = async (id: number | undefined) => {
     setLoading(true);
     const data = await getPhones(id);
+    console.log("dara: ", data);
     if (data) setPhones(data);
-    console.log("data: ", data);
+    console.log('data: ', data);
     setLoading(false);
   };
 
@@ -42,21 +43,21 @@ const PhoneSection = () => {
     const added = await addPhone(newPhone.trim(), user?.id);
     if (added) {
       setPhones((prev) => [...prev, added]);
-      setNewPhone("");
+      setNewPhone('');
       setShowForm(false);
     }
   };
 
   const handleDeletePhone = async (phoneId: number) => {
-    console.log("delete bosildi");
-    const confirmed = window.confirm("Ишончингиз комилми?");
+    console.log('delete bosildi');
+    const confirmed = window.confirm('Ишончингиз комилми?');
     if (!confirmed) return;
 
     const res = await deletePhone(user?.id, +phoneId);
     if (res == false) {
-      toast("something went wrong on deleting");
+      toast('something went wrong on deleting');
     } else {
-      console.log("res: ", res);
+      console.log('res: ', res);
       setPhones((prev) => prev.filter((item) => item.id !== phoneId));
     }
   };
@@ -76,20 +77,39 @@ const PhoneSection = () => {
             {loading ? (
               <div className={styles.loader}>Юкланмоқда...</div>
             ) : (
-              phones.map((phone) => (
-                <div className={styles.subItem} key={phone._id}>
-                  <div>{phone.phone_number}</div>
-                  <div
-                    className={`${styles.item} ${styles.delete}`}
-                    onClick={() => handleDeletePhone(phone.id)}
-                  >
-                    <RiDeleteBin5Line />
-                  </div>
-                </div>
-              ))
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Delete</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {phones.map((phone, index) => (
+                    <tr key={phone.id}>
+                      <th>{index + 1}</th>
+                      <th>{phone.phone_number}</th>
+                      <th>
+                        <div
+                          className={`${styles.item} ${styles.delete}`}
+                          onClick={() => handleDeletePhone(phone.id)}
+                        >
+                          <RiDeleteBin5Line />
+                        </div>
+                      </th>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             )}
-            <div className={styles.addButton} onClick={() => setShowForm(true)}>
-              + Добавить номер телефона
+            <div className={styles.addButtonLine}>
+              <div
+                className={styles.addButton}
+                onClick={() => setShowForm(true)}
+              >
+                <div>+ Добавить номер телефона</div>
+              </div>
             </div>
           </div>
         )}
